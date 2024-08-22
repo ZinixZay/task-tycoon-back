@@ -2,6 +2,6 @@
 ```bash
 pip install pipenv
 ```
-```commandline
-
+```bash
+pipenv install --ignore-pipfile 
 ```
