@@ -1,34 +1,39 @@
 import asyncio
 import asyncpg
-import datetime
+from typing import List
+import os
+from enum import Enum
+from dotenv import load_dotenv
 
+load_dotenv()
+
+class EnvironmentVariables(Enum):
+    POSTGRES_USER = os.getenv('POSTGRES_USER')
+    POSTGRES_PASSWORD = os.getenv('POSTGRES_PASSWORD')
+    POSTGRES_DB = os.getenv('POSTGRES_DB')
+
+class Database:
+    def __init__(self):
+        self.pool = None
+
+    async def setup(self):
+        print(EnvironmentVariables.POSTGRES_USER.value)
+        self.pool = await asyncpg.create_pool(
+            user=EnvironmentVariables.POSTGRES_USER.value,
+            password=EnvironmentVariables.POSTGRES_PASSWORD.value,
+            database=EnvironmentVariables.POSTGRES_DB.value,
+            host='127.0.0.1',
+            port='5432'
+        )
+
+    async def run_sql(self, query: str, params: List[str] = []):
+        async with self.pool.acquire() as conn:
+            result = await conn.execute(query)
+        print(result)
 
 async def main():
+    meow = Database()
+    await meow.setup()
+    await meow.run_sql(query="CREATE DATABASE table_meow")
 
-    # Establish a connection to an existing database named "test"
-    # as a "postgres" user.
-    conn = await asyncpg.connect(f'postgresql://{postgres}@localhost/test')
-    # Execute a statement to create a new table.
-    await conn.execute('''
-        CREATE TABLE users(
-            id serial PRIMARY KEY,
-            name text,
-            dob date
-        )
-    ''')
-
-    # Insert a record into the created table.
-    await conn.execute('''
-        INSERT INTO users(name, dob) VALUES($1, $2)
-    ''', 'Bob', datetime.date(1984, 3, 1))
-
-    # Select a row from the table.
-    row = await conn.fetchrow(
-        'SELECT * FROM users WHERE name = $1', 'Bob')
-    # *row* now contains
-    # asyncpg.Record(id=1, name='Bob', dob=datetime.date(1984, 3, 1))
-
-    # Close the connection.
-    await conn.close()
-
-asyncio.get_event_loop().run_until_complete(main())
+asyncio.run(main())
