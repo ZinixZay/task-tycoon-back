@@ -8,6 +8,10 @@ asyncpg = "*"
 fastapi = "*"
 uvicorn = "*"
 python-dotenv = "*"
+pydantic = {extras = ["email"], version = "*"}
+sqlalchemy = "*"
+aiosqlite = "*"
+psycopg = {extras = ["binary", "pool"], version = "*"}
 
 [dev-packages]
 

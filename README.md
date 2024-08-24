@@ -8,5 +8,7 @@ pipenv shell
 
 docker compose up -d
 
+cd task-tycoon
+
 uvicorn main:app --reload
 ```
