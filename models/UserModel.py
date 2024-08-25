@@ -1,5 +1,6 @@
 from typing import Optional
 from uuid import uuid4
+from helpers.enums.tablename_enum import TableName
 
 from sqlalchemy.sql import func
 from sqlalchemy import DateTime, String, UUID
@@ -11,20 +12,15 @@ from sqlalchemy_utils import EmailType
 
 
 class UserModel(BaseModel):
-    __tablename__ = "users"
+    __tablename__ = TableName.USERS.value
 
-    UUID: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True)
+    UUID: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, unique=True, default=uuid4)
     email: Mapped[EmailType] = mapped_column(EmailType, unique=True)
     hashed_password: Mapped[str] = mapped_column(String)
     name: Mapped[Optional[str]] = mapped_column(String)
     surname: Mapped[Optional[str]] = mapped_column(String)
     nickname: Mapped[Optional[str]] = mapped_column(String, unique=True)
     create_date: Mapped[datetime] = mapped_column(DateTime(timezone=False), server_default=func.now())
-
-
-    def __init__(self, **kwargs):
-        kwargs['UUID'] = uuid4()
-        super().__init__(**kwargs)
 
     @property
     def password(self):
