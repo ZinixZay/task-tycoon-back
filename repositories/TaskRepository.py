@@ -1,7 +1,7 @@
 from sqlalchemy import select
 
-from database import new_session, TaskOrm
-from schemas import STaskAdd, STask
+from database.database import new_session
+from dtos.tasks.task import STaskAdd, STask
 
 
 class TaskRepository:
