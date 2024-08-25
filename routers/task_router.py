@@ -3,7 +3,9 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 
 from repositories.TaskRepository import TaskRepository
-from dtos.tasks.task import STaskAdd, STask, STaskId
+from dtos.tasks.task_create import CreateTaskResponse, CreateTask
+from dtos.tasks.task_get import GetTask
+
 
 router = APIRouter(
     prefix="/tasks",
@@ -13,13 +15,13 @@ router = APIRouter(
 
 @router.post("")
 async def add_task(
-        task: Annotated[STaskAdd, Depends()],
-) -> STaskId:
+        task: Annotated[CreateTask, Depends()],
+) -> CreateTaskResponse:
     task_id = await TaskRepository.add_one(task)
-    return {"ok": True, "task_id": task_id}
+    return CreateTaskResponse(ok=True, task_id=task_id)
 
 
 @router.get("")
-async def get_tasks() -> list[STask]:
+async def get_tasks() -> list[GetTask]:
     tasks = await TaskRepository.find_all()
     return tasks
