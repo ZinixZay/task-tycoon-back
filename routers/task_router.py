@@ -13,15 +13,15 @@ router = APIRouter(
 )
 
 
-@router.post("")
+@router.post("/")
 async def add_task(
-        task: Annotated[CreateTask, Depends()],
+        task: CreateTask,
 ) -> CreateTaskResponse:
     task_id = await TaskRepository.add_one(task)
     return CreateTaskResponse(ok=True, task_id=task_id)
 
 
-@router.get("")
+@router.get("/")
 async def get_tasks() -> list[GetTask]:
     tasks = await TaskRepository.find_all()
     return tasks

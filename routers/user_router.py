@@ -10,9 +10,9 @@ router = APIRouter(
     tags=["Пользователи"]
 )
 
-@router.post("")
+@router.post("/")
 async def register_user(
-    user: Annotated[CreateUser, Depends()]
+    user: CreateUser
 ) -> CreateUserResponse:
     user_uuid = await UserRepository.add_one(user)
     return CreateUserResponse(ok=True, user_uuid=user_uuid)
