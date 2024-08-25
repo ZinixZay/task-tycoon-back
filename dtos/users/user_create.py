@@ -1,11 +1,11 @@
 from pydantic import BaseModel
 
 
-class RegistUser(BaseModel):
+class CreateUser(BaseModel):
     email: str
     password: str
 
 
-class RegistUserResponce(BaseModel):
+class CreateUserResponce(BaseModel):
     ok: bool
     user_id: int
