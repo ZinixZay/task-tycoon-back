@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class TableName(Enum):
+class TableNameEnum(Enum):
     QUESTIONS = "questions"
     TASKS = "tasks"
     USERS = "users"
