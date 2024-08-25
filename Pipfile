@@ -12,6 +12,8 @@ pydantic = {extras = ["email"], version = "*"}
 sqlalchemy = "*"
 aiosqlite = "*"
 psycopg = {extras = ["binary", "pool"], version = "*"}
+werkzeug = "*"
+sqlalchemy-utils = "*"
 
 [dev-packages]
 
