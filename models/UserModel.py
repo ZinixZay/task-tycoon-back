@@ -18,7 +18,7 @@ class UserModel(BaseModel):
     permissions: Mapped[SMALLINT] = mapped_column(SMALLINT, default=0)
     name: Mapped[Optional[str]] = mapped_column(String)
     surname: Mapped[Optional[str]] = mapped_column(String)
-    create_date = mapped_column(DateTime(timezone=False), default=datetime.now())
+    create_date: Mapped[Optional[DateTime]] = mapped_column(DateTime(timezone=False), default=datetime.now())
     hashed_password: Mapped[str] = mapped_column(String)
 
 
