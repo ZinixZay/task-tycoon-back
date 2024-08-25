@@ -1,7 +1,8 @@
 from typing import Optional
+from uuid import uuid4
 
 from sqlalchemy.sql import func
-from sqlalchemy import DateTime, String
+from sqlalchemy import DateTime, String, UUID
 from sqlalchemy.orm import Mapped, mapped_column
 from models.BaseModel import BaseModel
 from datetime import datetime
@@ -12,24 +13,26 @@ from sqlalchemy_utils import EmailType
 class UserModel(BaseModel):
     __tablename__ = "users"
 
-    UUID: Mapped[int] = mapped_column(primary_key=True, unique=True)
-    name: Mapped[Optional[str]] 
-    surname: Mapped[Optional[str]]
-    nickname: Mapped[Optional[str]] = mapped_column(String, unique=True)
+    UUID: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True)
     email: Mapped[EmailType] = mapped_column(EmailType, unique=True)
+    hashed_password: Mapped[str] = mapped_column(String)
+    name: Mapped[Optional[str]] = mapped_column(String)
+    surname: Mapped[Optional[str]] = mapped_column(String)
+    nickname: Mapped[Optional[str]] = mapped_column(String, unique=True)
     create_date: Mapped[datetime] = mapped_column(DateTime(timezone=False), server_default=func.now())
-    hashed_password: Mapped[str]
 
-    def set_hashed_password(self, password: str):
-        self.hashed_password = generate_password_hash(password)
 
-    def check_password(self, password: str) -> bool:
-        return check_password_hash(self.hashed_password, password)
+    def __init__(self, **kwargs):
+        kwargs['UUID'] = uuid4()
+        super().__init__(**kwargs)
 
     @property
     def password(self):
         raise ValueError("user contains only hashed password")
-    
+
     @password.setter
-    def password(self, data: str):
-        self.set_hashed_password(data)
+    def password(self, password: str):
+        self.hashed_password = generate_password_hash(password)
+
+    def verify_password(self, password):
+        return check_password_hash(self.hashed_password_password, password)
