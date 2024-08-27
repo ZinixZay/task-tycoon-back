@@ -1,6 +1,5 @@
 from typing import Optional, List
 from uuid import uuid4
-from helpers.enums.tablename_enum import TableNameEnum
 
 from models.BaseModel import BaseModel
 from sqlalchemy.sql import func
@@ -9,6 +8,9 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy_utils import EmailType
+
+from helpers.enums.tablename_enum import TableNameEnum
+from helpers.enums.model_name_enum import ModelNameEnum
 
 
 class UserModel(BaseModel):
@@ -22,7 +24,7 @@ class UserModel(BaseModel):
     nickname: Mapped[Optional[str]] = mapped_column(String, unique=True)
     create_date: Mapped[datetime] = mapped_column(DateTime(timezone=False), server_default=func.now())
 
-    answers: Mapped[List["AnswerModel"]] = relationship(back_populates="user")
+    answers: Mapped[List[ModelNameEnum.ANSWER.value]] = relationship(cascade="all,delete", back_populates="user")
 
     @property
     def password(self):

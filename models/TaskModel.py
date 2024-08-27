@@ -4,7 +4,9 @@ from uuid import uuid4
 from sqlalchemy import String, UUID, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from models.BaseModel import BaseModel
+
 from helpers.enums.tablename_enum import TableNameEnum
+from helpers.enums.model_name_enum import ModelNameEnum
 
 
 class TaskModel(BaseModel):
@@ -17,4 +19,4 @@ class TaskModel(BaseModel):
     description_short: Mapped[Optional[str]] = mapped_column(String)
     file_path: Mapped[Optional[str]] = mapped_column(String)
     
-    questions: Mapped[List["QuestionModel"]] = relationship(cascade="all,delete", back_populates="task")
+    questions: Mapped[List[ModelNameEnum.QUESTION.value]] = relationship(cascade="all,delete", back_populates="task")

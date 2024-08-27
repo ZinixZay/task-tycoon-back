@@ -6,8 +6,10 @@ from sqlalchemy import ForeignKey
 from sqlalchemy import String, UUID, Integer, JSON
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.orm import relationship
+
 from helpers.enums.question_type_enum import QuestionTypeEnum
 from helpers.enums.tablename_enum import TableNameEnum
+from helpers.enums.model_name_enum import ModelNameEnum
 
 
 class QuestionModel(BaseModel):
@@ -21,5 +23,5 @@ class QuestionModel(BaseModel):
     content: Mapped[Optional[JSON]] = mapped_column(JSON)
     file_path: Mapped[Optional[str]] = mapped_column(String)
     
-    answers: Mapped[List["AnswerModel"]] = relationship(cascade="all,delete", back_populates="question")
-    task: Mapped["TaskModel"] = relationship(back_populates="questions")
+    answers: Mapped[List[ModelNameEnum.ANSWER.value]] = relationship(cascade="all,delete", back_populates="question")
+    task: Mapped[ModelNameEnum.TASK.value] = relationship(cascade="all,delete", back_populates="questions")
