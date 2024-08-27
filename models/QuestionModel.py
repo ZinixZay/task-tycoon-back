@@ -2,8 +2,6 @@ from typing import List, Optional
 from uuid import uuid4
 
 from models.BaseModel import BaseModel
-from models.TaskModel import TaskModel
-from models.AnswerModel import AnswerModel
 from sqlalchemy import ForeignKey
 from sqlalchemy import String, UUID, Integer, JSON
 from sqlalchemy.orm import Mapped, mapped_column
@@ -19,9 +17,9 @@ class QuestionModel(BaseModel):
     task_id: Mapped[UUID] = mapped_column(ForeignKey(f"{TableNameEnum.TASKS.value}.UUID"))
     question_body: Mapped[str] = mapped_column(String)
     identifier: Mapped[int] = mapped_column(Integer, unique=True, primary_key=True, autoincrement=True)
-    type: Mapped[QuestionTypeEnum] = mapped_column(QuestionTypeEnum)
+    type: Mapped[QuestionTypeEnum] = mapped_column(String)
     content: Mapped[Optional[JSON]] = mapped_column(JSON)
     file_path: Mapped[Optional[str]] = mapped_column(String)
     
-    answers: Mapped[List[AnswerModel]] = relationship(cascade="all,delete", back_populates="question")
-    task: Mapped[TaskModel] = relationship(back_populates="questions")
+    answers: Mapped[List["AnswerModel"]] = relationship(cascade="all,delete", back_populates="question")
+    task: Mapped["TaskModel"] = relationship(back_populates="questions")

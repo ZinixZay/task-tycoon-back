@@ -2,11 +2,11 @@
 ```bash
 pip install pipenv
 
+pipenv shell
+
 pipenv install --ignore-pipfile 
 
 docker compose up -d
-
-pipenv shell
 
 uvicorn main:app --reload
 ```

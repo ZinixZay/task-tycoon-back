@@ -1,9 +1,8 @@
 from typing import Optional, List
 from uuid import uuid4
-from helpers.enums.tablename_enum import TableName
+from helpers.enums.tablename_enum import TableNameEnum
 
 from models.BaseModel import BaseModel
-from models.AnswerModel import AnswerModel
 from sqlalchemy.sql import func
 from sqlalchemy import DateTime, String, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -13,7 +12,7 @@ from sqlalchemy_utils import EmailType
 
 
 class UserModel(BaseModel):
-    __tablename__ = TableName.USERS.value
+    __tablename__ = TableNameEnum.USERS.value
 
     UUID: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, unique=True, default=uuid4())
     email: Mapped[EmailType] = mapped_column(EmailType, unique=True)
@@ -23,7 +22,7 @@ class UserModel(BaseModel):
     nickname: Mapped[Optional[str]] = mapped_column(String, unique=True)
     create_date: Mapped[datetime] = mapped_column(DateTime(timezone=False), server_default=func.now())
 
-    answers: Mapped[List[AnswerModel]] = relationship(back_populates="user")
+    answers: Mapped[List["AnswerModel"]] = relationship(back_populates="user")
 
     @property
     def password(self):
