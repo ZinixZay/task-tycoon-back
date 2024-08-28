@@ -15,6 +15,7 @@ psycopg = {extras = ["binary", "pool"], version = "*"}
 werkzeug = "*"
 sqlalchemy-utils = "*"
 email-validator = "*"
+fastapi-users = {extras = ["sqlalchemy"], version = "*"}
 
 [dev-packages]
 

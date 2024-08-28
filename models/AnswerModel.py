@@ -13,7 +13,7 @@ class AnswerModel(BaseModel):
 
     UUID: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, unique=True, default=uuid4())
     question_id: Mapped[UUID] = mapped_column(ForeignKey(f"{TableNameEnum.QUESTIONS.value}.UUID"))
-    user_id: Mapped[UUID] = mapped_column(ForeignKey(f"{TableNameEnum.USERS.value}.UUID"))
+    user_id: Mapped[UUID] = mapped_column(ForeignKey(f"{TableNameEnum.USERS.value}.id"))
     content: Mapped[JSON] = mapped_column(JSON)
 
     question: Mapped[ModelNameEnum.QUESTION.value] = relationship(cascade="all,delete", back_populates="answers")
