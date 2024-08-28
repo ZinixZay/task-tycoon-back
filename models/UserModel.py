@@ -18,11 +18,12 @@ class UserModel(BaseModel):
 
     UUID: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, unique=True, default=uuid4())
     email: Mapped[EmailType] = mapped_column(EmailType, unique=True)
-    hashed_password: Mapped[str] = mapped_column(String)
+    nickname: Mapped[Optional[str]] = mapped_column(String, unique=True)
+    permissions: Mapped[SMALLINT] = mapped_column(SMALLINT, default=0)
     name: Mapped[Optional[str]] = mapped_column(String)
     surname: Mapped[Optional[str]] = mapped_column(String)
-    nickname: Mapped[Optional[str]] = mapped_column(String, unique=True)
-    create_date: Mapped[datetime] = mapped_column(DateTime(timezone=False), server_default=func.now())
+    create_date: Mapped[Optional[DateTime]] = mapped_column(DateTime(timezone=False), default=datetime.now())
+    hashed_password: Mapped[str] = mapped_column(String)
 
     answers: Mapped[List[ModelNameEnum.ANSWER.value]] = relationship(cascade="all,delete", back_populates="user")
 
