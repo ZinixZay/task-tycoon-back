@@ -1,12 +1,7 @@
-from pydantic import BaseModel, EmailStr
-from uuid import UUID
+from pydantic import EmailStr
+from fastapi_users import schemas
 
 
-class CreateUser(BaseModel):
+class CreateUser(schemas.BaseUserCreate):
     email: EmailStr
     password: str
-
-
-class CreateUserResponse(BaseModel):
-    ok: bool
-    user_uuid: UUID
