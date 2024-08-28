@@ -15,4 +15,4 @@ class QuestionRepository:
             session.add(question)
             await session.flush()
             await session.commit()
-            return question.ident
+            return question.UUID
