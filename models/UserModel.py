@@ -25,6 +25,7 @@ class UserModel(BaseModel):
     hashed_password: Mapped[str] = mapped_column(String)
 
     answers: Mapped[List[ModelNameEnum.ANSWER.value]] = relationship(cascade="all,delete", back_populates="user")
+    tasks: Mapped[List[ModelNameEnum.TASK.value]] = relationship(cascade="all,delete",back_populates="user")
 
     @property
     def password(self):
