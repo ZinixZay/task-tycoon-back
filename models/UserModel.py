@@ -2,8 +2,7 @@ from typing import Optional, List
 from uuid import uuid4
 
 from models.BaseModel import BaseModel
-from sqlalchemy.sql import func
-from sqlalchemy import DateTime, String, UUID
+from sqlalchemy import DateTime, String, UUID, SMALLINT
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
