@@ -16,7 +16,7 @@ class TaskRepository:
             session.add(task)
             await session.flush()
             await session.commit()
-            return task.id
+            return task.UUID
 
     @classmethod
     async def find_all(cls) -> list[GetTask]:
