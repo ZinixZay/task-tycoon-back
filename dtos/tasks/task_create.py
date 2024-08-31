@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional
 from uuid import UUID
+from dtos.questions.question_create import CreateQuestion
 
 
 class CreateTask(BaseModel):
@@ -9,6 +10,7 @@ class CreateTask(BaseModel):
     description_full: Optional[str]
     description_short: Optional[str]
     file_path: Optional[str]
+    questions: list[CreateQuestion]
 
 
 class CreateTaskResponse(BaseModel):
