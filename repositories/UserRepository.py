@@ -1,4 +1,4 @@
-from dtos.users.user_create import CreateUser
+from dtos import CreateUser
 from database.database import get_async_session
 from models.UserModel import UserModel
 from uuid import UUID

@@ -1,8 +1,7 @@
 from sqlalchemy import select
 
 from database.database import get_async_session
-from dtos.tasks.task_create import CreateTask
-from dtos.tasks.task_get import GetTask
+from dtos import CreateTask, GetTask
 from models.TaskModel import TaskModel
 
 

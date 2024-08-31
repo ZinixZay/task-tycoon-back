@@ -5,9 +5,7 @@ from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
 from database.database import create_tables, delete_tables
-from dtos.users.user_create import CreateUser
-from dtos.users.user_get import GetUser
-from dtos.users.user_update import UpdateUser
+from dtos import CreateUser, GetUser, UpdateUser
 from modules.authentication.auth_backend import auth_backend
 from modules.authentication.auth_service import fastapi_users
 from routers.task_router import router as tasks_router

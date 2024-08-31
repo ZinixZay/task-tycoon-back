@@ -3,8 +3,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 
 from repositories.QuestionRepository import QuestionRepository
-from dtos.questions.question_create import CreateQuestion, CreateQuestionResponse
-from dtos.tasks.task_get import GetTask
+from dtos import CreateQuestion, CreateQuestionResponse
 
 
 router = APIRouter(
