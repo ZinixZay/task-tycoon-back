@@ -18,10 +18,10 @@ async def add_task(
 ) -> CreateTaskResponse:
 
     task_model: TaskModel = task_dto_to_model(task, user)
-    task_entity = await TaskRepository.add_one(task_model)
+    task_entity: TaskModel = await TaskRepository.add_one(task_model)
 
     for question in task.questions:
-        question_model = question_dto_to_model(question, task_entity)
+        question_model: QuestionModel = question_dto_to_model(question, task_entity)
         await QuestionRepository.add_one(question_model)
 
     return CreateTaskResponse(ok=True, task_id=task_entity.id)
