@@ -10,4 +10,4 @@ class CreateQuestion(BaseModel):
 
 class CreateQuestionResponse(BaseModel):
     ok: bool
-    question_id: int
+    question_id: UUID
