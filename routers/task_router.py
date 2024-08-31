@@ -1,7 +1,4 @@
-from typing import Annotated
-
 from fastapi import APIRouter, Depends
-
 from repositories import TaskRepository
 from dtos import CreateTaskResponse, CreateTask, GetTask
 
@@ -16,8 +13,8 @@ tasks_router = APIRouter(
 async def add_task(
         task: CreateTask,
 ) -> CreateTaskResponse:
-    task_id = await TaskRepository.add_one(task)
-    return CreateTaskResponse(ok=True, task_id=task_id)
+    task_entity = await TaskRepository.add_one(task)
+    return CreateTaskResponse(ok=True, task_id=task_entity.id)
 
 
 @tasks_router.get("/")

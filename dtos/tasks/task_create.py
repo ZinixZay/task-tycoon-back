@@ -1,14 +1,18 @@
 from pydantic import BaseModel
 from typing import Optional
+from uuid import UUID
+from dtos.questions.question_create import CreateQuestion
 
 
 class CreateTask(BaseModel):
+    user_id: UUID
     title: str
-    description_full: str
-    description_short: str
+    description_full: Optional[str]
+    description_short: Optional[str]
     file_path: Optional[str]
+    questions: list[CreateQuestion]
 
 
 class CreateTaskResponse(BaseModel):
     ok: bool = True
-    task_id: int
+    task_id: UUID

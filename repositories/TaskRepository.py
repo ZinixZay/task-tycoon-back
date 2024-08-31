@@ -7,19 +7,19 @@ from models.TaskModel import TaskModel
 
 class TaskRepository:
     @classmethod
-    async def add_one(cls, data: CreateTask) -> int:
-        async with get_async_session() as session:
+    async def add_one(cls, data: CreateTask) -> TaskModel:
+        async for session in get_async_session():
             task_dict = data.model_dump()
 
             task = TaskModel(**task_dict)
             session.add(task)
             await session.flush()
             await session.commit()
-            return task.UUID
+            return task
 
     @classmethod
     async def find_all(cls) -> list[GetTask]:
-        async with get_async_session() as session:
+        async for session in get_async_session():
             query = select(TaskModel)
             result = await session.execute(query)
             task_models = result.scalars().all()
