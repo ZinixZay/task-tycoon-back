@@ -13,7 +13,7 @@ from helpers.enums import QuestionTypeEnum, TableNameEnum, ModelNameEnum
 class QuestionModel(BaseModel):
     __tablename__ = TableNameEnum.QUESTIONS.value
 
-    id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, unique=True, default=uuid4())
+    id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, unique=True, default=uuid4)
     task_id: Mapped[UUID] = mapped_column(ForeignKey(f"{TableNameEnum.TASKS.value}.id"))
     question_body: Mapped[str] = mapped_column(String)
     identifier: Mapped[int] = mapped_column(Integer, unique=True, primary_key=True, autoincrement=True)
