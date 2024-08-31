@@ -1,7 +1,7 @@
 from typing import Optional, List
 from pydantic import BaseModel
 from uuid import UUID
-from helpers.enums import QuestionTypeEnum
+from utils.enums import QuestionTypeEnum
 
 
 class ContentField(BaseModel):

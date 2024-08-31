@@ -5,7 +5,7 @@ from sqlalchemy import String, UUID, Integer, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from models.BaseModel import BaseModel
 
-from helpers.enums import TableNameEnum, ModelNameEnum
+from utils.enums import TableNameEnum, ModelNameEnum
 
 
 class TaskModel(BaseModel):

@@ -1,7 +1,7 @@
 from fastapi_users.authentication import AuthenticationBackend
 
-from modules.authentication.strategies.jwt_strategy import get_jwt_strategy
-from modules.authentication.transports.bearer_transport import bearer_transport
+from services.authentication.strategies.jwt_strategy import get_jwt_strategy
+from services.authentication.transports.bearer_transport import bearer_transport
 
 auth_backend = AuthenticationBackend(
     name='jwt',

@@ -7,7 +7,7 @@ from sqlalchemy import String, UUID, Integer, JSON
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.orm import relationship
 
-from helpers.enums import QuestionTypeEnum, TableNameEnum, ModelNameEnum
+from utils.enums import QuestionTypeEnum, TableNameEnum, ModelNameEnum
 
 
 class QuestionModel(BaseModel):

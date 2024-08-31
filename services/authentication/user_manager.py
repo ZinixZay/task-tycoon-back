@@ -7,7 +7,7 @@ from fastapi_users import BaseUserManager, UUIDIDMixin
 from database.database import get_user_db
 from models.UserModel import UserModel
 
-from modules.authentication.strategies.jwt_strategy import SECRET
+from services.authentication.strategies.jwt_strategy import SECRET
 
 
 class UserManager(UUIDIDMixin, BaseUserManager[UserModel, uuid.UUID]):

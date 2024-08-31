@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, Asyn
 from fastapi_users.db import SQLAlchemyUserDatabase
 from models.BaseModel import BaseModel
 from models.UserModel import UserModel
-from helpers.env.get_env_variables import EnvironmentVariables
+from utils.env.get_env_variables import EnvironmentVariables
 
 engine = create_async_engine(f"postgresql+asyncpg://"
                              f"{EnvironmentVariables.POSTGRES_USER.value}:"

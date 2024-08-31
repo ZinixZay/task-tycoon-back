@@ -1,5 +1,5 @@
 from fastapi_users.authentication import JWTStrategy
-from helpers.env.get_env_variables import EnvironmentVariables
+from utils.env.get_env_variables import EnvironmentVariables
 
 SECRET = EnvironmentVariables.JWT_SECRET.value
 
