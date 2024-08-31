@@ -8,8 +8,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from helpers.enums.tablename_enum import TableNameEnum
-from helpers.enums.model_name_enum import ModelNameEnum
+from helpers.enums import TableNameEnum, ModelNameEnum
 
 
 class UserModel(SQLAlchemyBaseUserTableUUID, BaseModel):

@@ -1,16 +1,15 @@
 from fastapi import APIRouter, Depends
-from repositories.TaskRepository import TaskRepository
-from dtos.tasks.task_create import CreateTaskResponse, CreateTask
-from dtos.tasks.task_get import GetTask
+from repositories import TaskRepository
+from dtos import CreateTaskResponse, CreateTask, GetTask
 
 
-router = APIRouter(
+tasks_router = APIRouter(
     prefix="/tasks",
     tags=["Таски"],
 )
 
 
-@router.post("/")
+@tasks_router.post("/")
 async def add_task(
         task: CreateTask,
 ) -> CreateTaskResponse:
@@ -18,7 +17,7 @@ async def add_task(
     return CreateTaskResponse(ok=True, task_id=task_entity.id)
 
 
-@router.get("/")
+@tasks_router.get("/")
 async def get_tasks() -> list[GetTask]:
     tasks = await TaskRepository.find_all()
     return tasks

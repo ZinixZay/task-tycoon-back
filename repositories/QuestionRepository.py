@@ -1,5 +1,5 @@
 from database.database import get_async_session
-from dtos.questions.question_create import CreateQuestion
+from dtos import CreateQuestion
 from models.QuestionModel import QuestionModel
 
 

@@ -4,8 +4,7 @@ from models.BaseModel import BaseModel
 from sqlalchemy import UUID, ForeignKey, JSON
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from helpers.enums.tablename_enum import TableNameEnum
-from helpers.enums.model_name_enum import ModelNameEnum
+from helpers.enums import TableNameEnum, ModelNameEnum
 
 
 class AnswerModel(BaseModel):

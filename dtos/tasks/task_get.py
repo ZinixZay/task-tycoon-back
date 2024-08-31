@@ -1,5 +1,5 @@
 from pydantic import ConfigDict
-from dtos.tasks.task_create import CreateTask
+from dtos import CreateTask
 
 class GetTask(CreateTask):
     id: int
