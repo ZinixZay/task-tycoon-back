@@ -31,5 +31,5 @@ class UserModel(SQLAlchemyBaseUserTableUUID, BaseModel):
     def password(self, password: str):
         self.hashed_password = generate_password_hash(password)
 
-    def verify_password(self, password):
+    def verify_password(self, password: str) -> bool:
         return check_password_hash(self.hashed_password_password, password)

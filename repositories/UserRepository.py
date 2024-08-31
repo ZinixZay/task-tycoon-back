@@ -4,12 +4,8 @@ from models.UserModel import UserModel
 
 class UserRepository:
     @classmethod
-    async def add_one(cls, data: CreateUser) -> UserModel:
+    async def add_one(cls, user: UserModel) -> UserModel:
         async for session in get_async_session():
-            user_dict = data.model_dump()
-
-            user = UserModel(**user_dict)
-
             session.add(user)
             await session.flush()
             await session.commit()

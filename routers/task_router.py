@@ -6,7 +6,7 @@ from models import UserModel, TaskModel, QuestionModel
 from services.tasks import task_dto_to_model
 from services.questions import question_dto_to_model
 
-tasks_router = APIRouter(
+tasks_router: APIRouter = APIRouter(
     prefix="/tasks",
     tags=["Таски"],
 )

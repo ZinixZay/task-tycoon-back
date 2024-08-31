@@ -11,8 +11,8 @@ from services.authentication.strategies.jwt_strategy import SECRET
 
 
 class UserManager(UUIDIDMixin, BaseUserManager[UserModel, uuid.UUID]):
-    reset_password_token_secret = SECRET
-    verification_token_secret = SECRET
+    reset_password_token_secret: str = SECRET
+    verification_token_secret: str = SECRET
 
     async def on_after_register(self, user: UserModel, request: Optional[Request] = None):
         print(f"User {user.email} has registered.")
