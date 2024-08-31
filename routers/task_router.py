@@ -17,8 +17,8 @@ router = APIRouter(
 async def add_task(
         task: CreateTask,
 ) -> CreateTaskResponse:
-    task_id = await TaskRepository.add_one(task)
-    return CreateTaskResponse(ok=True, task_id=task_id)
+    task_entity = await TaskRepository.add_one(task)
+    return CreateTaskResponse(ok=True, task_id=task_entity.id)
 
 
 @router.get("/")
