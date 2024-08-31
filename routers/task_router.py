@@ -1,7 +1,4 @@
-from typing import Annotated
-
 from fastapi import APIRouter, Depends
-
 from repositories.TaskRepository import TaskRepository
 from dtos.tasks.task_create import CreateTaskResponse, CreateTask
 from dtos.tasks.task_get import GetTask
