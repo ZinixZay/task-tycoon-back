@@ -3,13 +3,15 @@ from sqlalchemy import select
 from database.database import get_async_session
 from dtos import CreateTask, GetTask
 from models.TaskModel import TaskModel
+from uuid import UUID
 
+from helpers.normalize_dto import normalize_create_task
 
 class TaskRepository:
     @classmethod
-    async def add_one(cls, data: CreateTask) -> TaskModel:
+    async def add_one(cls, data: CreateTask, user_id: UUID) -> TaskModel:
         async for session in get_async_session():
-            task_dict = data.model_dump()
+            task_dict = normalize_create_task(data, user_id)
 
             task = TaskModel(**task_dict)
             session.add(task)

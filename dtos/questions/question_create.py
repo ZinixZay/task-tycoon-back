@@ -1,6 +1,7 @@
-from typing import Optional
+from typing import Optional, List
 from pydantic import BaseModel
 from uuid import UUID
+from helpers.enums import QuestionTypeEnum
 
 
 class ContentField(BaseModel):
@@ -10,9 +11,8 @@ class ContentField(BaseModel):
 
 class CreateQuestion(BaseModel):
     question_body: str
-    type: int
-    task_id: UUID
-    content: Optional[list[ContentField]]
+    type: QuestionTypeEnum
+    content: Optional[List[ContentField]]
 
 
 class CreateQuestionResponse(BaseModel):
