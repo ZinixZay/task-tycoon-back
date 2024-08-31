@@ -2,7 +2,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 
-from repositories.TaskRepository import TaskRepository
+from repositories import TaskRepository
 from dtos import CreateTaskResponse, CreateTask, GetTask
 
 

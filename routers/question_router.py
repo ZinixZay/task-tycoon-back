@@ -2,7 +2,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 
-from repositories.QuestionRepository import QuestionRepository
+from repositories import QuestionRepository
 from dtos import CreateQuestion, CreateQuestionResponse
 
 
