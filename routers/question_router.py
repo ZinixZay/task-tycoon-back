@@ -6,12 +6,12 @@ from repositories import QuestionRepository
 from dtos import CreateQuestion, CreateQuestionResponse
 
 
-router = APIRouter(
+questions_router = APIRouter(
     prefix="/questions",
     tags=["Вопросы"],
 )
 
-@router.post("")
+@questions_router.post("")
 async def add_question(
       question: CreateQuestion
 ) -> CreateQuestionResponse:

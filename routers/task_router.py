@@ -6,13 +6,13 @@ from repositories import TaskRepository
 from dtos import CreateTaskResponse, CreateTask, GetTask
 
 
-router = APIRouter(
+tasks_router = APIRouter(
     prefix="/tasks",
     tags=["Таски"],
 )
 
 
-@router.post("/")
+@tasks_router.post("/")
 async def add_task(
         task: CreateTask,
 ) -> CreateTaskResponse:
@@ -20,7 +20,7 @@ async def add_task(
     return CreateTaskResponse(ok=True, task_id=task_id)
 
 
-@router.get("/")
+@tasks_router.get("/")
 async def get_tasks() -> list[GetTask]:
     tasks = await TaskRepository.find_all()
     return tasks
