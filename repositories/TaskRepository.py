@@ -4,12 +4,11 @@ from database.database import get_async_session
 from dtos.tasks.task_create import CreateTask
 from dtos.tasks.task_get import GetTask
 from models.TaskModel import TaskModel
-from uuid import UUID
 
 
 class TaskRepository:
     @classmethod
-    async def add_one(cls, data: CreateTask) -> UUID:
+    async def add_one(cls, data: CreateTask) -> TaskModel:
         async for session in get_async_session():
             task_dict = data.model_dump()
 
@@ -17,7 +16,7 @@ class TaskRepository:
             session.add(task)
             await session.flush()
             await session.commit()
-            return task.UUID
+            return task
 
     @classmethod
     async def find_all(cls) -> list[GetTask]:

@@ -15,8 +15,8 @@ from helpers.enums.model_name_enum import ModelNameEnum
 class QuestionModel(BaseModel):
     __tablename__ = TableNameEnum.QUESTIONS.value
 
-    UUID: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, unique=True, default=uuid4())
-    task_id: Mapped[UUID] = mapped_column(ForeignKey(f"{TableNameEnum.TASKS.value}.UUID"))
+    id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, unique=True, default=uuid4())
+    task_id: Mapped[UUID] = mapped_column(ForeignKey(f"{TableNameEnum.TASKS.value}.id"))
     question_body: Mapped[str] = mapped_column(String)
     identifier: Mapped[int] = mapped_column(Integer, unique=True, primary_key=True, autoincrement=True)
     type: Mapped[QuestionTypeEnum] = mapped_column(String)
