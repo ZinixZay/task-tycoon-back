@@ -12,7 +12,7 @@ class ContentField(BaseModel):
 class CreateQuestion(BaseModel):
     question_body: str
     type: QuestionTypeEnum
-    content: Optional[List[ContentField]]
+    content: Optional[List[ContentField]] = None
 
 
 class CreateQuestionResponse(BaseModel):

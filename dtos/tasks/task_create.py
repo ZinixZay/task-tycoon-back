@@ -6,9 +6,8 @@ from dtos.questions.question_create import CreateQuestion
 
 class CreateTask(BaseModel):
     title: str
-    description_full: Optional[str]
-    description_short: Optional[str]
-    file_path: Optional[str]
+    description_full: Optional[str] = None
+    description_short: Optional[str] = None
     questions: List[CreateQuestion]
 
 
