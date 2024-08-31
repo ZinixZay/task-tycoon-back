@@ -1,5 +1,5 @@
 from dtos import CreateQuestion
-from models import UserModel, QuestionModel, TaskModel
+from models import QuestionModel, TaskModel
 
 
 def question_dto_to_model(question: CreateQuestion, task_entity: TaskModel) -> QuestionModel:
