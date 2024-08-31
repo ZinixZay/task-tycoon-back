@@ -12,7 +12,7 @@ from helpers.enums.model_name_enum import ModelNameEnum
 class TaskModel(BaseModel):
     __tablename__ = TableNameEnum.TASKS.value
 
-    UUID: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, unique=True, default=uuid4())
+    id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, unique=True, default=uuid4())
     user_id: Mapped[ModelNameEnum.USER] = mapped_column(ForeignKey(f"{TableNameEnum.USERS.value}.id"))
     title: Mapped[str] = mapped_column(String)
     identifier: Mapped[int] = mapped_column(Integer, unique=True, primary_key=True, autoincrement=True)

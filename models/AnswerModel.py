@@ -11,7 +11,7 @@ from helpers.enums.model_name_enum import ModelNameEnum
 class AnswerModel(BaseModel):
     __tablename__ = TableNameEnum.ANSWERS.value
 
-    UUID: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, unique=True, default=uuid4())
+    id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, unique=True, default=uuid4())
     question_id: Mapped[UUID] = mapped_column(ForeignKey(f"{TableNameEnum.QUESTIONS.value}.UUID"))
     user_id: Mapped[UUID] = mapped_column(ForeignKey(f"{TableNameEnum.USERS.value}.id"))
     content: Mapped[JSON] = mapped_column(JSON)
