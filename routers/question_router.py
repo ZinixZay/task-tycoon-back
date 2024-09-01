@@ -18,8 +18,8 @@ questions_router: APIRouter = APIRouter(
 @questions_router.post("/")
 async def create_questions(
     questions_add_schema: AddQuestionToTask
-) -> List[CreateQuestionResponse]:
-    response: List[CreateQuestionResponse] = list()
+) -> CreateQuestionResponse:
+    ids: List[UUID] = list()
     for question_schema in questions_add_schema.questions:
         task_model: TaskModel
         try:
@@ -30,10 +30,9 @@ async def create_questions(
         question_model: QuestionModel = question_dto_to_model(question_schema, task_model)
         question_entity: QuestionModel = await QuestionRepository.add_one(question_model)
 
-        response.append(
-            CreateQuestionResponse(ok=True, question_id=question_entity.id)
-        )
-    return response
+        ids.append(question_entity.id)
+        
+    return CreateQuestionResponse(ok=True, question_ids=ids)
 
 
 @questions_router.get("/by_task/{task_id}")

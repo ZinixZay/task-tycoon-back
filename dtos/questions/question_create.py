@@ -17,7 +17,7 @@ class CreateQuestion(BaseModel):
 
 class CreateQuestionResponse(BaseModel):
     ok: bool
-    question_id: UUID
+    question_ids: List[UUID]
 
 
 class AddQuestionToTask(BaseModel):
