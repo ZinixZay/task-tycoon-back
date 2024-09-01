@@ -1,7 +1,7 @@
 from typing import AsyncGenerator
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
-from fastapi_users.db import SQLAlchemyUserDatabase
+from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
 from models.BaseModel import BaseModel
 from models.UserModel import UserModel
 from utils.env.get_env_variables import EnvironmentVariables
