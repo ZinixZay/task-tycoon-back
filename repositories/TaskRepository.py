@@ -14,10 +14,10 @@ class TaskRepository:
             return task
 
     @classmethod
-    async def find_all(cls) -> list[GetTask]:
+    async def find_all(cls) -> list[TaskModel]:
         async for session in get_async_session():
             query = select(TaskModel)
             result = await session.execute(query)
-            task_models = result.scalars().all()
-            task_schemas = [GetTask.model_validate(task_model) for task_model in task_models]
-            return task_schemas
+            task_entity = result.scalars().all()
+            return task_entity
+        

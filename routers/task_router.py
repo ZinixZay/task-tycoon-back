@@ -13,14 +13,14 @@ tasks_router: APIRouter = APIRouter(
 
 @tasks_router.post("/")
 async def add_task(
-        task: CreateTask,
-        user: UserModel = Depends(fastapi_users.current_user())
+        task_scheme: CreateTask,
+        user_entity: UserModel = Depends(fastapi_users.current_user())
 ) -> CreateTaskResponse:
 
-    task_model: TaskModel = task_dto_to_model(task, user)
+    task_model: TaskModel = task_dto_to_model(task_scheme, user_entity)
     task_entity: TaskModel = await TaskRepository.add_one(task_model)
 
-    for question in task.questions:
+    for question in task_scheme.questions:
         question_model: QuestionModel = question_dto_to_model(question, task_entity)
         await QuestionRepository.add_one(question_model)
 
@@ -29,5 +29,6 @@ async def add_task(
 
 @tasks_router.get("/")
 async def get_tasks() -> list[GetTask]:
-    tasks = await TaskRepository.find_all()
-    return tasks
+    task_entities = await TaskRepository.find_all()
+    task_schemas = [GetTask.model_validate(task_model) for task_model in task_entities]
+    return task_schemas
