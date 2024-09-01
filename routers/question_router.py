@@ -17,7 +17,7 @@ questions_router: APIRouter = APIRouter(
 async def create_questions(
     question_schema: AddQuestionToTask
 ) -> List[CreateQuestionResponse]:
-    response: List[CreateQuestionResponse] = []
+    response: List[CreateQuestionResponse] = list()
     for schema in question_schema.questions:
         task_model: TaskModel = TaskModel()
         task_model.id = question_schema.task_id
