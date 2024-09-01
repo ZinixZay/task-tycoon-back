@@ -15,7 +15,7 @@ questions_router: APIRouter = APIRouter(
 
 @questions_router.post("/")
 async def create_questions(
-    question_schema: AddQuestionToTask
+    question_add_schema: AddQuestionToTask
 ) -> List[CreateQuestionResponse]:
     response: List[CreateQuestionResponse] = list()
     for schema in question_schema.questions:
