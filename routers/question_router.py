@@ -1,15 +1,35 @@
+from re import I
 from typing import List
 from fastapi import APIRouter
-from dtos import GetQuestionResponse
-from models import QuestionModel
+from dtos import AddQuestionToTask, CreateQuestionResponse, GetQuestionResponse
+from models import QuestionModel, TaskModel
 from repositories import QuestionRepository
 from uuid import UUID
+from services.questions import question_dto_to_model
 
 
 questions_router: APIRouter = APIRouter(
     prefix="/questions",
     tags=["Вопросы"],
 )
+
+@questions_router.post("/")
+async def create_questions(
+    question_schema: AddQuestionToTask
+) -> List[CreateQuestionResponse]:
+    responce: List[CreateQuestionResponse] = []
+    for schema in question_schema.questions:
+        task_model: TaskModel = TaskModel()
+        task_model.id = question_schema.task_id
+        
+        question_model: QuestionModel = question_dto_to_model(schema, task_model)
+        question_entity: QuestionModel = await QuestionRepository.add_one(question_model)
+
+        responce.append(
+            CreateQuestionResponse(ok=True, question_id=question_entity.id)
+        )
+    return responce
+
 
 @questions_router.get("/by_task/{task_id}")
 async def get_questions_by_task(
