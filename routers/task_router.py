@@ -30,7 +30,7 @@ async def add_task(
 
 
 @tasks_router.get("/")
-async def get_tasks() -> list[GetTask]:
+async def get_tasks() -> List[GetTask]:
     tasks = await TaskRepository.find_all()
     return tasks
 
