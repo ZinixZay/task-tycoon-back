@@ -11,7 +11,7 @@ class TaskRepository:
         async for session in get_async_session():
             session.add(task)
             await session.commit()
-          return task
+            return task
 
     @classmethod
     async def find_all(cls) -> list[TaskModel]:
@@ -19,7 +19,7 @@ class TaskRepository:
             query = select(TaskModel)
             result = await session.execute(query)
             task_entities = result.scalars().all()
-            return task_entities
+            return list(task_entities)
     
     @classmethod
     async def find_by_id(cls, task_id: UUID) -> TaskModel:

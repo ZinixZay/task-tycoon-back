@@ -15,17 +15,18 @@ tasks_router: APIRouter = APIRouter(
     tags=["Таски"],
 )
 
+
 @tasks_router.post("/")
 async def add_task(
-        task_scheme: CreateTask,
+        task_schema: CreateTask,
         user_entity: UserModel = Depends(fastapi_users.current_user())
 ) -> CreateTaskResponse:
     models_for_transaction = list()
 
-    task_model: TaskModel = task_dto_to_model(task, user)
+    task_model: TaskModel = task_dto_to_model(task_schema, user_entity)
     models_for_transaction.append(task_model)
 
-    question_models: List[QuestionModel] = question_dto_to_model(task.questions, task_model)
+    question_models: List[QuestionModel] = question_dto_to_model(task_schema.questions, task_model)
     models_for_transaction.extend(question_models)
 
     transaction: Transaction = Transaction({TransactionMethodsEnum.INSERT: models_for_transaction})

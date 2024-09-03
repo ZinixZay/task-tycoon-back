@@ -27,6 +27,9 @@ class Transaction:
                 if method == TransactionMethodsEnum.INSERT:
                     for model in models:
                         self.session.add(model)
+                elif method == TransactionMethodsEnum.DELETE:
+                    for model in models:
+                        await self.session.delete(model)
             await self.session.commit()
         except Exception as e:
             await self.session.rollback()

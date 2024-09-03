@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from database.database import delete_tables, create_tables
 from dtos import CreateUser, GetUser, UpdateUser
 from services.authentication import auth_backend, fastapi_users
-from routers import tasks_router, questions_router
+from routers import tasks_router, questions_router, users_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -23,4 +23,5 @@ app.include_router(fastapi_users.get_auth_router(auth_backend), prefix='/auth/jw
 app.include_router(fastapi_users.get_register_router(GetUser, CreateUser), prefix='/auth/jwt', tags=['register'])
 app.include_router(fastapi_users.get_users_router(GetUser, UpdateUser), prefix='/auth/jwt', tags=['users'])
 app.include_router(tasks_router)
+app.include_router(users_router)
 app.include_router(questions_router)
