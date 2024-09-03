@@ -1,12 +1,12 @@
 from typing import Optional, List
 
-from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTableUUID
 
 from models.BaseModel import BaseModel
 from sqlalchemy import DateTime, String, SMALLINT
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
+from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTableUUID
 
 from utils.enums import TableNameEnum, ModelNameEnum
 

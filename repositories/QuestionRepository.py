@@ -11,7 +11,6 @@ class QuestionRepository:
     async def add_one(cls, question: QuestionModel) -> QuestionModel:
         async for session in get_async_session():
             session.add(question)
-            await session.flush()
             await session.commit()
             return question
     

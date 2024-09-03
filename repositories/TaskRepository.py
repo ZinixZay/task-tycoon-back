@@ -1,6 +1,6 @@
+from typing import List
 from sqlalchemy import select
 from database.database import get_async_session
-from dtos import GetTask
 from models.TaskModel import TaskModel
 from uuid import UUID
 
@@ -10,17 +10,16 @@ class TaskRepository:
     async def add_one(cls, task: TaskModel) -> TaskModel:
         async for session in get_async_session():
             session.add(task)
-            await session.flush()
             await session.commit()
-            return task
+          return task
 
     @classmethod
     async def find_all(cls) -> list[TaskModel]:
         async for session in get_async_session():
             query = select(TaskModel)
             result = await session.execute(query)
-            task_entity = result.scalars().all()
-            return task_entity
+            task_entities = result.scalars().all()
+            return task_entities
     
     @classmethod
     async def find_by_id(cls, task_id: UUID) -> TaskModel:
@@ -29,3 +28,11 @@ class TaskRepository:
             result = await session.execute(query)
             task_entity = result.scalar().one()
             return task_entity
+        
+    @classmethod
+    async def find_by_user(cls, user_id: UUID) -> List[TaskModel]:
+        async for session in get_async_session():
+            query = select(TaskModel).where(TaskModel.user_id == user_id)
+            result = await session.execute(query)
+            task_entities = result.scalars().all()
+            return task_entities
