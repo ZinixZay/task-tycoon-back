@@ -20,17 +20,13 @@ class QuestionRepository:
         async for session in get_async_session():
             query = select(QuestionModel).where(QuestionModel.task_id == task_id)
             result = await session.execute(query)
-            question_entity = result.scalars().all()
-            # NOTE: no check for emptyness is intended
-            return question_entity
+            question_entities = result.scalars().all()
+            return list(question_entities)
         
     @classmethod
-    async def find(cls, id: UUID) -> QuestionModel:
+    async def find_one_by_id(cls, question_id: UUID) -> QuestionModel:
         async for session in get_async_session():
-            query = select(QuestionModel).where(QuestionModel.id == id)
+            query = select(QuestionModel).where(QuestionModel.id == question_id)
             result = await session.execute(query)
-            try:
-                question_entity = result.scalars().one()
-            except exc.NoResultFound:
-                raise NotFoundException({"question_id": str(id)})
-            return question_entity
+            question_instance = result.scalars().one_or_none()
+            return question_instance

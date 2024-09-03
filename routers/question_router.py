@@ -48,6 +48,8 @@ async def get_questions_by_task(
 async def get_question_by_id(
     question_id: UUID
 ) -> GetQuestionResponse:
-    question_entity: QuestionModel = await QuestionRepository.find(question_id)
-    question_shema = GetQuestionResponse.model_validate(question_entity)
-    return question_shema
+    question_entity: QuestionModel = await QuestionRepository.find_one_by_id(question_id)
+    if not question_entity:
+        raise NotFoundException({'question_id': str(question_id)})
+    question_schema = GetQuestionResponse.model_validate(question_entity)
+    return question_schema
