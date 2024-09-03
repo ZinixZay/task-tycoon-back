@@ -11,20 +11,28 @@ class TaskRepository:
         async for session in get_async_session():
             session.add(task)
             await session.commit()
-        return task
+          return task
 
     @classmethod
-    async def find_all(cls) -> List[TaskModel]:
+    async def find_all(cls) -> list[TaskModel]:
         async for session in get_async_session():
             query = select(TaskModel)
             result = await session.execute(query)
-            task_models: List[TaskModel] = list(result.scalars().all())
-            return task_models
+            task_entities = result.scalars().all()
+            return task_entities
+    
+    @classmethod
+    async def find_by_id(cls, task_id: UUID) -> TaskModel:
+        async for session in get_async_session():
+            query = select(TaskModel).where(TaskModel.id == task_id)
+            result = await session.execute(query)
+            task_entity = result.scalar().one()
+            return task_entity
         
     @classmethod
     async def find_by_user(cls, user_id: UUID) -> List[TaskModel]:
         async for session in get_async_session():
             query = select(TaskModel).where(TaskModel.user_id == user_id)
             result = await session.execute(query)
-            task_models: List[TaskModel] = list(result.scalars().all())
-            return task_models
+            task_entities = result.scalars().all()
+            return task_entities

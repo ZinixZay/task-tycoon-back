@@ -17,10 +17,9 @@ tasks_router: APIRouter = APIRouter(
 
 @tasks_router.post("/")
 async def add_task(
-        task: CreateTask,
-        user: UserModel = Depends(fastapi_users.current_user())
+        task_scheme: CreateTask,
+        user_entity: UserModel = Depends(fastapi_users.current_user())
 ) -> CreateTaskResponse:
-
     models_for_transaction = list()
 
     task_model: TaskModel = task_dto_to_model(task, user)
