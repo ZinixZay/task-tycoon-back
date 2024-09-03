@@ -24,13 +24,3 @@ class ChangePermission(BaseModel):
 class ChangePermissionsResponse(BaseModel):
     ok: bool
     user_id: UUID
-
-
-class DeletePermission(BaseModel):
-    user_id: UUID
-    permission: PermissionsEnum
-
-
-class DeletePermissionResponse(BaseModel):
-    ok: bool
-    user_id: UUID
