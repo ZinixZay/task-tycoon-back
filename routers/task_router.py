@@ -8,6 +8,7 @@ from services.tasks import task_dto_to_model
 from services.questions import question_dto_to_model
 from uuid import UUID
 from services.transactions import Transaction
+from utils.custom_errors import NotFoundException
 from utils.enums import TransactionMethodsEnum
 
 tasks_router: APIRouter = APIRouter(
@@ -52,3 +53,19 @@ async def get_tasks_by_user(
     task_entities: List[TaskModel] = await TaskRepository.find_by_user(user_id)
     task_schemas: List[GetTask] = [GetTask.model_validate(task_model) for task_model in task_entities]
     return task_schemas
+
+
+@tasks_router.delete("/{task_id}")
+async def delete_task_by_id(
+        task_id: UUID
+) -> bool:
+    task_entity: TaskModel = await TaskRepository.find_by_id(task_id)
+    if not task_entity:
+        raise NotFoundException({'task_id': task_id})
+    transaction = Transaction({TransactionMethodsEnum.DELETE: [task_entity]})
+    transaction_response = await transaction.run()
+
+    if not transaction_response['success']:
+        print(transaction_response['detailed'])
+        return False
+    return True

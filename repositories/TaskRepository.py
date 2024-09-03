@@ -26,7 +26,7 @@ class TaskRepository:
         async for session in get_async_session():
             query = select(TaskModel).where(TaskModel.id == task_id)
             result = await session.execute(query)
-            task_entity = result.scalar().one()
+            task_entity = result.scalars().one_or_none()
             return task_entity
         
     @classmethod
@@ -35,4 +35,4 @@ class TaskRepository:
             query = select(TaskModel).where(TaskModel.user_id == user_id)
             result = await session.execute(query)
             task_entities = result.scalars().all()
-            return task_entities
+            return list(task_entities)
