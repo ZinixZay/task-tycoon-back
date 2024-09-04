@@ -38,9 +38,8 @@ class TaskRepository:
             return list(task_entities)
 
     @classmethod
-    async def delete_by_id(cls, task_id: UUID) -> TaskModel:
+    async def delete_by_id(cls, task_id: UUID):
         async for session in get_async_session():
             query = delete(TaskModel).where(TaskModel.id == task_id)
-            result = await session.execute(query)
+            await session.execute(query)
             await session.commit()
-            return result.scalars().one_or_none()

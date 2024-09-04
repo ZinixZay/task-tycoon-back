@@ -58,8 +58,6 @@ async def get_tasks_by_user(
 @tasks_router.delete("/{task_id}")
 async def delete_task_by_id(
         task_id: UUID
-) -> bool:
-    task_model = await TaskRepository.delete_by_id(task_id)
-    if task_model:
-        return True
-    return False
+) -> UUID:
+    await TaskRepository.delete_by_id(task_id)
+    return task_id
