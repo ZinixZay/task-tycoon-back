@@ -59,13 +59,7 @@ async def get_tasks_by_user(
 async def delete_task_by_id(
         task_id: UUID
 ) -> bool:
-    task_entity: TaskModel = await TaskRepository.find_by_id(task_id)
-    if not task_entity:
-        raise NotFoundException({'task_id': task_id})
-    transaction = Transaction({TransactionMethodsEnum.DELETE: [task_entity]})
-    transaction_response = await transaction.run()
-
-    if not transaction_response['success']:
-        print(transaction_response['detailed'])
-        return False
-    return True
+    task_model = await TaskRepository.delete_by_id(task_id)
+    if task_model:
+        return True
+    return False
