@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from sqlalchemy import select, delete
 from database.database import get_async_session
 from models.TaskModel import TaskModel
@@ -22,7 +22,7 @@ class TaskRepository:
             return list(task_entities)
     
     @classmethod
-    async def find_by_id(cls, task_id: UUID) -> TaskModel:
+    async def find_by_id(cls, task_id: UUID) -> Optional[TaskModel]:
         async for session in get_async_session():
             query = select(TaskModel).where(TaskModel.id == task_id)
             result = await session.execute(query)
@@ -36,6 +36,14 @@ class TaskRepository:
             result = await session.execute(query)
             task_entities = result.scalars().all()
             return list(task_entities)
+    
+    @classmethod
+    async def find_by_title(cls, task_title: str) -> Optional[TaskModel]:
+        async for session in get_async_session():
+            query = select(TaskModel).where(TaskModel.title == task_title)
+            result = await session.execute(query)
+            task_entity = result.scalars().one_or_none()
+            return task_entity
 
     @classmethod
     async def delete_by_id(cls, task_id: UUID):

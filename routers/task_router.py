@@ -61,3 +61,20 @@ async def delete_task_by_id(
 ) -> UUID:
     await TaskRepository.delete_by_id(task_id)
     return task_id
+
+@tasks_router.get("/{task_title}")
+async def search_task_by_title(
+    task_title: str
+) -> GetTask:
+    task_entity = await TaskRepository.find_by_title(task_title)
+    task_schema = GetTask.model_validate(task_entity)
+    return task_schema
+
+
+@tasks_router.get("/{task_id}")
+async def search_task_by_id(
+    task_id: UUID
+) -> GetTask:
+    task_entity = await TaskRepository.find_by_id(task_id)
+    task_schema = GetTask.model_validate(task_entity)
+    return task_schema
