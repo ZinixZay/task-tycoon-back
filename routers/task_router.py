@@ -46,7 +46,7 @@ async def get_tasks() -> List[GetTask]:
     return task_schemas
 
 
-@tasks_router.get("/{user_id}")
+@tasks_router.get("/search/user_id/{user_id}")
 async def get_tasks_by_user(
     user_id: UUID
 ) -> List[GetTask]:
@@ -55,14 +55,7 @@ async def get_tasks_by_user(
     return task_schemas
 
 
-@tasks_router.delete("/{task_id}")
-async def delete_task_by_id(
-        task_id: UUID
-) -> UUID:
-    await TaskRepository.delete_by_id(task_id)
-    return task_id
-
-@tasks_router.get("/{task_title}")
+@tasks_router.get("/search/title/{task_title}")
 async def search_task_by_title(
     task_title: str
 ) -> GetTask:
@@ -71,10 +64,18 @@ async def search_task_by_title(
     return task_schema
 
 
-@tasks_router.get("/{task_id}")
+@tasks_router.get("/search/id/{task_id}")
 async def search_task_by_id(
     task_id: UUID
 ) -> GetTask:
     task_entity = await TaskRepository.find_by_id(task_id)
     task_schema = GetTask.model_validate(task_entity)
     return task_schema
+
+
+@tasks_router.delete("/{task_id}")
+async def delete_task_by_id(
+        task_id: UUID
+) -> UUID:
+    await TaskRepository.delete_by_id(task_id)
+    return task_id
