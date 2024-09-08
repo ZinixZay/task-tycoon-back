@@ -25,4 +25,4 @@ app.include_router(fastapi_users.get_register_router(GetUser, CreateUser), prefi
 app.include_router(fastapi_users.get_users_router(GetUser, UpdateUser), prefix='/auth/jwt', tags=['users'])
 app.include_router(tasks_router)
 app.include_router(questions_router)
-app.include_router(permission_router)
+app.include_router(permission_router, prefix="/api/v1")
