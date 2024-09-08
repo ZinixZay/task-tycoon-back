@@ -12,7 +12,7 @@ from utils.custom_errors import NotFoundException
 
 questions_router: APIRouter = APIRouter(
     prefix="/questions",
-    tags=["Вопросы"],
+    tags=["Questions"],
 )
 
 @questions_router.post("/")

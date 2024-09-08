@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from dtos import CreateUser, GetUser, UpdateUser
 from services.authentication import auth_backend, fastapi_users
-from routers import tasks_router, questions_router
+from routers import tasks_router, questions_router, permission_router
 
 origins = [
     "http://localhost",
@@ -25,3 +25,4 @@ app.include_router(fastapi_users.get_register_router(GetUser, CreateUser), prefi
 app.include_router(fastapi_users.get_users_router(GetUser, UpdateUser), prefix='/auth/jwt', tags=['users'])
 app.include_router(tasks_router)
 app.include_router(questions_router)
+app.include_router(permission_router)
