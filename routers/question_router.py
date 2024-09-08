@@ -19,6 +19,7 @@ questions_router: APIRouter = APIRouter(
 async def create_questions(
     questions_add_schema: AddQuestionToTask
 ) -> CreateQuestionResponse:
+    # THAT IS NOT WORKING!
     ids: List[UUID] = list()
     for question_schema in questions_add_schema.questions:
         task_model: TaskModel
