@@ -16,6 +16,10 @@ class PermissionField(BaseModel):
     state: bool
 
 
+class GetPermission(BaseModel):
+    user_id: UUID
+
+
 class ChangePermission(BaseModel):
     user_id: UUID
     permissions: List[PermissionField]

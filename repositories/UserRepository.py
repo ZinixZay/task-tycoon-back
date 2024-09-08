@@ -28,10 +28,7 @@ class UserRepository:
             result = await session.execute(query)
             user_entity: UserModel = result.scalars().one()
             user_entity.permissions = new_permissions
-            try:
-                session.add(user_entity)
-            except exc.InvalidRequestError:
-                session.merge(user_entity)
+            session.merge(user_entity)
             await session.flush()
             await session.commit()
             return user_model
