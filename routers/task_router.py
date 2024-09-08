@@ -51,7 +51,7 @@ async def get_tasks_by_user(
     user_id: UUID
 ) -> List[GetTaskTitle]:
     task_entities: List[TaskModel] = await TaskRepository.find_by_user(user_id)
-    task_schemas: List[GetTask] = [
+    task_schemas: List[GetTaskTitle] = [
         GetTaskTitle(
             id=task_model.id,
             title=task_model.title
@@ -66,8 +66,7 @@ async def search_task_by_title(
 ) -> List[GetTaskTitle]:
     task_entities: List[TaskModel] = await TaskRepository.find_by_title(task_title)
     
-    task_schemas: List[GetTask]
-    task_schemas = [
+    task_schemas: List[GetTaskTitle] = [
         GetTaskTitle(
             id=task_model.id,
             title=task_model.title
@@ -76,7 +75,7 @@ async def search_task_by_title(
     return task_schemas
 
 
-@tasks_router.get("/search/id/{task_id}")
+@tasks_router.get("/search/identifier/{task_identifier}")
 async def search_task_by_id(
     task_ident: int
 ) -> GetTaskTitle:
