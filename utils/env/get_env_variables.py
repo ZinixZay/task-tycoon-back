@@ -11,3 +11,7 @@ class EnvironmentVariables(Enum):
     POSTGRES_HOST = os.getenv('POSTGRES_HOST')
     POSTGRES_PORT = os.getenv('POSTGRES_PORT')
     JWT_SECRET = os.getenv('JWT_SECRET')
+    SUPERUSER_LOGIN = os.getenv('SUPERUSER_LOGIN')
+    SUPERUSER_PASSWORD = os.getenv('SUPERUSER_PASSWORD')
+    TEST_USER = os.getenv('TEST_USER')
+    TEST_USER_PASSWORD = os.getenv('TEST_USER_PASSWORD')
