@@ -19,5 +19,5 @@ class TaskModel(BaseModel):
     description_short: Mapped[Optional[str]] = mapped_column(String)
     file_path: Mapped[Optional[str]] = mapped_column(String)
     
-    questions: Mapped[List[ModelNameEnum.QUESTION.value]] = relationship(cascade="all,delete", back_populates="task")
-    user: Mapped[ModelNameEnum.USER.value] = relationship(cascade="all,delete", back_populates="tasks")
+    questions: Mapped[List[ModelNameEnum.QUESTION.value]] = relationship(cascade="all,delete", back_populates="task", lazy="selectin")
+    user: Mapped[ModelNameEnum.USER.value] = relationship(cascade="all,delete", back_populates="tasks", lazy="selectin")

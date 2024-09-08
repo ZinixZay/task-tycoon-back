@@ -17,7 +17,7 @@ async def lifespan(app: FastAPI):
     print("Выключение")
 
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI()
 
 app.include_router(fastapi_users.get_auth_router(auth_backend), prefix='/auth/jwt', tags=['auth'])
 app.include_router(fastapi_users.get_register_router(GetUser, CreateUser), prefix='/auth/jwt', tags=['register'])
