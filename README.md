@@ -8,5 +8,7 @@ pipenv install --ignore-pipfile
 
 docker compose up -d
 
+alembic upgrade head
+
 uvicorn main:app --reload
 ```

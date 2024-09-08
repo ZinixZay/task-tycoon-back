@@ -22,7 +22,7 @@ async def change_permission(
 ) -> ChangePermissionsResponse:
 
     client_permissions: Permissions = Permissions.from_number(user.permissions)
-    if not client_permissions.has(PermissionsEnum.ChangeOthersPermissions):
+    if not client_permissions.has(PermissionsEnum.ChangeOthersPermissions) and not user.is_superuser:
         raise NoPermissionException(PermissionsEnum.ChangeOthersPermissions)
 
     user_entity = await UserRepository.find_one_by_id(
