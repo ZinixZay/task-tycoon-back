@@ -13,7 +13,7 @@ from utils.enums import TransactionMethodsEnum
 
 tasks_router: APIRouter = APIRouter(
     prefix="/tasks",
-    tags=["Таски"],
+    tags=["Tasks"],
 )
 
 
