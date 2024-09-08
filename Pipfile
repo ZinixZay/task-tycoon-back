@@ -16,6 +16,8 @@ werkzeug = "*"
 sqlalchemy-utils = "*"
 email-validator = "*"
 fastapi-users = {extras = ["sqlalchemy"], version = "*"}
+alembic = "*"
+psycopg2 = "*"
 
 [dev-packages]
 
