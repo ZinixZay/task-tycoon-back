@@ -8,7 +8,7 @@ from services.questions import question_dto_to_model
 
 tasks_router: APIRouter = APIRouter(
     prefix="/tasks",
-    tags=["Таски"],
+    tags=["Tasks"],
 )
 
 @tasks_router.post("/")

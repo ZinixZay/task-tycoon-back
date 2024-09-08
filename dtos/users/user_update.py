@@ -21,7 +21,7 @@ class GetPermission(BaseModel):
 
 
 class ChangePermission(BaseModel):
-    user_id: UUID
+    target_user_id: UUID
     permissions: List[PermissionField]
 
 

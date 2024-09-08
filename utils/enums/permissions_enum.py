@@ -7,5 +7,4 @@ from enum import Enum
 # and so on 
 class PermissionsEnum(Enum):
     CreateTasks: str = "create_task"
-    SolveTasks: str = "solve_task"
-    TalkInChat: str = "talk_in_chat"
+    ChangeOthersPermissions: str = "change_others_permissions"

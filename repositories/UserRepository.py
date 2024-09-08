@@ -28,7 +28,7 @@ class UserRepository:
             result = await session.execute(query)
             user_entity: UserModel = result.scalars().one()
             user_entity.permissions = new_permissions
-            session.merge(user_entity)
+            await session.merge(user_entity)
             await session.flush()
             await session.commit()
             return user_model
