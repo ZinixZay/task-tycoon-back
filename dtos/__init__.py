@@ -5,3 +5,4 @@ from dtos.tasks.task_get import *
 from dtos.users.user_create import *
 from dtos.users.user_get import *
 from dtos.users.user_update import *
+from dtos.users.profile_get import *
