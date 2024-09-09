@@ -8,19 +8,15 @@ asyncpg = "*"
 fastapi = "*"
 uvicorn = "*"
 python-dotenv = "*"
-pydantic = {extras = ["email"], version = "*"}
+pydantic = "*"
 sqlalchemy = "*"
-aiosqlite = "*"
-psycopg = {extras = ["binary", "pool"], version = "*"}
-werkzeug = "*"
-sqlalchemy-utils = "*"
-email-validator = "*"
-fastapi-users = {extras = ["sqlalchemy"], version = "*"}
-fastapi-users = {extras = ["sqlalchemy"], version = "*"}
-alembic = "*"
 psycopg2 = "*"
+alembic = "*"
+fastapi-users = "*"
+fastapi-users-db-sqlalchemy = "*"
 
 [dev-packages]
 
 [requires]
 python_version = "3.12"
+python_full_version = "3.12.2"
