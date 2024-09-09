@@ -1,5 +1,6 @@
 from typing import List, Optional
 from uuid import UUID
+from dtos import UpdateProfile
 
 from sqlalchemy import func, select
 
@@ -34,6 +35,22 @@ class UserRepository:
             await session.flush()
             await session.commit()
             return user_model
+
+    @classmethod
+    async def change_profile(cls, user_model: UserModel, schema: UpdateProfile) -> UserModel:
+        async for session in get_async_session():
+            query = select(UserModel).where(UserModel.id == user_model.id)
+            result = await session.execute(query)
+            user_entity: UserModel = result.scalars().one()
+            
+            user_entity.nickname = schema.nickname
+            user_entity.name = schema.name
+            user_entity.surname = schema.surname
+
+            await session.merge(user_entity)
+            await session.flush()
+            await session.commit()
+            return user_entity
 
     @classmethod
     async def find(cls, user_ids: List[UUID]) -> List[UserModel]:

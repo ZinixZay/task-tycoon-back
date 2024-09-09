@@ -11,6 +11,13 @@ class UpdateUser(schemas.BaseUserUpdate):
     surname: str
 
 
+class UpdateProfile(BaseModel):
+    user_id: UUID
+    nickname: str
+    name: str
+    surname: str
+
+
 class PermissionField(BaseModel):
     permission: PermissionsEnum
     state: bool
