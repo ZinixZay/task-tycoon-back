@@ -1,9 +1,11 @@
 from typing import List, Optional
 from uuid import uuid4
 
+from sqlalchemy.dialects.postgresql import JSONB
+
 from models.BaseModel import BaseModel
 from sqlalchemy import ForeignKey
-from sqlalchemy import String, UUID, Integer, JSON
+from sqlalchemy import String, UUID, Integer
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.orm import relationship
 
@@ -18,7 +20,7 @@ class QuestionModel(BaseModel):
     question_body: Mapped[str] = mapped_column(String)
     identifier: Mapped[int] = mapped_column(Integer, unique=True, primary_key=True, autoincrement=True)
     type: Mapped[QuestionTypeEnum] = mapped_column(String)
-    content: Mapped[Optional[JSON]] = mapped_column(JSON)
+    content: Mapped[JSONB] = mapped_column(JSONB)
     file_path: Mapped[Optional[str]] = mapped_column(String)
     
     answers: Mapped[List[ModelNameEnum.ANSWER.value]] = relationship(cascade="all,delete", back_populates="question")

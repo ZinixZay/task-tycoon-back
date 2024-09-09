@@ -1,5 +1,10 @@
 from typing import List
 from fastapi import APIRouter, Depends
+
+from dtos.questions.question_get import GetQuestionResponse
+from dtos.questions.questions import Question
+from dtos.tasks.task_get import GetTasksResponse, IsolatedTask, GetTasksByUserDto, GetTasksByTitleDto, \
+    GetTaskByIdentifierDto, FullTaskResponse
 from repositories import TaskRepository
 from services.authentication import fastapi_users
 from dtos import CreateTaskResponse, CreateTask, GetTask, GetTaskTitle
@@ -40,54 +45,53 @@ async def add_task(
 
 
 @tasks_router.get("/")
-async def get_tasks() -> List[GetTask]:
+async def get_tasks() -> GetTasksResponse:
     task_entities: List[TaskModel] = await TaskRepository.find_all()
-    task_schemas: List[GetTask] = [GetTask.model_validate(task_model) for task_model in task_entities]
-    return task_schemas
-
-
-@tasks_router.get("/search/user_id/{user_id}")
-async def get_tasks_by_user(
-    user_id: UUID
-) -> List[GetTaskTitle]:
-    task_entities: List[TaskModel] = await TaskRepository.find_by_user(user_id)
-    task_schemas: List[GetTaskTitle] = [
-        GetTaskTitle(
-            id=task_model.id,
-            title=task_model.title
-        ) for task_model in task_entities
-    ]
-    return task_schemas
-
-
-@tasks_router.get("/search/title/{task_title}")
-async def search_task_by_title(
-    task_title: str
-) -> List[GetTaskTitle]:
-    task_entities: List[TaskModel] = await TaskRepository.find_by_title(task_title)
-    
-    task_schemas: List[GetTaskTitle] = [
-        GetTaskTitle(
-            id=task_model.id,
-            title=task_model.title
-        ) for task_model in task_entities
-    ]
-    return task_schemas
-
-
-@tasks_router.get("/search/identifier/{task_identifier}")
-async def search_task_by_id(
-    task_ident: int
-) -> GetTaskTitle:
-    task_entity = await TaskRepository.find_by_identifier(task_ident)
-    task_schema = GetTaskTitle(
-        id=task_entity.id,
-        title=task_entity.title
+    response: GetTasksResponse = GetTasksResponse(
+        tasks=[IsolatedTask.model_validate(task_entity.__dict__) for task_entity in task_entities]
     )
-    return task_schema
+    return response
 
 
-@tasks_router.delete("/{task_id}")
+@tasks_router.get("/get/user_id/")
+async def get_tasks_by_user(
+    query_params: GetTasksByUserDto = Depends()
+) -> GetTasksResponse:
+    user_id = query_params.user_id
+    task_entities: List[TaskModel] = await TaskRepository.find_by_user(user_id)
+    response: GetTasksResponse = GetTasksResponse(
+        tasks=[IsolatedTask.model_validate(task_entity.__dict__) for task_entity in task_entities]
+    )
+    return response
+
+
+@tasks_router.get("/get/task_title/")
+async def get_tasks_by_title(
+    query_params: GetTasksByTitleDto = Depends()
+) -> GetTasksResponse:
+    task_title = query_params.title
+    task_entities: List[TaskModel] = await TaskRepository.find_by_title(task_title)
+    response: GetTasksResponse = GetTasksResponse(
+        tasks=[IsolatedTask.model_validate(task_entity.__dict__) for task_entity in task_entities]
+    )
+    return response
+
+
+@tasks_router.get("/get/identifier/")
+async def get_task_by_identifier(
+    query_params: GetTaskByIdentifierDto = Depends()
+) -> FullTaskResponse:
+    identifier = query_params.identifier
+    task_entity = await TaskRepository.find_by_identifier(identifier)
+    print(task_entity.questions[0].__dict__)
+    validated_questions: List[Question] = [Question.model_validate(question_model.__dict__) for question_model in task_entity.questions]
+    task_entity.questions = validated_questions
+    print(validated_questions[0])
+    result: FullTaskResponse = FullTaskResponse.model_validate(task_entity.__dict__)
+    return result
+
+
+@tasks_router.delete("")
 async def delete_task_by_id(
         task_id: UUID
 ) -> UUID:
