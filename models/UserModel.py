@@ -1,13 +1,11 @@
+from datetime import datetime
 from typing import Optional, List
 
-
-from models.BaseModel import BaseModel
+from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTableUUID
 from sqlalchemy import DateTime, String, SMALLINT
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from datetime import datetime
-from werkzeug.security import generate_password_hash, check_password_hash
-from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTableUUID
 
+from models.BaseModel import BaseModel
 from utils.enums import TableNameEnum, ModelNameEnum
 
 
@@ -22,14 +20,3 @@ class UserModel(SQLAlchemyBaseUserTableUUID, BaseModel):
 
     answers: Mapped[List[ModelNameEnum.ANSWER.value]] = relationship(cascade="all,delete", back_populates="user")
     tasks: Mapped[List[ModelNameEnum.TASK.value]] = relationship(cascade="all,delete", back_populates="user")
-
-    @property
-    def password(self):
-        raise ValueError("user contains only hashed password")
-
-    @password.setter
-    def password(self, password: str):
-        self.hashed_password = generate_password_hash(password)
-
-    def verify_password(self, password: str) -> bool:
-        return check_password_hash(self.hashed_password_password, password)

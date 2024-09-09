@@ -12,13 +12,14 @@ from utils.custom_errors import NotFoundException
 
 questions_router: APIRouter = APIRouter(
     prefix="/questions",
-    tags=["Вопросы"],
+    tags=["Questions"],
 )
 
 @questions_router.post("/")
 async def create_questions(
     questions_add_schema: AddQuestionToTask
 ) -> CreateQuestionResponse:
+    # THAT IS NOT WORKING!
     ids: List[UUID] = list()
     for question_schema in questions_add_schema.questions:
         task_model: TaskModel
