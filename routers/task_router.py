@@ -8,8 +8,8 @@ from services.tasks import task_dto_to_model
 from services.questions import question_dto_to_model
 from uuid import UUID
 from services.transactions import Transaction
-from utils.custom_errors import NotFoundException
-from utils.enums import TransactionMethodsEnum
+from utils.custom_errors import NotFoundException, NoPermissionException
+from utils.enums import TransactionMethodsEnum, PermissionsEnum
 
 tasks_router: APIRouter = APIRouter(
     prefix="/tasks",
@@ -57,7 +57,22 @@ async def get_tasks_by_user(
 
 @tasks_router.delete("/{task_id}")
 async def delete_task_by_id(
-        task_id: UUID
+        task_id: UUID,
+        user_entity: UserModel = Depends(fastapi_users.current_user())
 ) -> UUID:
+    if user_entity.is_superuser:
+        await TaskRepository.delete_by_id(task_id)
+        return task_id
+    
+    task_entity: TaskModel = await TaskRepository.find_by_id(task_id)
+    if task_entity is None:
+        raise NotFoundException()
+    if task_entity.user_id != user_entity.id:
+        from fastapi import HTTPException
+        class Dummy(HTTPException):
+            def __init__(self):
+                super().__init__(status_code=403, detail=["can't delete other users' tasks"])
+        raise Dummy()
     await TaskRepository.delete_by_id(task_id)
+            
     return task_id
