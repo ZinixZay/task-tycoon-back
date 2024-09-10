@@ -1,7 +1,9 @@
 from typing import List, Optional
 from uuid import UUID
-from sqlalchemy import func, select
+from sqlalchemy import func, select, update
+
 from database.database import get_async_session
+from dtos.profiles import UpdateProfileDto
 from models import UserModel
 
 class UserRepository:
@@ -40,3 +42,17 @@ class UserRepository:
             result = await session.execute(query)
             return list(result.scalars().all())
 
+    @classmethod
+    async def change_profile(cls, user_model: UserModel, schema: UpdateProfileDto):
+        async for session in get_async_session():
+
+            query = update(UserModel).where(UserModel.id == user_model.id).values(
+                    nickname=schema.nickname,
+                    name=schema.name,
+                    surname=schema.surname
+                )
+
+
+            await session.execute(query)
+
+            await session.commit()
