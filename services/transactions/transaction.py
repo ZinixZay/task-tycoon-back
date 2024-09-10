@@ -1,7 +1,6 @@
 from typing import Dict, List, Union
-
 from database.database import get_async_session
-from dtos.transactions.transaction_response import TransactionResponse
+from dtos.transactions import TransactionResponse
 from utils.enums import TransactionMethodsEnum
 import models as database_models
 

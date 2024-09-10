@@ -1,9 +1,7 @@
 from uuid import uuid4
-
 from models.BaseModel import BaseModel
 from sqlalchemy import UUID, ForeignKey, JSON
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-
 from utils.enums import TableNameEnum, ModelNameEnum
 
 

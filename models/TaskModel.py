@@ -1,10 +1,8 @@
 from typing import Optional, List
 from uuid import uuid4
-
 from sqlalchemy import String, UUID, Integer, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from models.BaseModel import BaseModel
-
+from models import BaseModel
 from utils.enums import TableNameEnum, ModelNameEnum
 
 
@@ -19,5 +17,5 @@ class TaskModel(BaseModel):
     description_short: Mapped[Optional[str]] = mapped_column(String)
     file_path: Mapped[Optional[str]] = mapped_column(String)
     
-    questions: Mapped[List[ModelNameEnum.QUESTION.value]] = relationship(cascade="all,delete", back_populates="task")
-    user: Mapped[ModelNameEnum.USER.value] = relationship(cascade="all,delete", back_populates="tasks")
+    questions: Mapped[List[ModelNameEnum.QUESTION.value]] = relationship(cascade="all,delete", back_populates="task", lazy="selectin")
+    user: Mapped[ModelNameEnum.USER.value] = relationship(cascade="all,delete", back_populates="tasks", lazy="selectin")

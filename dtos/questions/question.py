@@ -1,7 +1,27 @@
-from typing import Optional, List
+from typing import List, Optional
 from pydantic import BaseModel
 from uuid import UUID
 from utils.enums import QuestionTypeEnum
+
+
+class QuestionContent(BaseModel):
+    title: str
+    is_correct: bool
+
+
+class Question(BaseModel):
+    id: UUID
+    question_body: str
+    type: QuestionTypeEnum
+    content: List[QuestionContent]
+
+
+class GetQuestionsByTaskIdDto(BaseModel):
+    task_id: UUID
+
+
+class GetQuestionsByQuestionIdDto(BaseModel):
+    question_id: UUID
 
 
 class ContentField(BaseModel):

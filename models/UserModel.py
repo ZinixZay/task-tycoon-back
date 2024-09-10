@@ -1,11 +1,9 @@
 from datetime import datetime
 from typing import Optional, List
-
 from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTableUUID
 from sqlalchemy import DateTime, String, SMALLINT
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-
-from models.BaseModel import BaseModel
+from models import BaseModel
 from utils.enums import TableNameEnum, ModelNameEnum
 
 
