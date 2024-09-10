@@ -1,14 +1,19 @@
 from typing import List, Optional
-
-from pydantic import ConfigDict, BaseModel
-from dtos import CreateTask
+from pydantic import BaseModel
 from uuid import UUID
+from dtos.questions.question import CreateQuestion, Question
 
-from dtos.questions.questions import Question
+
+class CreateTaskDto(BaseModel):
+    title: str
+    description_full: Optional[str] = None
+    description_short: Optional[str] = None
+    questions: List[CreateQuestion]
 
 
-class GetTask(CreateTask):
-    model_config = ConfigDict(from_attributes=True)
+class CreateTaskResponse(BaseModel):
+    ok: bool = True
+    task_id: UUID
 
 
 class GetTaskTitle(BaseModel):
@@ -26,23 +31,25 @@ class IsolatedTask(BaseModel):
 
 
 class FullTaskResponse(BaseModel):
-    id: UUID
-    user_id: UUID
-    title: str
-    identifier: int
-    description_full: Optional[str]
-    description_short: Optional[str]
+    task: IsolatedTask
     questions: Optional[List[Question]]
 
 
 class GetTasksResponse(BaseModel):
     tasks: List[IsolatedTask]
 
+
 class GetTasksByUserDto(BaseModel):
     user_id: UUID
+
 
 class GetTasksByTitleDto(BaseModel):
     title: str
 
+
 class GetTaskByIdentifierDto(BaseModel):
     identifier: int
+
+
+class DeleteTaskByIdDto(BaseModel):
+    task_id: UUID

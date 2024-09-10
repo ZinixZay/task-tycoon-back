@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from dtos import CreateUser, GetUser, UpdateUser
+from dtos.users import CreateUser, GetUser, UpdateUser
 from services.authentication import auth_backend, fastapi_users
 from routers import tasks_router, questions_router, permission_router
 

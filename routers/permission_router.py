@@ -2,10 +2,9 @@ from fastapi import APIRouter, Depends
 
 from models import UserModel
 from repositories import UserRepository
-from dtos import ChangePermission, ChangePermissionsResponse
+from dtos.permissions import ChangePermission, ChangePermissionsResponse
 from services.authentication import fastapi_users
 from services.permissions import Permissions
-from uuid import UUID
 from utils.custom_errors import NotFoundException, NoPermissionException
 from utils.enums import PermissionsEnum
 
@@ -40,14 +39,3 @@ async def change_permission(
     )
 
     return ChangePermissionsResponse(ok=True, user_id=user_entity.id)
-
-
-@permission_router.get("/")
-async def get_permission(
-    user_id: UUID
-) -> ChangePermission:
-    user_entity = await UserRepository.find_one_by_id(user_id)
-    if user_entity is None:
-        raise NotFoundException()
-    permissions = Permissions.from_number(user_entity.permissions)
-    return ChangePermission(target_user_id=user_entity.id, permissions=permissions.to_data())

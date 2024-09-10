@@ -1,10 +1,8 @@
 from typing import List, Optional
 from uuid import UUID
-
 from sqlalchemy import func, select
-
 from database.database import get_async_session
-from models.UserModel import UserModel
+from models import UserModel
 
 class UserRepository:
     @classmethod

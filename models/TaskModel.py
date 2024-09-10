@@ -1,10 +1,8 @@
 from typing import Optional, List
 from uuid import uuid4
-
 from sqlalchemy import String, UUID, Integer, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from models.BaseModel import BaseModel
-
+from models import BaseModel
 from utils.enums import TableNameEnum, ModelNameEnum
 
 

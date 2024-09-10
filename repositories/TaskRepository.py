@@ -1,7 +1,7 @@
 from typing import List, Optional
-from sqlalchemy import select, delete, func
+from sqlalchemy import select, delete
 from database.database import get_async_session
-from models.TaskModel import TaskModel
+from models import TaskModel
 from uuid import UUID
 
 

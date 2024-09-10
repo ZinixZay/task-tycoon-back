@@ -1,13 +1,9 @@
 from typing import List, Optional
 from uuid import uuid4
-
 from sqlalchemy.dialects.postgresql import JSONB
-
-from models.BaseModel import BaseModel
-from sqlalchemy import ForeignKey
-from sqlalchemy import String, UUID, Integer
-from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy.orm import relationship
+from models import BaseModel
+from sqlalchemy import ForeignKey, String, UUID, Integer
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from utils.enums import QuestionTypeEnum, TableNameEnum, ModelNameEnum
 

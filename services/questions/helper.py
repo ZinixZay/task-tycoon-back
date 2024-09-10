@@ -1,6 +1,6 @@
 from typing import List
 
-from dtos import CreateQuestion
+from dtos.questions import CreateQuestion
 from models import QuestionModel, TaskModel
 
 

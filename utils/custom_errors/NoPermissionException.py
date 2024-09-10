@@ -1,5 +1,4 @@
 from fastapi import HTTPException
-
 from utils.enums import PermissionsEnum
 
 
