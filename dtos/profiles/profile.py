@@ -10,7 +10,6 @@ class GetProfileResponse(BaseModel):
 
 
 class UpdateProfileDto(BaseModel):
-    user_id: UUID
     nickname: str
     name: str
     surname: str
