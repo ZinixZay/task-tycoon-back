@@ -12,6 +12,7 @@ class QuestionContent(BaseModel):
 class Question(BaseModel):
     id: UUID
     question_body: str
+    order: int
     type: QuestionTypeEnum
     content: List[QuestionContent]
 
@@ -33,6 +34,7 @@ class CreateQuestion(BaseModel):
     question_body: str
     type: QuestionTypeEnum
     content: Optional[List[ContentField]] = None
+    order: int
 
 
 class CreateQuestionResponse(BaseModel):
