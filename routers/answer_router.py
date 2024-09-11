@@ -48,7 +48,6 @@ async def get_answers_for_task(
         answer_entities: List[AnswerModel] = await AnswerRepository.find_all_for_task_by_user(question_ids, user.id)
     else:
         answer_entities: List[AnswerModel] = await AnswerRepository.find_all_for_task(question_ids)
-    print([AnswerContent.model_validate(answer_content) for answer_content in answer_entities[0].content])
     validated_answers: List[AnswersGetResponse] = [
         AnswersGetResponse(
             id=answer.id,
