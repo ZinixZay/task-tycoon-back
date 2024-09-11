@@ -1,6 +1,5 @@
 from typing import Dict, List, Union
 from database.database import get_async_session
-from dtos.transactions import TransactionResponse
 from utils.enums import TransactionMethodsEnum
 import models as database_models
 
@@ -9,17 +8,14 @@ class Transaction:
     payload: Dict[TransactionMethodsEnum, List[Union[*database_models.__all__]]]
     session = None
 
-
-    def __init__(self,  payload: Dict[TransactionMethodsEnum, List[Union[*database_models.__all__]]]):
+    def __init__(self, payload: Dict[TransactionMethodsEnum, List[Union[*database_models.__all__]]]):
         self.payload = payload
-
 
     async def __get_session__(self):
         async for session in get_async_session():
             self.session = session
 
-
-    async def run(self) -> TransactionResponse:
+    async def run(self) -> None:
         await self.__get_session__()
         try:
             for method, models in self.payload.items():
@@ -32,5 +28,4 @@ class Transaction:
             await self.session.commit()
         except Exception as e:
             await self.session.rollback()
-            return {"success": False, "detailed": e}
-        return {"success": True, "detailed": "success"}
+            raise e

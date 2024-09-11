@@ -8,3 +8,4 @@ from enum import Enum
 class PermissionsEnum(Enum):
     CreateTasks: str = "create_task"
     ChangeOthersPermissions: str = "change_others_permissions"
+    Other: str = "unknown_permission"  # Для разррешений, которые мне пока впадлу писать
