@@ -3,7 +3,7 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends
 
-from dtos.answers import CreateAnswerDto, AnswerContent, AnswerDto
+from dtos.answers import CreateAnswerDto, AnswerContent, AnswerDto, AnswersGetResponse
 from models import UserModel, AnswerModel
 from repositories import TaskRepository, QuestionRepository, AnswerRepository
 from services.authentication import fastapi_users
@@ -37,7 +37,7 @@ async def create_answer(
 async def get_answers_for_task(
         task_id: UUID,
         user: UserModel = Depends(fastapi_users.current_user())
-) -> List[AnswerDto]:
+) -> List[AnswersGetResponse]:
     task_entity = await TaskRepository.find_by_id(task_id)
     if not task_entity:
         raise NotFoundException(task_id)
@@ -48,11 +48,13 @@ async def get_answers_for_task(
         answer_entities: List[AnswerModel] = await AnswerRepository.find_all_for_task_by_user(question_ids, user.id)
     else:
         answer_entities: List[AnswerModel] = await AnswerRepository.find_all_for_task(question_ids)
-    validated_answers: List[AnswerDto] = [
-        AnswerDto(
+    print([AnswerContent.model_validate(answer_content) for answer_content in answer_entities[0].content])
+    validated_answers: List[AnswersGetResponse] = [
+        AnswersGetResponse(
+            id=answer.id,
             question_id=answer.question_id,
             content=
-                [AnswerContent.model_validate(answer_content.__dict__) for answer_content in answer.content]
+                [answer_content for answer_content in answer.content]
         ) for answer in answer_entities
     ]
     return validated_answers
