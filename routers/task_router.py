@@ -32,11 +32,8 @@ async def add_task(
     models_for_transaction.extend(question_models)
 
     transaction: Transaction = Transaction({TransactionMethodsEnum.INSERT: models_for_transaction})
-    transaction_response = await transaction.run()
+    await transaction.run()
 
-    if not transaction_response['success']:
-        print(transaction_response['detailed'])
-        return CreateTaskResponse(ok=False, task_id=task_model.id)
     return CreateTaskResponse(ok=True, task_id=task_model.id)
 
 
