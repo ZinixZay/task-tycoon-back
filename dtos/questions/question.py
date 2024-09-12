@@ -33,7 +33,7 @@ class ContentField(BaseModel):
 class CreateQuestion(BaseModel):
     question_body: str
     type: QuestionTypeEnum
-    content: Optional[List[ContentField]] = None
+    content: List[ContentField]
     order: int
 
 
