@@ -92,6 +92,20 @@ async def get_task_by_identifier(
     )
     return result
 
+@tasks_router.get("/task_id")
+async def get_task_by_id(
+    query_params: GetTaskByIdDto = Depends()
+) -> FullTaskResponse:
+    id = query_params.id
+    task_entity = await TaskRepository.find_by_id(id)
+    validated_questions: List[Question] = \
+        [Question.model_validate(question_model.__dict__) for question_model in task_entity.questions]
+    result: FullTaskResponse = FullTaskResponse(
+        task=IsolatedTask.model_validate(task_entity.__dict__),
+        questions=validated_questions
+    )
+    return result
+
 
 @tasks_router.delete("/")
 async def delete_task_by_id(

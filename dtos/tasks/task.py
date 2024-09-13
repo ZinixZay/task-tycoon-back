@@ -51,5 +51,9 @@ class GetTaskByIdentifierDto(BaseModel):
     identifier: int
 
 
+class GetTaskByIdDto(BaseModel):
+    id: UUID
+
+
 class DeleteTaskByIdDto(BaseModel):
     task_id: UUID
