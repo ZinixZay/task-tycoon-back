@@ -1,7 +1,7 @@
 from sqlalchemy import select
 from typing import List
 from database.database import get_async_session
-from models.QuestionModel import QuestionModel
+from models import QuestionModel
 from uuid import UUID
 
 

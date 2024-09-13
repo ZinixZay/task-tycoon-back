@@ -9,3 +9,4 @@ class PermissionsEnum(Enum):
     CreateTasks: str = "create_task"
     ChangeOthersPermissions: str = "change_others_permissions"
     DeleteOthersTasks: str = "delete_other_task"
+    Other: str = "unknown_permission"  # Для разррешений, которые мне пока впадлу писать

@@ -1,8 +1,6 @@
-from typing import List, Dict, Generator
-
-from dtos.users.user_update import PermissionField
+from typing import List, Dict
+from dtos.permissions import PermissionField
 from models import UserModel
-
 from utils.enums import PermissionsEnum
 
 

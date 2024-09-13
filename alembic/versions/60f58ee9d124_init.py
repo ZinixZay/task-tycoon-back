@@ -1,24 +1,24 @@
 """init
 
-Revision ID: 9990a834794e
+Revision ID: 60f58ee9d124
 Revises: 
-Create Date: 2024-09-08 18:34:25.113576
+Create Date: 2024-09-10 23:40:05.569005
 
 """
 from typing import Sequence, Union
 
-from utils.env.get_env_variables import EnvironmentVariables
-
 import fastapi_users_db_sqlalchemy
 from alembic import op
 import sqlalchemy as sa
+from argon2 import PasswordHasher
+from sqlalchemy.dialects import postgresql
 from sqlalchemy.orm import sessionmaker
 
 from models import UserModel
-from argon2 import PasswordHasher
+from utils.env.get_env_variables import EnvironmentVariables
 
 # revision identifiers, used by Alembic.
-revision: str = '9990a834794e'
+revision: str = '60f58ee9d124'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -60,20 +60,19 @@ def upgrade() -> None:
     sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('task_id', sa.UUID(), nullable=False),
     sa.Column('question_body', sa.String(), nullable=False),
-    sa.Column('identifier', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('order', sa.SMALLINT(), nullable=False),
     sa.Column('type', sa.String(), nullable=False),
-    sa.Column('content', sa.JSON(), nullable=True),
+    sa.Column('content', postgresql.JSONB(astext_type=sa.Text()), nullable=False),
     sa.Column('file_path', sa.String(), nullable=True),
     sa.ForeignKeyConstraint(['task_id'], ['tasks.id'], ondelete='CASCADE'),
-    sa.PrimaryKeyConstraint('id', 'identifier'),
-    sa.UniqueConstraint('id'),
-    sa.UniqueConstraint('identifier')
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('id')
     )
     op.create_table('answers',
     sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('question_id', sa.UUID(), nullable=False),
     sa.Column('user_id', fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False),
-    sa.Column('content', sa.JSON(), nullable=False),
+    sa.Column('content', postgresql.JSONB(astext_type=sa.Text()), nullable=False),
     sa.ForeignKeyConstraint(['question_id'], ['questions.id'], ondelete='CASCADE'),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
