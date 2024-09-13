@@ -76,8 +76,6 @@ async def get_task_by_identifier(
     query_params: GetTaskByIdentifierDto = Depends()
 ) -> GetTasksResponse:
     identifier = query_params.identifier
-    if identifier is None:
-        raise NotFoundException({"task identifier": identifier})
     task_entity = await TaskRepository.find_by_identifier(identifier)
     result: GetTasksResponse = GetTasksResponse(
         tasks=[IsolatedTask.model_validate(task_entity.__dict__)]
