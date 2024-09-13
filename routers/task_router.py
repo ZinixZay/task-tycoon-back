@@ -10,6 +10,7 @@ from uuid import UUID
 from services.transactions import Transaction
 from utils.custom_errors import NotFoundException, NoPermissionException
 from utils.enums import TransactionMethodsEnum, PermissionsEnum
+from services.permissions import Permissions
 
 tasks_router: APIRouter = APIRouter(
     prefix="/tasks",
@@ -67,7 +68,10 @@ async def delete_task_by_id(
     task_entity: TaskModel = await TaskRepository.find_by_id(task_id)
     if task_entity is None:
         raise NotFoundException({"not found": task_id})
-    if task_entity.user_id != user_entity.id:
+    
+    task_was_added_by_another_user = task_entity.user_id != user_entity.id
+    user_has_permission = Permissions.from_number(user_entity.permissions).has(PermissionsEnum.DeleteOthersTasks)
+    if not user_has_permission and task_was_added_by_another_user:
         raise NoPermissionException(PermissionsEnum.DeleteOthersTasks)
     await TaskRepository.delete_by_id(task_id)
             
