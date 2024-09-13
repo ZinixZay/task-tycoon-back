@@ -1,6 +1,16 @@
-from typing import TypedDict, Union
+from typing import Annotated, Dict, List, Optional, Union
+
+from pydantic import BaseModel
+from models import AnswerModel, QuestionModel, TaskModel, UserModel
+from utils.enums import TransactionMethodsEnum
 
 
-# class TransactionResponse(TypedDict):
-#     success: bool
-#     detailed: Union[str, Exception]
+class TransactionPayload(BaseModel):
+    method: TransactionMethodsEnum
+    models: Optional[List[Union[AnswerModel, QuestionModel, TaskModel, UserModel]]] = []
+    models_to_update: Optional[List[Dict[Union[AnswerModel, QuestionModel, TaskModel, UserModel], Dict]]] = []
+    
+    
+    class Config:
+        arbitrary_types_allowed=True
+    

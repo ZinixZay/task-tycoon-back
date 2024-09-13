@@ -2,7 +2,8 @@ from typing import List
 from fastapi import APIRouter, Depends
 from dtos.questions import Question
 from dtos.tasks import GetTasksResponse, IsolatedTask, GetTasksByUserDto, GetTasksByTitleDto, \
-    GetTaskByIdentifierDto, FullTaskResponse, DeleteTaskByIdDto, CreateTaskResponse, CreateTaskDto, GetTaskByIdDto
+    GetTaskByIdentifierDto, FullTaskResponse, DeleteTaskByIdDto, CreateTaskResponse, CreateTaskDto
+from dtos.transactions.transaction import TransactionPayload
 from repositories import TaskRepository
 from services.authentication import fastapi_users
 from services.tasks import task_dto_to_model
@@ -31,9 +32,16 @@ async def add_task(
     question_models: List[QuestionModel] = question_dto_to_model(task_schema.questions, task_model)
     models_for_transaction.extend(question_models)
 
-    transaction: Transaction = Transaction({TransactionMethodsEnum.INSERT: models_for_transaction})
-    await transaction.run()
+    transaction_payload: List[TransactionPayload] = [
+        TransactionPayload(
+            method=TransactionMethodsEnum.INSERT,
+            models=models_for_transaction
+        )
+    ]
 
+    transaction: Transaction = Transaction(transaction_payload)
+    await transaction.run()
+    
     return CreateTaskResponse(ok=True, task_id=task_model.id)
 
 

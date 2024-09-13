@@ -6,12 +6,6 @@ from uuid import UUID
 
 
 class TaskRepository:
-    @classmethod
-    async def add_one(cls, task: TaskModel) -> TaskModel:
-        async for session in get_async_session():
-            session.add(task)
-            await session.commit()
-            return task
 
     @classmethod
     async def find_all(cls) -> list[TaskModel]:
@@ -58,4 +52,4 @@ class TaskRepository:
         async for session in get_async_session():
             query = delete(TaskModel).where(TaskModel.id == task_id)
             await session.execute(query)
-            await session.commit()
+            await session.commit()        
