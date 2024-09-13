@@ -84,6 +84,7 @@ async def get_task_by_identifier(
     )
     return result
 
+@tasks_router.get("/task_id")
 async def get_task_by_id(
     query_params: GetTaskByIdDto
 ) -> FullTaskResponse:
