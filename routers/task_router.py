@@ -12,6 +12,7 @@ from uuid import UUID
 from models import UserModel, TaskModel, QuestionModel
 from services.transactions import Transaction
 from utils.enums import TransactionMethodsEnum
+from utils.custom_errors import NotFoundException
 
 tasks_router: APIRouter = APIRouter(
     prefix="/tasks",
@@ -81,14 +82,11 @@ async def get_tasks_by_title(
 @tasks_router.get("/identifier")
 async def get_task_by_identifier(
     query_params: GetTaskByIdentifierDto = Depends()
-) -> FullTaskResponse:
+) -> GetTasksResponse:
     identifier = query_params.identifier
     task_entity = await TaskRepository.find_by_identifier(identifier)
-    validated_questions: List[Question] = \
-        [Question.model_validate(question_model.__dict__) for question_model in task_entity.questions]
-    result: FullTaskResponse = FullTaskResponse(
-        task = IsolatedTask.model_validate(task_entity.__dict__),
-        questions = validated_questions
+    result: GetTasksResponse = GetTasksResponse(
+        tasks=[IsolatedTask.model_validate(task_entity.__dict__)]
     )
     return result
 
