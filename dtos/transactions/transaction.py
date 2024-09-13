@@ -7,7 +7,7 @@ from utils.enums import TransactionMethodsEnum
 
 class TransactionPayload(BaseModel):
     method: TransactionMethodsEnum
-    models: List[Union[AnswerModel, QuestionModel, TaskModel, UserModel]]
+    models: Optional[List[Union[AnswerModel, QuestionModel, TaskModel, UserModel]]] = []
     models_to_update: Optional[List[Dict[Union[AnswerModel, QuestionModel, TaskModel, UserModel], Dict]]] = []
     
     
