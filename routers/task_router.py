@@ -86,7 +86,7 @@ async def get_task_by_identifier(
 
 @tasks_router.get("/task_id")
 async def get_task_by_id(
-    query_params: GetTaskByIdDto
+    query_params: GetTaskByIdDto = Depends()
 ) -> FullTaskResponse:
     id = query_params.id
     task_entity = await TaskRepository.find_by_id(id)
