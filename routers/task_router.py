@@ -66,13 +66,9 @@ async def delete_task_by_id(
     
     task_entity: TaskModel = await TaskRepository.find_by_id(task_id)
     if task_entity is None:
-        raise NotFoundException()
+        raise NotFoundException({"not found": task_id})
     if task_entity.user_id != user_entity.id:
-        from fastapi import HTTPException
-        class Dummy(HTTPException):
-            def __init__(self):
-                super().__init__(status_code=403, detail=["can't delete other users' tasks"])
-        raise Dummy()
+        raise NoPermissionException(PermissionsEnum.DeleteOthersTasks)
     await TaskRepository.delete_by_id(task_id)
             
     return task_id
