@@ -11,8 +11,9 @@ from services.questions import question_dto_to_model
 from uuid import UUID
 from models import UserModel, TaskModel, QuestionModel
 from services.transactions import Transaction
-from utils.enums import TransactionMethodsEnum
-from utils.custom_errors import NotFoundException
+from utils.custom_errors import NotFoundException, NoPermissionException
+from utils.enums import TransactionMethodsEnum, PermissionsEnum
+from services.permissions import Permissions
 
 tasks_router: APIRouter = APIRouter(
     prefix="/tasks",
@@ -107,9 +108,21 @@ async def get_task_by_id(
 
 @tasks_router.delete("/")
 async def delete_task_by_id(
-        body: DeleteTaskByIdDto,
+        task_id: UUID,
         user_entity: UserModel = Depends(fastapi_users.current_user())
 ) -> UUID:
     if user_entity.is_superuser:
-        await TaskRepository.delete_by_id(body.task_id)
-    return body.task_id
+        await TaskRepository.delete_by_id(task_id)
+        return task_id
+    
+    task_entity: TaskModel = await TaskRepository.find_by_id(task_id)
+    if task_entity is None:
+        raise NotFoundException({"not found": task_id})
+    
+    task_was_added_by_another_user = task_entity.user_id != user_entity.id
+    user_has_permission = Permissions.from_number(user_entity.permissions).has(PermissionsEnum.DeleteOthersTasks)
+    if not user_has_permission and task_was_added_by_another_user:
+        raise NoPermissionException(PermissionsEnum.DeleteOthersTasks)
+    await TaskRepository.delete_by_id(task_id)
+            
+    return task_id
