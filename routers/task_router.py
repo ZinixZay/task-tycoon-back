@@ -83,12 +83,10 @@ async def get_tasks_by_title(
 @tasks_router.get("/identifier")
 async def get_task_by_identifier(
     query_params: GetTaskByIdentifierDto = Depends()
-) -> GetTasksResponse:
+) -> IsolatedTask:
     identifier = query_params.identifier
     task_entity = await TaskRepository.find_by_identifier(identifier)
-    result: GetTasksResponse = GetTasksResponse(
-        tasks=[IsolatedTask.model_validate(task_entity.__dict__)]
-    )
+    result: IsolatedTask = IsolatedTask.model_validate(task_entity.__dict__)
     return result
 
 @tasks_router.get("/task_id")
