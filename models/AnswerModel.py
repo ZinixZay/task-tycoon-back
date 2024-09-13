@@ -16,3 +16,6 @@ class AnswerModel(BaseModel):
 
     question: Mapped[ModelNameEnum.QUESTION.value] = relationship(cascade="all,delete", back_populates="answers")
     user: Mapped[ModelNameEnum.USER.value] = relationship(cascade="all,delete", back_populates="answers")
+    
+    class Config: 
+        arbitrary_types_allowed=True

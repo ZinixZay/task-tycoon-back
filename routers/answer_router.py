@@ -4,6 +4,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends
 
 from dtos.answers import CreateAnswerDto, AnswerContent, AnswerDto, AnswersGetResponse
+from dtos.transactions.transaction import TransactionPayload
 from models import UserModel, AnswerModel
 from repositories import TaskRepository, QuestionRepository, AnswerRepository
 from services.authentication import fastapi_users
@@ -29,7 +30,14 @@ async def create_answer(
         content=[answer_content.model_dump(mode='json') for answer_content in answer.content]
     ) for answer in answer_schemas.answers]
 
-    transaction: Transaction = Transaction({TransactionMethodsEnum.INSERT: answer_models})
+    transaction_payload: List[TransactionPayload] = [
+        TransactionPayload(
+            method=TransactionMethodsEnum.INSERT,
+            models=answer_models
+        )
+    ]    
+
+    transaction: Transaction = Transaction(transaction_payload)
     await transaction.run()
 
 

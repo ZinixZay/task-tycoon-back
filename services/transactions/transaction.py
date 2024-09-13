@@ -1,14 +1,15 @@
 from typing import Dict, List, Union
 from database.database import get_async_session
+from dtos.transactions.transaction import TransactionPayload
 from utils.enums import TransactionMethodsEnum
 import models as database_models
 
 
 class Transaction:
-    payload: Dict[TransactionMethodsEnum, List[Union[*database_models.__all__]]]
+    payload: List[TransactionPayload]
     session = None
 
-    def __init__(self, payload: Dict[TransactionMethodsEnum, List[Union[*database_models.__all__]]]):
+    def __init__(self, payload: List[TransactionPayload]):
         self.payload = payload
 
     async def __get_session__(self):
@@ -18,13 +19,20 @@ class Transaction:
     async def run(self) -> None:
         await self.__get_session__()
         try:
-            for method, models in self.payload.items():
-                if method == TransactionMethodsEnum.INSERT:
-                    for model in models:
+            for action in self.payload:
+                if action.method == TransactionMethodsEnum.INSERT:
+                    for model in action.models:
                         self.session.add(model)
-                elif method == TransactionMethodsEnum.DELETE:
-                    for model in models:
+                        
+                elif action.method == TransactionMethodsEnum.DELETE:
+                    for model in action.models:
                         await self.session.delete(model)
+                        
+                elif action.method == TransactionMethodsEnum.UPDATE:
+                    if not action.models_to_update:
+                        raise Exception('No models to update specified')
+                    for model, content in action.models_to_update.items():
+                        print(model, content)
             await self.session.commit()
         except Exception as e:
             await self.session.rollback()
