@@ -3,5 +3,6 @@ from .QuestionModel import *
 from .TaskModel import *
 from .UserModel import *
 from .BaseModel import *
+from .AttemptStatsModel import *
 
-__all__ = [AnswerModel, QuestionModel, TaskModel, UserModel, BaseModel]
+__all__ = [AnswerModel, QuestionModel, TaskModel, UserModel, BaseModel, AttemptStatsModel]

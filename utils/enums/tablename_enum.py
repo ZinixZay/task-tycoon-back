@@ -6,3 +6,4 @@ class TableNameEnum(Enum):
     TASKS = "tasks"
     USERS = "users"
     ANSWERS = "answers"
+    ATTEMPT_STATS = 'attempt_stats'
