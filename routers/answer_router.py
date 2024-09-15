@@ -26,7 +26,7 @@ async def create_answer(
         user: UserModel = Depends(fastapi_users.current_user())
 ) -> None:
 
-    answer_models = [AnswerModel(
+    models_to_update = [AnswerModel(
         user_id=user.id,
         question_id=answer.question_id,
         content=[answer_content.model_dump(mode='json') for answer_content in answer.content]
@@ -35,10 +35,12 @@ async def create_answer(
     stats: AttemptStatsCreate = await calculate_attempt_stats(answer_schema, user.id)
     attempt_stats_model: AttemptStatsModel = AttemptStatsModel(**stats.to_dict())
 
+    models_to_update.append(attempt_stats_model)
+
     transaction_payload: List[TransactionPayload] = [
         TransactionPayload(
             method=TransactionMethodsEnum.INSERT,
-            models=[*answer_models, attempt_stats_model]
+            models=models_to_update
         )
     ]    
 
