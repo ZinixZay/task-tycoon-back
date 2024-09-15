@@ -11,7 +11,7 @@ from services.questions import question_dto_to_model
 from uuid import UUID
 from models import UserModel, TaskModel, QuestionModel
 from services.transactions import Transaction
-from utils.custom_errors import NotFoundException, NoPermissionException
+from utils.custom_errors import ForbiddenException, NotFoundException, NoPermissionException
 from utils.enums import TransactionMethodsEnum, PermissionsEnum
 from services.permissions import Permissions
 
@@ -89,7 +89,26 @@ async def get_task_by_identifier(
     result: IsolatedTask = IsolatedTask.model_validate(task_entity.__dict__)
     return result
 
-@tasks_router.get("/task_id")
+@tasks_router.get("/task_id/to_solve")
+async def get_task_by_id(
+    query_params: GetTaskByIdDto = Depends(),
+    user: UserModel = Depends(fastapi_users.current_user())
+) -> FullTaskResponse:
+    id = query_params.id
+    task_entity = await TaskRepository.find_by_id(id)
+    validated_questions: List[Question] = \
+        [Question.model_validate(question_model.__dict__) for question_model in task_entity.questions]
+    for question in validated_questions:
+        for pair in question.content:
+            pair.title = False
+    result: FullTaskResponse = FullTaskResponse(
+        task=IsolatedTask.model_validate(task_entity.__dict__),
+        questions=validated_questions
+    )
+    return result
+
+
+@tasks_router.get("/task_id/to_observe")
 async def get_task_by_id(
     query_params: GetTaskByIdDto = Depends(),
     user: UserModel = Depends(fastapi_users.current_user())
@@ -100,11 +119,7 @@ async def get_task_by_id(
         validated_questions: List[Question] = \
             [Question.model_validate(question_model.__dict__) for question_model in task_entity.questions]
     else:
-        validated_questions: List[Question] = \
-            [Question.model_validate(question_model.__dict__) for question_model in task_entity.questions]
-        for question in validated_questions:
-            for pair in question.content:
-                pair.title = False
+        raise ForbiddenException(f"Вы не являетесь создателем задания {task_entity.title}")
     result: FullTaskResponse = FullTaskResponse(
         task=IsolatedTask.model_validate(task_entity.__dict__),
         questions=validated_questions
