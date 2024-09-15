@@ -33,14 +33,18 @@ class Transaction:
                         
                 elif action.method == TransactionMethodsEnum.UPDATE:
                     for model in action.models:
-                        params = list()
+                        params = dict()
                         updateQuery: str = f"UPDATE {model.__tablename__} SET "
                         for key, value in model.__dict__.items():
-                            if type(value) in [str, int]:
-                                updateQuery += f"{key} = '{value}', "
-                            elif type(value) == NoneType:
-                                updateQuery += f"{key} = NULL, "
-                        updateQuery = updateQuery[:-2] + f" WHERE id='{model.id}'"
+                            import json
+                            if type(value) in [dict, list]:
+                                params[key] = json.dumps(value)
+                            else:
+                                params[key] = value
+                            query_key = key if key != "order" else f'"{key}"'
+                            updateQuery += f"{query_key} = :{key}, "
+                        updateQuery = updateQuery[:-2] + f" WHERE id=:model_id"
+                        params["model_id"] = model.id
                         await self.session.execute(text(updateQuery), params)
                     
             await self.session.commit()

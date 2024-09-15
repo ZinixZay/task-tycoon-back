@@ -57,3 +57,16 @@ class GetTaskByIdDto(BaseModel):
 
 class DeleteTaskByIdDto(BaseModel):
     task_id: UUID
+
+
+class PatchTaskDto(BaseModel):
+    task_id: UUID
+    title: str
+    description_full: Optional[str] = None
+    description_short: Optional[str] = None
+    questions: List[CreateQuestion]
+
+
+class PatchTaskResponse(BaseModel):
+    ok: bool
+    task_id: UUID
