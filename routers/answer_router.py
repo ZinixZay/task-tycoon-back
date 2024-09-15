@@ -4,10 +4,12 @@ from uuid import UUID
 from fastapi import APIRouter, Depends
 
 from dtos.answers import CreateAnswerDto, AnswerContent, AnswerDto, AnswersGetResponse
+from dtos.attempt_stats.attempt_stats import AttemptStatsCreate
 from dtos.transactions.transaction import TransactionPayload
-from models import UserModel, AnswerModel
+from models import AttemptStatsModel, UserModel, AnswerModel
 from repositories import TaskRepository, QuestionRepository, AnswerRepository
 from services.authentication import fastapi_users
+from services.stats import calculate_attempt_stats
 from services.transactions import Transaction
 from utils.custom_errors import NotFoundException, NoPermissionException
 from utils.enums import TransactionMethodsEnum, PermissionsEnum
@@ -20,7 +22,7 @@ answer_router: APIRouter = APIRouter(
 
 @answer_router.post('/')
 async def create_answer(
-        answer_schemas: CreateAnswerDto,
+        answer_schema: CreateAnswerDto,
         user: UserModel = Depends(fastapi_users.current_user())
 ) -> None:
 
@@ -28,12 +30,15 @@ async def create_answer(
         user_id=user.id,
         question_id=answer.question_id,
         content=[answer_content.model_dump(mode='json') for answer_content in answer.content]
-    ) for answer in answer_schemas.answers]
+    ) for answer in answer_schema.answers]
+
+    stats: AttemptStatsCreate = await calculate_attempt_stats(answer_schema, user.id)
+    attempt_stats_model: AttemptStatsModel = AttemptStatsModel(**stats.to_dict())
 
     transaction_payload: List[TransactionPayload] = [
         TransactionPayload(
             method=TransactionMethodsEnum.INSERT,
-            models=answer_models
+            models=[*answer_models, attempt_stats_model]
         )
     ]    
 

@@ -1,19 +1,21 @@
 from typing import List
 from fastapi import APIRouter, Depends
+from dtos.attempt_stats.attempt_stats import AttemptStatsCreate
 from dtos.questions import Question
 from dtos.tasks import GetTasksResponse, IsolatedTask, GetTasksByUserDto, GetTasksByTitleDto, \
     GetTaskByIdentifierDto, FullTaskResponse, GetTaskByIdDto, DeleteTaskByIdDto, CreateTaskResponse, CreateTaskDto
 from dtos.transactions.transaction import TransactionPayload
-from repositories import TaskRepository
+from repositories import AttemptStatsRepository, TaskRepository
 from services.authentication import fastapi_users
 from services.tasks import task_dto_to_model
 from services.questions import question_dto_to_model
 from uuid import UUID
-from models import UserModel, TaskModel, QuestionModel
+from models import AttemptStatsModel, UserModel, TaskModel, QuestionModel
 from services.transactions import Transaction
 from utils.custom_errors import NotFoundException, NoPermissionException
 from utils.enums import TransactionMethodsEnum, PermissionsEnum
 from services.permissions import Permissions
+from utils.enums.attempt_type_enum import AttemptStatsStatusEnum, AttemptTypeEnum
 
 tasks_router: APIRouter = APIRouter(
     prefix="/tasks",
@@ -77,6 +79,7 @@ async def get_tasks_by_title(
     response: GetTasksResponse = GetTasksResponse(
         tasks=[IsolatedTask.model_validate(task_entity.__dict__) for task_entity in task_entities]
     )
+    
     return response
 
 

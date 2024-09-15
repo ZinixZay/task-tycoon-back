@@ -7,6 +7,12 @@ from pydantic import BaseModel
 class AnswerContent(BaseModel):
     title: str
     is_correct: bool
+    
+    def to_dict(self):
+        return {
+            'title': self.title,
+            'is_correct': self.is_correct
+        }
 
 
 class AnswerDto(BaseModel):
@@ -22,3 +28,4 @@ class AnswersGetResponse(BaseModel):
 
 class CreateAnswerDto(BaseModel):
     answers: List[AnswerDto]
+    task_id: UUID
