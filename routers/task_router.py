@@ -100,7 +100,7 @@ async def get_task_by_id(
         [Question.model_validate(question_model.__dict__) for question_model in task_entity.questions]
     for question in validated_questions:
         for pair in question.content:
-            pair.title = False
+            pair.is_correct = False
     result: FullTaskResponse = FullTaskResponse(
         task=IsolatedTask.model_validate(task_entity.__dict__),
         questions=validated_questions
