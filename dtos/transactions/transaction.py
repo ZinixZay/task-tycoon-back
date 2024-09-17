@@ -10,9 +10,6 @@ class TransactionPayload(BaseModel):
     models: Optional[List[Union[
         AnswerModel, QuestionModel, TaskModel, UserModel, AttemptStatsModel, SummaryAttemptStatsModel
         ]]] = []
-    models_to_update: Optional[List[Dict[Union[
-        AnswerModel, QuestionModel, TaskModel, UserModel, AttemptStatsModel, SummaryAttemptStatsModel
-        ], Dict]]] = []
     
     
     class Config:

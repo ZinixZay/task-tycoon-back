@@ -4,7 +4,6 @@ from database.database import get_async_session
 from models import QuestionModel
 from uuid import UUID
 
-
 class QuestionRepository:
     @classmethod
     async def add_one(cls, question: QuestionModel) -> QuestionModel:

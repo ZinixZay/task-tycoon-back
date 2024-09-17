@@ -3,13 +3,13 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends
 
-from dtos.answers import CreateAnswerDto, AnswerContent, AnswerDto, AnswersGetResponse
-from dtos.attempt_stats.attempt_stats import AttemptStatsCreate
-from dtos.transactions.transaction import TransactionPayload
-from models import AttemptStatsModel, UserModel, AnswerModel
+from dtos.answers import CreateAnswerDto, AnswersGetResponse
+from dtos.attempt_stats import AttemptStatsCreate
+from dtos.transactions import TransactionPayload
+from models import AttemptStatsModel, UserModel, AnswerModel, SummaryAttemptStatsModel
 from repositories import TaskRepository, QuestionRepository, AnswerRepository
 from services.authentication import fastapi_users
-from services.stats import calculate_attempt_stats
+from services.stats import calculate_attempt_stats, calculate_summary_attempt_stats
 from services.transactions import Transaction
 from utils.custom_errors import NotFoundException, NoPermissionException
 from utils.enums import TransactionMethodsEnum, PermissionsEnum
@@ -43,8 +43,15 @@ async def create_answer(
             models=models_to_update
         )
     ]    
-
+    
     transaction: Transaction = Transaction(transaction_payload)
+    await transaction.pre_run()
+    summaryStats = await calculate_summary_attempt_stats(user.id, answer_schema.task_id, transaction)
+    # if exists - update. Transactipn update method - which fields to collide
+    await transaction.extend([TransactionPayload(
+        method=TransactionMethodsEnum.INSERT,
+        models=[SummaryAttemptStatsModel(**summaryStats.__dict__)]
+    )])
     await transaction.run()
 
 

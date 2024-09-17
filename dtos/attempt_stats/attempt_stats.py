@@ -2,7 +2,6 @@
 from typing import Dict, List, Optional
 from pydantic import BaseModel
 from uuid import UUID
-from models import AttemptStatsModel
 from utils.enums.attempt_type_enum import AttemptStatsStatusEnum, AttemptTypeEnum
 
 
@@ -34,3 +33,13 @@ class AttemptStatsCreate(BaseModel):
             'percent': self.percent,
             'type': self.type.value
         }
+
+
+class AttemptStatsValidated(BaseModel):
+    id: UUID
+    user_id: UUID
+    task_id: UUID
+    stats: List[AttemptStatsField]
+    percent: float
+    type: AttemptTypeEnum
+    created_at: int

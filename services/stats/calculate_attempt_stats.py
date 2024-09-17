@@ -11,7 +11,7 @@ from utils.enums.attempt_type_enum import AttemptStatsStatusEnum, AttemptTypeEnu
 async def calculate_attempt_stats(answer_schema: CreateAnswerDto, user_id: UUID) -> AttemptStatsCreate:
     existing_questions = await QuestionRepository.find_by_task(answer_schema.task_id)
     stats: AttemptStatsField = []
-    correct_amount, incorrect_amount = 0, 0
+    correct_amount = 0
     for question in existing_questions:
         try:
             answered_question = next(filter(lambda answer: answer.question_id == question.id, answer_schema.answers))
@@ -22,7 +22,6 @@ async def calculate_attempt_stats(answer_schema: CreateAnswerDto, user_id: UUID)
                     status=AttemptStatsStatusEnum.no_answer
                 )
             )
-            incorrect_amount += 1
             continue
         if compare_contents(answered_question.content, question.content):
             stats.append(
@@ -40,13 +39,12 @@ async def calculate_attempt_stats(answer_schema: CreateAnswerDto, user_id: UUID)
                     content=[content.to_dict() for content in answered_question.content]
                 )
             )
-            incorrect_amount += 1
     result: AttemptStatsCreate = AttemptStatsCreate(
         user_id=user_id,
         task_id=answer_schema.task_id,
         type=AttemptTypeEnum.single,
         stats=[stat.to_dict() for stat in stats],
-        percent=100 if not incorrect_amount else round(correct_amount / incorrect_amount, 1)
+        percent=100 if not existing_questions else round(correct_amount / len(existing_questions) * 100, 1)
     )
     return result
     
