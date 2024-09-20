@@ -26,31 +26,29 @@ async def create_answer(
         answer_schema: CreateAnswerDto,
         user: UserModel = Depends(fastapi_users.current_user())
 ) -> None:
-
+    # adding answers
     models_to_update = [AnswerModel(
         user_id=user.id,
         question_id=answer.question_id,
         content=[answer_content.model_dump(mode='json') for answer_content in answer.content]
     ) for answer in answer_schema.answers]
-
     transaction_payload: List[TransactionPayload] = [
         TransactionPayload(
             method=TransactionMethodsEnum.INSERT,
             models=models_to_update
         )
     ]    
-    
     transaction: Transaction = await Transaction.create(transaction_payload)
-
     await transaction.run()
+
+    # calculating stats by attempt
     # TODO merge adding questions and calculating stats into 1 transaction
     stats: AttemptStatsCreate = await calculate_attempt_stats(answer_schema, user.id)
     await AttemptStatsRepository.add_one(stats)
 
+    #calculating summary stats
     summary_stats = await calculate_summary_attempt_stats(user.id, answer_schema.task_id)
-
     current_summary_stats = await SummaryStatsRepository.get_by_user_task(user.id, answer_schema.task_id)
-
     if (current_summary_stats):
         await SummaryStatsRepository.update_one(current_summary_stats.id, summary_stats)
     else:

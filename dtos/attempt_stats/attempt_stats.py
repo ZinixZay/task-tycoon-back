@@ -43,3 +43,13 @@ class AttemptStatsValidated(BaseModel):
     percent: float
     type: AttemptTypeEnum
     created_at: int
+
+
+class GetAttemptStatsDto(BaseModel):
+    attempt_id: UUID
+
+
+class GetAttemptStatsResponse(BaseModel):
+    stats: List[AttemptStatsField]
+    percent: float
+    created_at: int

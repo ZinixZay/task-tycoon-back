@@ -27,6 +27,13 @@ class AttemptStatsRepository:
             return model_id
         
     @classmethod
+    async def find_one_by_id(cls, id: UUID) -> AttemptStatsModel | None:
+        query = select(AttemptStatsModel).where(AttemptStatsModel.id == id)
+        async for session in get_async_session():
+            result = await session.execute(query)
+            return result.scalar_one_or_none()
+
+    @classmethod
     async def find_by_user_task(cls, user_id: UUID, task_id: UUID) -> List[AttemptStatsModel]:
         async for session in get_async_session():
             query = select(AttemptStatsModel).where(and_(AttemptStatsModel.user_id == user_id, 
@@ -44,5 +51,5 @@ class AttemptStatsRepository:
                 AttemptStatsModel.type == AttemptTypeEnum.resulting.value)
                 )
             result = await session.execute(query)
-            return result.scalars().one_or_none()
+            return result.scalar_one_or_none()
         
