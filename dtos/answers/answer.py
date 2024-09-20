@@ -29,4 +29,3 @@ class AnswersGetResponse(BaseModel):
 class CreateAnswerDto(BaseModel):
     task_id: UUID
     answers: List[AnswerDto]
-    task_id: UUID

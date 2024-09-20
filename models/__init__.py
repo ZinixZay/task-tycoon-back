@@ -6,4 +6,6 @@ from .BaseModel import *
 from .AttemptStatsModel import *
 from .SummaryAttemptStatsModel import *
 
+database_models = AnswerModel, QuestionModel, TaskModel, UserModel, AttemptStatsModel, SummaryAttemptStatsModel
+
 __all__ = [AnswerModel, QuestionModel, TaskModel, UserModel, BaseModel, AttemptStatsModel, SummaryAttemptStatsModel]

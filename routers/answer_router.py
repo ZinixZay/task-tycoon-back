@@ -47,7 +47,7 @@ async def create_answer(
     transaction: Transaction = Transaction(transaction_payload)
     await transaction.pre_run()
     summaryStats = await calculate_summary_attempt_stats(user.id, answer_schema.task_id, transaction)
-    # if exists - update. Transactipn update method - which fields to collide
+    # if exists - update. Transaction update method - which fields to collide
     await transaction.extend([TransactionPayload(
         method=TransactionMethodsEnum.INSERT,
         models=[SummaryAttemptStatsModel(**summaryStats.__dict__)]
