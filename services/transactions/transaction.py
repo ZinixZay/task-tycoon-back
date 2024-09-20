@@ -24,7 +24,7 @@ class Transaction:
     async def __get_session__(self):
         async for session in get_async_session():
             self.session = session
-    
+    # UPSERT method. fields to collide!
     async def __insert__(self, models):
         for model in models:
             self.session.add(model)
@@ -56,7 +56,7 @@ class Transaction:
             raise Exception('No transaction session or payload initialized')
         for action in self.payload:
             if action.method == TransactionMethodsEnum.INSERT:
-                await self.__update__(action.models)    
+                await self.__insert__(action.models)    
             elif action.method == TransactionMethodsEnum.DELETE:
                 await self.__delete__(action.models)
             elif action.method == TransactionMethodsEnum.UPDATE:

@@ -12,3 +12,13 @@ class SummaryAttemptStats(BaseModel):
     avg_percent: float
     attempt_amount: int
     resulting_attempt: UUID
+
+    def to_dict(self) -> dict:
+        return {
+            'user_id': self.user_id,
+            'task_id': self.task_id,
+            'best_percent': self.best_percent,
+            'avg_percent': self.avg_percent,
+            'attempt_amount': self.attempt_amount,
+            'resulting_attempt': self.resulting_attempt
+        }

@@ -19,9 +19,9 @@ class AttemptStatsRepository:
             return attempt_stats_model
         
     @classmethod
-    async def update_one(cls, model_id: UUID, content: dict) -> UUID:
+    async def update_one(cls, model_id: UUID, content: list) -> UUID:
         async for session in get_async_session():
-            stmt = update(AttemptStatsModel).where(AttemptStatsModel.id == model_id).values(**content)
+            stmt = update(AttemptStatsModel).where(AttemptStatsModel.id == model_id).values(stats=content)
             await session.execute(stmt)
             await session.commit()
             return model_id
@@ -29,7 +29,9 @@ class AttemptStatsRepository:
     @classmethod
     async def find_by_user_task(cls, user_id: UUID, task_id: UUID) -> List[AttemptStatsModel]:
         async for session in get_async_session():
-            query = select(AttemptStatsModel).where(AttemptStatsModel.user_id == user_id and AttemptStatsModel.task_id == task_id)
+            query = select(AttemptStatsModel).where(and_(AttemptStatsModel.user_id == user_id, 
+                                                         AttemptStatsModel.task_id == task_id, 
+                                                         AttemptStatsModel.type == AttemptTypeEnum.single.value))
             result = await session.execute(query)
             return list(result.scalars().all())
         
