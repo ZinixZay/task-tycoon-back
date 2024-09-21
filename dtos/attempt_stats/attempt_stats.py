@@ -47,6 +47,15 @@ class AttemptStatsValidated(BaseModel):
 
 class GetAttemptStatsDto(BaseModel):
     attempt_id: UUID
+    
+    
+class GetResultingAttemptStatsDto(BaseModel):
+    task_id: UUID
+    user_id: UUID
+
+
+class GetTaskStatsDto(BaseModel):
+    task_id: UUID
 
 
 class GetAttemptStatsResponse(BaseModel):

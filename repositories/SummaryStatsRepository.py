@@ -74,4 +74,11 @@ class SummaryStatsRepository:
         async for session in get_async_session():
             await session.execute(query)
             await session.commit()
+            
+    @classmethod
+    async def get_by_task(cls, task_id: UUID) -> List[SummaryAttemptStatsModel]:
+        query = select(SummaryAttemptStatsModel).where(SummaryAttemptStatsModel.task_id == task_id)
+        async for session in get_async_session():
+            result = await session.execute(query)
+            return list(result.scalars().all())
 

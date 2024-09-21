@@ -43,6 +43,15 @@ class AttemptStatsRepository:
             return list(result.scalars().all())
         
     @classmethod
+    async def find_resulting_by_user_task(cls, user_id: UUID, task_id: UUID) -> List[AttemptStatsModel]:
+        async for session in get_async_session():
+            query = select(AttemptStatsModel).where(and_(AttemptStatsModel.user_id == user_id, 
+                                                         AttemptStatsModel.task_id == task_id, 
+                                                         AttemptStatsModel.type == AttemptTypeEnum.resulting.value))
+            result = await session.execute(query)
+            return list(result.scalars().all())
+    
+    @classmethod
     async def find_resulting_by_user_task(cls, user_id: UUID, task_id: UUID) -> AttemptStatsModel:
         async for session in get_async_session():
             query = select(AttemptStatsModel).where(
