@@ -16,6 +16,7 @@ fastapi-users = "*"
 fastapi-users-db-sqlalchemy = "*"
 setuptools = "*"
 coredis = "*"
+openpyxl = "*"
 
 [dev-packages]
 

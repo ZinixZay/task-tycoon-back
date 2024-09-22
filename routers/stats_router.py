@@ -1,5 +1,6 @@
 import json
 from fastapi import APIRouter, Depends
+from fastapi.responses import FileResponse
 from dtos.tasks.stats.task_stats import TaskStats
 from repositories import AttemptStatsRepository, TaskRepository
 from services.authentication import fastapi_users
@@ -69,3 +70,16 @@ async def get_task_stats(
     else:
         task_stats = json.loads(task_stats)
     return task_stats
+
+
+@stats_router.get('/task_stats/download/excel')
+async def download_excel_task_stats(
+    query_params: GetTaskStatsDto = Depends(),
+    user: UserModel = Depends(fastapi_users.current_user())
+) -> FileResponse:
+    task_entity = await TaskRepository.find_by_id(query_params.task_id)
+    if not task_entity:
+        raise NotFoundException(f'Не найдено задание с id={query_params.task_id}')
+    if task_entity.user_id != user.id and not user.is_superuser:
+        raise NoPermissionException(PermissionsEnum.Other)
+    
