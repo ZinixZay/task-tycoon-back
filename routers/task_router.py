@@ -104,6 +104,7 @@ async def get_task_to_solve_by_id(
             pair.is_correct = False
         if question.type == QuestionTypeEnum.DETAILED:
             new_content = list()
+            pair.title = ""
             for content in question.content:
                 delattr(content, "is_correct")
                 new_content.append(content)
