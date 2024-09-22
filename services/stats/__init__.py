@@ -1,3 +1,3 @@
-from .calculate_attempt_stats import calculate_attempt_stats
-from .calculate_summary_stats import calculate_summary_attempt_stats
+from .attempt_stats import AttemptStatsCalculate
+from .summary_attempt_stats import SummaryAttemptStatsCalculate
 from .task_stats import TaskStatsCalculate

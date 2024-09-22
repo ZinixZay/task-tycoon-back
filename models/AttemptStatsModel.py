@@ -13,7 +13,7 @@ class AttemptStatsModel(BaseModel):
     user_id: Mapped[UUID] = mapped_column(ForeignKey(f"{TableNameEnum.USERS.value}.id", ondelete='CASCADE'))
     task_id: Mapped[UUID] = mapped_column(ForeignKey(f"{TableNameEnum.TASKS.value}.id", ondelete='CASCADE'))
     stats: Mapped[JSONB] = mapped_column(JSONB)
-    percent: Mapped[Float] = mapped_column(Float)
+    result: Mapped[Float] = mapped_column(Float)
     type: Mapped[String] = mapped_column(String)
     created_at: Mapped[DateTime] = mapped_column(DateTime, default=func.now())
     

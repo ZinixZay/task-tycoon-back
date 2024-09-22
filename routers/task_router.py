@@ -41,10 +41,10 @@ async def add_task(
         )
     ]
 
-    transaction: Transaction = Transaction(transaction_payload)
+    transaction = await Transaction.create(transaction_payload)
     await transaction.run()
     
-    return CreateTaskResponse(ok=True, task_id=task_model.id)
+    return CreateTaskResponse(task_id=task_model.id)
 
 
 @tasks_router.get("/")

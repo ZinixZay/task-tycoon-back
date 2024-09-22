@@ -18,6 +18,12 @@ class AnswerContent(BaseModel):
 class AnswerDto(BaseModel):
     question_id: UUID
     content: List[AnswerContent]
+    
+    def to_dict(self):
+        return {
+            'question_id': self.question_id,
+            'content': [answer.to_dict() for answer in self.content]
+        }
 
 
 class AnswersGetResponse(BaseModel):

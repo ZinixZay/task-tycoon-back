@@ -20,6 +20,13 @@ class Transaction:
         await transaction.__get_session__()
         await transaction.sync()
         return transaction
+    
+    @classmethod
+    async def create_and_run(cls, payload: List[TransactionPayload]):
+        transaction = Transaction(payload)
+        await transaction.__get_session__()
+        await transaction.sync()
+        await transaction.run()
         
     async def __get_session__(self):
         async for session in get_async_session():

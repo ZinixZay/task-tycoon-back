@@ -9,7 +9,7 @@ from dtos.transactions import TransactionPayload
 from models import UserModel, AnswerModel
 from repositories import AttemptStatsRepository, TaskRepository, QuestionRepository, AnswerRepository
 from services.authentication import fastapi_users
-from services.stats import calculate_attempt_stats, calculate_summary_attempt_stats
+from services.stats import AttemptStatsCalculate, SummaryAttemptStatsCalculate
 from services.transactions import Transaction
 from utils.custom_errors import NotFoundException, NoPermissionException
 from utils.enums import TransactionMethodsEnum, PermissionsEnum
@@ -26,28 +26,19 @@ async def create_answer(
         answer_schema: CreateAnswerDto,
         user: UserModel = Depends(fastapi_users.current_user())
 ) -> None:
+    # TODO merge adding answers and calculating stats into 1 transaction
+    
     # adding answers
-    models_to_update = [AnswerModel(
-        user_id=user.id,
-        question_id=answer.question_id,
-        content=[answer_content.model_dump(mode='json') for answer_content in answer.content]
-    ) for answer in answer_schema.answers]
-    transaction_payload: List[TransactionPayload] = [
-        TransactionPayload(
-            method=TransactionMethodsEnum.INSERT,
-            models=models_to_update
-        )
-    ]    
-    transaction: Transaction = await Transaction.create(transaction_payload)
-    await transaction.run()
+    answer_model = AnswerModel(user_id=user.id, content=[answer.model_dump(mode='json') for answer in answer_schema.answers])
+    transaction_payload = TransactionPayload(method=TransactionMethodsEnum.INSERT, models=[answer_model])
+    await Transaction.create_and_run([transaction_payload])
 
     # calculating stats by attempt
-    # TODO merge adding questions and calculating stats into 1 transaction
-    stats: AttemptStatsCreate = await calculate_attempt_stats(answer_schema, user.id)
+    stats: AttemptStatsCreate = await AttemptStatsCalculate.calculate_attempt_stats(answer_schema, user.id)
     await AttemptStatsRepository.add_one(stats)
 
-    #calculating summary stats
-    summary_stats = await calculate_summary_attempt_stats(user.id, answer_schema.task_id)
+    # calculating summary stats
+    summary_stats = await SummaryAttemptStatsCalculate.calculate_summary_attempt_stats(user.id, answer_schema.task_id)
     current_summary_stats = await SummaryStatsRepository.get_by_user_task(user.id, answer_schema.task_id)
     if (current_summary_stats):
         await SummaryStatsRepository.update_one(current_summary_stats.id, summary_stats)

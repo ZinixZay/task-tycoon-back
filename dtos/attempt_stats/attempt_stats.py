@@ -22,7 +22,7 @@ class AttemptStatsCreate(BaseModel):
     user_id: UUID
     task_id: UUID
     stats: List[AttemptStatsField]
-    percent: float
+    result: float
     type: AttemptTypeEnum
     
     def to_dict(self) -> dict:
@@ -30,7 +30,7 @@ class AttemptStatsCreate(BaseModel):
             'user_id': str(self.user_id),
             'task_id': str(self.task_id),
             'stats': [stat.to_dict() for stat in self.stats],
-            'percent': self.percent,
+            'result': self.result,
             'type': self.type.value
         }
 
@@ -40,7 +40,7 @@ class AttemptStatsValidated(BaseModel):
     user_id: UUID
     task_id: UUID
     stats: List[AttemptStatsField]
-    percent: float
+    result: float
     type: AttemptTypeEnum
     created_at: int
 

@@ -19,9 +19,9 @@ class AttemptStatsRepository:
             return attempt_stats_model
         
     @classmethod
-    async def update_one(cls, model_id: UUID, content: list) -> UUID:
+    async def update_one(cls, model_id: UUID, content: list, result: float) -> UUID:
         async for session in get_async_session():
-            stmt = update(AttemptStatsModel).where(AttemptStatsModel.id == model_id).values(stats=content)
+            stmt = update(AttemptStatsModel).where(AttemptStatsModel.id == model_id).values(stats=content, result=result)
             await session.execute(stmt)
             await session.commit()
             return model_id
