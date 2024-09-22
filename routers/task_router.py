@@ -12,7 +12,7 @@ from uuid import UUID
 from models import UserModel, TaskModel, QuestionModel
 from services.transactions import Transaction
 from utils.custom_errors import ForbiddenException, NotFoundException, NoPermissionException
-from utils.enums import TransactionMethodsEnum, PermissionsEnum
+from utils.enums import TransactionMethodsEnum, PermissionsEnum, QuestionTypeEnum
 from services.permissions import Permissions
 
 tasks_router: APIRouter = APIRouter(
@@ -91,7 +91,7 @@ async def get_task_by_identifier(
     return result
 
 @tasks_router.get("/task_id/to_solve")
-async def get_task_by_id(
+async def get_task_to_solve_by_id(
     query_params: GetTaskByIdDto = Depends(),
     user: UserModel = Depends(fastapi_users.current_user())
 ) -> FullTaskResponse:
@@ -102,6 +102,12 @@ async def get_task_by_id(
     for question in validated_questions:
         for pair in question.content:
             pair.is_correct = False
+        if question.type == QuestionTypeEnum.DETAILED:
+            new_content = list()
+            for content in question.content:
+                delattr(content, "is_correct")
+                new_content.append(content)
+            question.content = new_content
     result: FullTaskResponse = FullTaskResponse(
         task=IsolatedTask.model_validate(task_entity.__dict__),
         questions=validated_questions
@@ -110,7 +116,7 @@ async def get_task_by_id(
 
 
 @tasks_router.get("/task_id/to_observe")
-async def get_task_by_id(
+async def get_task_to_observe_by_id(
     query_params: GetTaskByIdDto = Depends(),
     user: UserModel = Depends(fastapi_users.current_user())
 ) -> FullTaskResponse:
