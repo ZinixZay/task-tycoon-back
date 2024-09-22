@@ -18,8 +18,8 @@ class Cache:
         return value
 
     @staticmethod
-    async def set(key: str, value: str) -> str:
-        await client.set(key, value)
+    async def set(key: str, value: str, expires_in: int = 3600) -> str:
+        await client.set(key, value, ex=expires_in)
         return value
     
     @staticmethod
