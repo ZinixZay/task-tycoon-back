@@ -90,7 +90,7 @@ async def get_task_by_identifier(
     result: IsolatedTask = IsolatedTask.model_validate(task_entity.__dict__)
     return result
 
-@tasks_router.get("/task_id/to_solve")
+@tasks_router.get("/to_solve")
 async def get_task_to_solve_by_id(
     query_params: GetTaskByIdDto = Depends(),
     user: UserModel = Depends(fastapi_users.current_user())
@@ -103,12 +103,7 @@ async def get_task_to_solve_by_id(
         for pair in question.content:
             pair.is_correct = False
         if question.type == QuestionTypeEnum.DETAILED:
-            new_content = list()
             pair.title = ""
-            for content in question.content:
-                delattr(content, "is_correct")
-                new_content.append(content)
-            question.content = new_content
     result: FullTaskResponse = FullTaskResponse(
         task=IsolatedTask.model_validate(task_entity.__dict__),
         questions=validated_questions
@@ -116,7 +111,7 @@ async def get_task_to_solve_by_id(
     return result
 
 
-@tasks_router.get("/task_id/to_observe")
+@tasks_router.get("/to_observe")
 async def get_task_to_observe_by_id(
     query_params: GetTaskByIdDto = Depends(),
     user: UserModel = Depends(fastapi_users.current_user())
