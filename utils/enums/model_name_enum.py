@@ -6,3 +6,5 @@ class ModelNameEnum(Enum):
     ANSWER = "AnswerModel"
     TASK = "TaskModel"
     QUESTION = "QuestionModel"
+    ATTEMPT_STATS = "AttemptStatsModel"
+    SUMMARY_ATTEMPT_STATS = "SummaryAttemptStatsModel"

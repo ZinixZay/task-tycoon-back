@@ -10,7 +10,7 @@ from services.questions import question_dto_to_model
 from uuid import UUID
 from models import UserModel, TaskModel, QuestionModel
 from services.transactions import Transaction
-from utils.custom_errors import NotFoundException, NoPermissionException
+from utils.custom_errors import ForbiddenException, NotFoundException, NoPermissionException
 from utils.enums import TransactionMethodsEnum, PermissionsEnum
 from services.permissions import Permissions
 from sqlalchemy.orm import mapper
@@ -48,10 +48,10 @@ async def add_task(
         )
     ]
 
-    transaction: Transaction = Transaction(transaction_payload)
+    transaction = await Transaction.create(transaction_payload)
     await transaction.run()
     
-    return CreateTaskResponse(ok=True, task_id=task_model.id)
+    return CreateTaskResponse(task_id=task_model.id)
 
 
 @tasks_router.patch("/")
@@ -128,6 +128,7 @@ async def get_tasks_by_title(
     response: GetTasksResponse = GetTasksResponse(
         tasks=[IsolatedTask.model_validate(task_entity.__dict__) for task_entity in task_entities]
     )
+    
     return response
 
 
@@ -140,14 +141,37 @@ async def get_task_by_identifier(
     result: IsolatedTask = IsolatedTask.model_validate(task_entity.__dict__)
     return result
 
-@tasks_router.get("/task_id")
+@tasks_router.get("/task_id/to_solve")
 async def get_task_by_id(
-    query_params: GetTaskByIdDto = Depends()
+    query_params: GetTaskByIdDto = Depends(),
+    user: UserModel = Depends(fastapi_users.current_user())
 ) -> FullTaskResponse:
     id = query_params.id
     task_entity = await TaskRepository.find_by_id(id)
     validated_questions: List[Question] = \
         [Question.model_validate(question_model.__dict__) for question_model in task_entity.questions]
+    for question in validated_questions:
+        for pair in question.content:
+            pair.is_correct = False
+    result: FullTaskResponse = FullTaskResponse(
+        task=IsolatedTask.model_validate(task_entity.__dict__),
+        questions=validated_questions
+    )
+    return result
+
+
+@tasks_router.get("/task_id/to_observe")
+async def get_task_by_id(
+    query_params: GetTaskByIdDto = Depends(),
+    user: UserModel = Depends(fastapi_users.current_user())
+) -> FullTaskResponse:
+    id = query_params.id
+    task_entity = await TaskRepository.find_by_id(id)
+    if task_entity.user_id == user.id or user.is_superuser:
+        validated_questions: List[Question] = \
+            [Question.model_validate(question_model.__dict__) for question_model in task_entity.questions]
+    else:
+        raise ForbiddenException(f"Вы не являетесь создателем задания {task_entity.title}")
     result: FullTaskResponse = FullTaskResponse(
         task=IsolatedTask.model_validate(task_entity.__dict__),
         questions=validated_questions

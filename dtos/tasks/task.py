@@ -12,7 +12,6 @@ class CreateTaskDto(BaseModel):
 
 
 class CreateTaskResponse(BaseModel):
-    ok: bool = True
     task_id: UUID
 
 

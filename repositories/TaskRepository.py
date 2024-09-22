@@ -16,7 +16,7 @@ class TaskRepository:
             return list(task_entities)
     
     @classmethod
-    async def find_by_id(cls, task_id: UUID) -> Optional[TaskModel]:
+    async def find_by_id(cls, task_id: UUID) -> TaskModel | None:
         async for session in get_async_session():
             query = select(TaskModel).where(TaskModel.id == task_id)
             result = await session.execute(query)
