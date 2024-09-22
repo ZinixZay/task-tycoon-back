@@ -58,9 +58,9 @@ async def get_tasks() -> GetTasksResponse:
 
 @tasks_router.get("/user_id")
 async def get_tasks_by_user(
-    query_params: GetTasksByUserDto = Depends()
+    user_entity: UserModel = Depends(fastapi_users.current_user())
 ) -> GetTasksResponse:
-    user_id = query_params.user_id
+    user_id = user_entity.id
     task_entities: List[TaskModel] = await TaskRepository.find_by_user(user_id)
     response: GetTasksResponse = GetTasksResponse(
         tasks=[IsolatedTask.model_validate(task_entity.__dict__) for task_entity in task_entities]
