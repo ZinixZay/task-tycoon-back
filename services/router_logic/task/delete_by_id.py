@@ -14,17 +14,16 @@ async def delete_by_id(
         query_params: DeleteTaskByIdDto = Depends(),
         user_entity: UserModel = Depends(fastapi_users.current_user())
 ) -> UUID:
-    if user_entity.is_superuser:
-        await TaskRepository.delete_by_id(query_params.task_id)
-        return query_params.task_id
-    
     task_entity: TaskModel = await TaskRepository.find_by_id(query_params.task_id)
     if task_entity is None:
         raise NotFoundException({"not found": query_params.task_id})
     
-    task_was_added_by_another_user = task_entity.user_id != user_entity.id
+    task_was_added_by_this_user = task_entity.user_id == user_entity.id
     user_has_permission = Permissions.from_number(user_entity.permissions).has(PermissionsEnum.DeleteOthersTasks)
-    if not user_has_permission and task_was_added_by_another_user:
+    is_superuser = user_entity.is_superuser
+    user_has_permission = is_superuser or task_was_added_by_this_user or user_has_permission
+
+    if not user_has_permission:
         raise NoPermissionException(PermissionsEnum.DeleteOthersTasks)
     await TaskRepository.delete_by_id(query_params.task_id)
             

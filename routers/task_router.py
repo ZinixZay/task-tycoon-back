@@ -1,10 +1,9 @@
 from typing import List
 from fastapi import APIRouter, Depends
 from dtos.questions import Question
-from dtos.tasks import GetTasksResponse, IsolatedTask, GetTasksByUserDto, GetTasksByTitleDto, \
-    GetTaskByIdentifierDto, FullTaskResponse, GetTaskByIdDto, DeleteTaskByIdDto, CreateTaskResponse, CreateTaskDto
+from dtos.tasks import *
 from dtos.transactions.transaction import TransactionPayload
-from repositories import TaskRepository
+from repositories import TaskRepository, QuestionRepository
 from services.authentication import fastapi_users
 from services.tasks import task_dto_to_model
 from services.questions import question_dto_to_model
@@ -28,6 +27,53 @@ async def add_task(
         user_entity: UserModel = Depends(fastapi_users.current_user())
 ) -> CreateTaskResponse:
     return await task.add(task_schema, user_entity)
+
+
+@tasks_router.patch("/")
+async def patch_task(
+    task_schema: PatchTaskDto,
+    user_entity: UserModel = Depends(fastapi_users.current_user())
+) -> PatchTaskResponse:
+    task_entity = await TaskRepository.find_by_id(task_schema.task_id)
+    if not task_entity:
+        raise NotFoundException(f'Не найдено задание с id={task_schema.task_id}')
+
+    task_was_added_by_this_user = task_entity.user_id == user_entity.id
+    user_has_permission = Permissions.from_number(user_entity.permissions).has(PermissionsEnum.ChangeOthersTasks)
+    is_superuser = user_entity.is_superuser
+    user_has_permission = is_superuser or task_was_added_by_this_user or user_has_permission 
+
+    # permission check
+    if not user_has_permission:
+        raise NoPermissionException(PermissionsEnum.ChangeOthersTasks)
+    
+    models_for_transaction = list()
+
+    task_entity.title = task_schema.title
+    task_entity.description_short = task_schema.description_short
+    task_entity.description_full = task_schema.description_full
+
+    models_for_transaction.append(task_entity)
+
+    question_entities = await QuestionRepository.find_by_task(task_entity.id)
+    question_models: List[QuestionModel] = question_dto_to_model(task_schema.questions, task_entity)
+
+    for question_entity, question_model in zip(question_entities, question_models):
+        question_entity.question_body = question_model.question_body
+        question_entity.type = question_model.type
+        question_entity.content = question_model.content
+        question_entity.order = question_model.order
+        models_for_transaction.append(question_entity)
+
+    transaction_payload: List[TransactionPayload] = [
+        TransactionPayload(
+            method=TransactionMethodsEnum.UPDATE,
+            models=models_for_transaction
+        )
+    ]
+    await Transaction.create_and_run(transaction_payload)
+
+    return PatchTaskResponse(task_id=task_schema.task_id)
 
 
 @tasks_router.get("/")
@@ -77,3 +123,4 @@ async def delete_task_by_id(
         user_entity: UserModel = Depends(fastapi_users.current_user())
 ) -> UUID:
     return await task.delete_by_id(query_params, user_entity)
+
