@@ -20,7 +20,6 @@ tasks_router: APIRouter = APIRouter(
 )
 
 
-
 @tasks_router.post("/")
 async def add_task(
         task_schema: CreateTaskDto,
@@ -53,6 +52,8 @@ async def patch_task(
     user_entity: UserModel = Depends(fastapi_users.current_user())
 ) -> PatchTaskResponse:
     task_entity = await TaskRepository.find_by_id(task_schema.task_id)
+    if not task_entity:
+        raise NotFoundException(f'Не найдено задание с id={task_schema.task_id}')
 
     task_was_added_by_this_user = task_entity.user_id == user_entity.id
     user_has_permission = Permissions.from_number(user_entity.permissions).has(PermissionsEnum.ChangeOthersTasks)
@@ -87,10 +88,9 @@ async def patch_task(
             models=models_for_transaction
         )
     ]
-    transaction: Transaction = Transaction(transaction_payload)
-    await transaction.run()
+    await Transaction.create_and_run(transaction_payload)
 
-    return PatchTaskResponse(ok=True, task_id=task_schema.task_id)
+    return PatchTaskResponse(task_id=task_schema.task_id)
 
 
 @tasks_router.get("/")
