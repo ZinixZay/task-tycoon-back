@@ -6,3 +6,4 @@ from services.router_logic.task.get_by_identifier import *
 from services.router_logic.task.get_by_title import *
 from services.router_logic.task.get_by_user import *
 from services.router_logic.task.get_many import *
+from services.router_logic.task.patch import *
