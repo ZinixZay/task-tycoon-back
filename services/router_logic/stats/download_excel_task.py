@@ -8,7 +8,7 @@ from utils.custom_errors import NoPermissionException, NotFoundException
 from utils.enums.permissions_enum import PermissionsEnum
 
 
-async def download_excel_task(
+async def stats_download_excel_task(
     query_params: GetTaskStatsDto = Depends(),
     user: UserModel = Depends(fastapi_users.current_user())
 ) -> FileResponse:

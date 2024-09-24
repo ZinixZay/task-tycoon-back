@@ -9,7 +9,7 @@ from utils.enums.question_type_enum import QuestionTypeEnum
 
 
 
-async def get_by_id_to_solve(
+async def task_get_by_id_to_solve(
     query_params: GetTaskByIdDto = Depends(),
     user: UserModel = Depends(fastapi_users.current_user())
 ) -> FullTaskResponse:

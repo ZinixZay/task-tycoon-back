@@ -9,7 +9,7 @@ from utils.custom_errors import ForbiddenException
 
 
 
-async def get_by_id_to_observe(
+async def task_get_by_id_to_observe(
     query_params: GetTaskByIdDto = Depends(),
     user: UserModel = Depends(fastapi_users.current_user())
 ) -> FullTaskResponse:

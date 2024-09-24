@@ -5,7 +5,7 @@ from dtos.profiles import UpdateProfileDto
 from services.authentication import fastapi_users
 
 
-async def update(
+async def profile_update(
     user_schema: UpdateProfileDto,
     user_entity: UserModel = Depends(fastapi_users.current_user())
 ) -> bool:

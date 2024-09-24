@@ -10,7 +10,7 @@ from services.transactions import Transaction
 from utils.enums import TransactionMethodsEnum
 
 
-async def add(
+async def task_add(
         task_schema: CreateTaskDto,
         user_entity: UserModel = Depends(fastapi_users.current_user())
 ) -> CreateTaskResponse:

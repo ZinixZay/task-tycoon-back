@@ -13,11 +13,11 @@ questions_router: APIRouter = APIRouter(
 async def get_questions_by_task(
     query_params: GetQuestionsByTaskIdDto = Depends()
 ) -> List[Question]:
-    return await question.get_by_task(query_params)
+    return await question.question_get_by_task(query_params)
 
 
 @questions_router.get("/question_id")
 async def get_question_by_id(
     query_params: GetQuestionsByQuestionIdDto = Depends()
 ) -> Question:
-    return await question.get_by_id(query_params)
+    return await question.question_get_by_id(query_params)
