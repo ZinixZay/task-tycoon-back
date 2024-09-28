@@ -10,7 +10,7 @@ origins = [
     "http://localhost:3000",
 ]
 
-app = FastAPI()
+app = FastAPI(redirect_slashes=False)
 
 app.add_middleware(
     CORSMiddleware,

@@ -1,6 +1,6 @@
 from typing import AsyncGenerator
 from fastapi import Depends
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession, AsyncEngine
 from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
 from models import BaseModel, UserModel
 from utils.env.get_env_variables import EnvironmentVariables
@@ -11,6 +11,17 @@ engine = create_async_engine(f"postgresql+asyncpg://"
                              f"{EnvironmentVariables.POSTGRES_HOST.value}:"
                              f"{EnvironmentVariables.POSTGRES_PORT.value}/"
                              f"{EnvironmentVariables.POSTGRES_DB.value}")
+
+
+def change_engine(new_engine: AsyncEngine):
+    global engine
+    engine = new_engine
+
+
+def change_session(new_session: async_sessionmaker):
+    global async_session
+    async_session = new_session
+
 
 async_session = async_sessionmaker(engine, expire_on_commit=False, autoflush=True)
 

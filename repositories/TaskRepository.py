@@ -6,6 +6,13 @@ from uuid import UUID
 
 
 class TaskRepository:
+    @classmethod
+    async def add_one(cls, task: TaskModel) -> TaskModel:
+        async for session in get_async_session():
+            session.add(task)
+            await session.flush()
+            await session.commit()
+            return task
 
     @classmethod
     async def find_all(cls) -> list[TaskModel]:

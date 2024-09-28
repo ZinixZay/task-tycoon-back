@@ -1,6 +1,6 @@
 from typing import List, Optional
 from uuid import UUID
-from sqlalchemy import func, select, update
+from sqlalchemy import func, select, update, delete
 
 from database.database import get_async_session
 from dtos.profiles import UpdateProfileDto
@@ -51,5 +51,12 @@ class UserRepository:
                     surname=schema.surname
                 )
 
+            await session.execute(query)
+            await session.commit()
+    
+    @classmethod
+    async def delete_by_id(cls, user_id: UUID) -> None:
+        async for session in get_async_session():
+            query = delete(UserModel).where(UserModel.id == user_id)
             await session.execute(query)
             await session.commit()

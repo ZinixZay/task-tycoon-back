@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends
 from models import UserModel
 from dtos.permissions import ChangePermission, ChangePermissionsResponse
 from services.authentication import fastapi_users
-from services.router_logic.permissions import change
+from services.router_logic.permissions.change import change
 
 permission_router: APIRouter = APIRouter(
     prefix="/permissions",

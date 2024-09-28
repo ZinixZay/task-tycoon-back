@@ -38,7 +38,7 @@ class Transaction:
     
     async def __delete__(self, models):
         for model in models:
-            self.session.delete(model)
+            await self.session.delete(model)
     
     async def __update__(self, models):
         for model in models:

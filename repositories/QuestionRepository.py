@@ -1,4 +1,4 @@
-from sqlalchemy import select
+from sqlalchemy import select, delete
 from typing import List
 from database.database import get_async_session
 from models import QuestionModel
@@ -27,3 +27,10 @@ class QuestionRepository:
             result = await session.execute(query)
             question_instance = result.scalars().one_or_none()
             return question_instance
+
+    @classmethod
+    async def delete_by_id(cls, question_id: UUID) -> None:
+        async for session in get_async_session():
+            query = delete(QuestionModel).where(QuestionModel.id == question_id)
+            await session.execute(query)
+            await session.commit()
