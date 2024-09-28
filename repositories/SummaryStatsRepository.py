@@ -68,8 +68,8 @@ class SummaryStatsRepository:
         query = (update(SummaryAttemptStatsModel)
                  .where(SummaryAttemptStatsModel.id == id)
                  .values(attempt_amount=summary_stats.attempt_amount,
-                         best_percent=summary_stats.best_percent,
-                         avg_percent=summary_stats.avg_percent,
+                         best_result=summary_stats.best_result,
+                         avg_result=summary_stats.avg_result,
                          resulting_attempt=summary_stats.resulting_attempt))
         async for session in get_async_session():
             await session.execute(query)
