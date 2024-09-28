@@ -36,17 +36,17 @@ class TaskStatsCalculate:
     def __get_avg_result__(cls, summary_stats: List[SummaryAttemptStatsModel]) -> float:
         return round(
             sum(
-                [s.best_percent for s in summary_stats]
+                [s.best_result for s in summary_stats]
             ) / len(summary_stats), 1
             )
     
     @classmethod
     def __get_best_result__(cls, summary_stats: List[SummaryAttemptStatsModel]) -> float:
-        return max([s.best_percent for s in summary_stats])
+        return max([s.best_result for s in summary_stats])
     
     @classmethod
     def __get_best_result_author__(cls, summary_stats: List[SummaryAttemptStatsModel], best_result: float) -> UUID | None:
-        return next((x.user_id for x in summary_stats if x.best_percent == best_result), None)
+        return next((x.user_id for x in summary_stats if x.best_result == best_result), None)
 
     @classmethod
     def __get_total_attempts__(cls, summary_stats: List[SummaryAttemptStatsModel]):
