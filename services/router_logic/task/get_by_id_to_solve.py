@@ -23,6 +23,7 @@ async def task_get_by_id_to_solve(
         if question.type == QuestionTypeEnum.DETAILED:
             new_content = list()
             for content in question.content:
+                content["title"] = ""
                 delattr(content, "is_correct")
                 new_content.append(content)
             question.content = new_content
