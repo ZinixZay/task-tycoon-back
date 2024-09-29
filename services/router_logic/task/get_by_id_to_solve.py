@@ -23,7 +23,7 @@ async def task_get_by_id_to_solve(
         if question.type == QuestionTypeEnum.DETAILED:
             new_content = list()
             for content in question.content:
-                delattr(content, "is_correct")
+                content["title"] = ""
                 new_content.append(content)
             question.content = new_content
     result: FullTaskResponse = FullTaskResponse(
