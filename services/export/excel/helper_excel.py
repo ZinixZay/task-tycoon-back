@@ -1,9 +1,10 @@
 import string
+from typing import List
 
 
-rows = [str(i) for i in range(1, 101)]
+rows: List[str] = [str(i) for i in range(1, 101)]
 
-columns = []
+columns: List[str] = []
 for i in range(1, 26 * 3 + 1):
     column = ''
     while i > 0:
