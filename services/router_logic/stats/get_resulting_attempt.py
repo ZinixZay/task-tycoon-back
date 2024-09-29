@@ -6,7 +6,7 @@ from models import UserModel
 from utils.custom_errors import NoPermissionException, NotFoundException
 
 
-async def get_resulting_attempt(
+async def stats_get_resulting_attempt(
     query_params: GetResultingAttemptStatsDto = Depends(),
     user: UserModel = Depends(fastapi_users.current_user())
 ) -> GetAttemptStatsResponse:

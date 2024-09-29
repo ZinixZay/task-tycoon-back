@@ -10,7 +10,7 @@ from services.permissions import Permissions
 
 
 
-async def delete_by_id(
+async def task_delete_by_id(
         query_params: DeleteTaskByIdDto = Depends(),
         user_entity: UserModel = Depends(fastapi_users.current_user())
 ) -> UUID:

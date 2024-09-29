@@ -6,7 +6,7 @@ from services.authentication import fastapi_users
 from models import UserModel, TaskModel
 
 
-async def get_by_user(
+async def task_get_by_user(
     user_entity: UserModel = Depends(fastapi_users.current_user())
 ) -> GetTasksResponse:
     user_id = user_entity.id

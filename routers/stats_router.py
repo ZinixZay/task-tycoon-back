@@ -18,7 +18,7 @@ async def get_attempt_stats(
     query_params: GetAttemptStatsDto = Depends(),
     user: UserModel = Depends(fastapi_users.current_user())
 ) -> GetAttemptStatsResponse:
-    return await stats.get_attempt(query_params, user)
+    return await stats.stats_get_attempt(query_params, user)
 
 
 @stats_router.get('/attempt/resulting')
@@ -26,7 +26,7 @@ async def get_resulting_attempt_stats(
     query_params: GetResultingAttemptStatsDto = Depends(),
     user: UserModel = Depends(fastapi_users.current_user())
 ) -> GetAttemptStatsResponse:
-    return await stats.get_resulting_attempt(query_params, user)
+    return await stats.stats_get_resulting_attempt(query_params, user)
 
 
 @stats_router.get('/task_stats')
@@ -34,7 +34,7 @@ async def get_task_stats(
     query_params: GetTaskStatsDto = Depends(),
     user: UserModel = Depends(fastapi_users.current_user())
 ) -> TaskStats:
-    return await stats.get_task(query_params, user)
+    return await stats.stats_get_task(query_params, user)
 
 
 @stats_router.get('/task_stats/download/excel')
@@ -42,5 +42,5 @@ async def download_excel_task_stats(
     query_params: GetTaskStatsDto = Depends(),
     user: UserModel = Depends(fastapi_users.current_user())
 ) -> FileResponse:
-    return await stats.download_excel_task(query_params, user)
+    return await stats.stats_download_excel_task(query_params, user)
     

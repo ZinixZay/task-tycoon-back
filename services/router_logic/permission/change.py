@@ -9,7 +9,7 @@ from utils.custom_errors import NotFoundException, NoPermissionException
 from utils.enums import PermissionsEnum
 
 
-async def change(
+async def permission_change(
     permission_schema: ChangePermission,
     user: UserModel = Depends(fastapi_users.current_user())
 ) -> ChangePermissionsResponse:

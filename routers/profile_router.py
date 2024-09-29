@@ -14,7 +14,7 @@ profile_router: APIRouter = APIRouter(
 async def get_profile(
     user_entity: UserModel = Depends(fastapi_users.current_user())
 ) -> GetProfileResponse:
-    return await profile.get(user_entity)
+    return await profile.profile_get(user_entity)
 
 
 @profile_router.patch("/")
@@ -22,4 +22,4 @@ async def update_profile(
     user_schema: UpdateProfileDto,
     user_entity: UserModel = Depends(fastapi_users.current_user())
 ) -> bool:
-    return await profile.update(user_schema, user_entity)
+    return await profile.profile_update(user_schema, user_entity)

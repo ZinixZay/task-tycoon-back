@@ -12,7 +12,7 @@ from repositories import SummaryStatsRepository
 
 
 
-async def create(
+async def answer_create(
         answer_schema: CreateAnswerDto,
         user: UserModel = Depends(fastapi_users.current_user())
     ) -> None:

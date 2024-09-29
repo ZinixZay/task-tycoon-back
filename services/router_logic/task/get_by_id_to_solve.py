@@ -9,7 +9,7 @@ from utils.enums.question_type_enum import QuestionTypeEnum
 
 
 
-async def get_by_id_to_solve(
+async def task_get_by_id_to_solve(
     query_params: GetTaskByIdDto = Depends(),
     user: UserModel = Depends(fastapi_users.current_user())
 ) -> FullTaskResponse:
@@ -23,7 +23,7 @@ async def get_by_id_to_solve(
         if question.type == QuestionTypeEnum.DETAILED:
             new_content = list()
             for content in question.content:
-                delattr(content, "is_correct")
+                content.title = ""
                 new_content.append(content)
             question.content = new_content
     result: FullTaskResponse = FullTaskResponse(

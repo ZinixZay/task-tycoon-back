@@ -5,7 +5,7 @@ from repositories import TaskRepository
 from models import TaskModel
 
 
-async def get_by_title(
+async def task_get_by_title(
     query_params: GetTasksByTitleDto = Depends()
 ) -> GetTasksResponse:
     task_title = query_params.title

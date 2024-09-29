@@ -12,7 +12,7 @@ from utils.enums import TransactionMethodsEnum, PermissionsEnum
 from services.permissions import Permissions
 
 
-async def patch(
+async def task_patch(
     task_schema: PatchTaskDto,
     user_entity: UserModel = Depends(fastapi_users.current_user())
 ) -> PatchTaskResponse:

@@ -11,7 +11,7 @@ from utils.custom_errors import NotFoundException, NoPermissionException
 from utils.enums import PermissionsEnum
 
 
-async def get_for_task(
+async def answer_get_for_task(
         task_id: UUID,
         user: UserModel = Depends(fastapi_users.current_user())
 ) -> List[AnswersGetResponse]:

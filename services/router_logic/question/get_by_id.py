@@ -6,7 +6,7 @@ from repositories import QuestionRepository
 from utils.custom_errors import NotFoundException
 
 
-async def get_by_id(
+async def question_get_by_id(
     query_params: GetQuestionsByQuestionIdDto = Depends()
 ) -> Question:
     question_entity: QuestionModel = await QuestionRepository.find_one_by_id(query_params.question_id)

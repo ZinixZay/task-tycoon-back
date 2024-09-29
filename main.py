@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from dtos.users import CreateUser, GetUser, UpdateUser
 from services.authentication import auth_backend, fastapi_users
-from routers import stats_router, tasks_router, questions_router, permission_router, profile_router, answer_router
+from routers import stats_router, tasks_router, questions_router, permission_router, profile_router, answer_router, export_router
 
 origins = [
     "http://localhost",
@@ -30,3 +30,4 @@ app.include_router(tasks_router, prefix="/api/v1")
 app.include_router(questions_router, prefix="/api/v1")
 app.include_router(permission_router, prefix="/api/v1")
 app.include_router(profile_router, prefix="/api/v1")
+app.include_router(export_router, prefix="/api/v1")

@@ -4,7 +4,7 @@ from dtos.profiles import GetProfileResponse
 from services.authentication import fastapi_users
 
 
-async def get(
+async def profile_get(
     user_entity: UserModel = Depends(fastapi_users.current_user())
 ) -> GetProfileResponse:
     return GetProfileResponse(

@@ -11,7 +11,7 @@ from utils.custom_errors import NoPermissionException, NotFoundException
 from utils.enums.permissions_enum import PermissionsEnum
 
 
-async def get_task(
+async def stats_get_task(
     query_params: GetTaskStatsDto = Depends(),
     user: UserModel = Depends(fastapi_users.current_user())
 ) -> TaskStats:
