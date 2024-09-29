@@ -24,7 +24,6 @@ async def task_get_by_id_to_solve(
             new_content = list()
             for content in question.content:
                 content["title"] = ""
-                delattr(content, "is_correct")
                 new_content.append(content)
             question.content = new_content
     result: FullTaskResponse = FullTaskResponse(
