@@ -5,6 +5,7 @@ from dtos.tasks import TaskStats
 from models import SummaryAttemptStatsModel
 from repositories import SummaryStatsRepository
 from services.cache.cache import Cache
+from utils.custom_errors import NotFoundException
 
 
 class TaskStatsCalculate:
@@ -12,6 +13,8 @@ class TaskStatsCalculate:
     @classmethod
     async def calculate_task_stats(cls, task_id: UUID) -> dict:
         summary_stats_entities = await SummaryStatsRepository.get_by_task(task_id)
+        if len(summary_stats_entities) == 0:
+            raise NotFoundException('Нет статистических данных')
         best_result = cls.__get_best_result__(summary_stats_entities)
         best_result_author = cls.__get_best_result_author__(summary_stats_entities, best_result)
         if not best_result_author:
