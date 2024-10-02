@@ -4,6 +4,7 @@ from pydantic import BaseModel
 
 
 class GetProfileResponse(BaseModel):
+    email: str
     nickname: Optional[str]
     name: Optional[str]
     surname: Optional[str]
