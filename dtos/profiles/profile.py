@@ -10,6 +10,7 @@ class GetProfileResponse(BaseModel):
 
 
 class UpdateProfileDto(BaseModel):
+    email: str
     nickname: str
     name: str
     surname: str
