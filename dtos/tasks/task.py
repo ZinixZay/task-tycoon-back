@@ -46,8 +46,8 @@ class GetTasksByTitleDto(BaseModel):
     title: str
 
 
-class GetTaskByIdentifierDto(BaseModel):
-    identifier: int
+class GetTaskByIdWithoutQuestions(BaseModel):
+    id: UUID
 
 
 class GetTaskByIdDto(BaseModel):

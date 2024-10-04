@@ -58,7 +58,7 @@ async def get_tasks_by_title(
 
 @tasks_router.get("/task_id/without_questions")
 async def get_task_by_identifier(
-    query_params: GetTaskByIdentifierDto = Depends()
+    query_params: GetTaskByIdWithoutQuestions = Depends()
 ) -> IsolatedTask:
     return await task.task_get_by_id_without_questions(query_params)
 
