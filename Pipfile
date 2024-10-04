@@ -4,22 +4,14 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-asyncpg = "*"
+peewee = "*"
 fastapi = "*"
 uvicorn = "*"
 python-dotenv = "*"
 pydantic = "*"
-sqlalchemy = "*"
 psycopg2 = "*"
-alembic = "*"
-fastapi-users = "*"
-fastapi-users-db-sqlalchemy = "*"
-setuptools = "*"
-coredis = "*"
-openpyxl = "*"
 
 [dev-packages]
 
 [requires]
 python_version = "3.12"
-python_full_version = "3.12.2"
