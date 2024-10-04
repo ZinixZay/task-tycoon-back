@@ -56,11 +56,11 @@ async def get_tasks_by_title(
     return await task.task_get_by_title(query_params)
 
 
-@tasks_router.get("/identifier")
+@tasks_router.get("/task_id/without_questions")
 async def get_task_by_identifier(
     query_params: GetTaskByIdentifierDto = Depends()
 ) -> IsolatedTask:
-    return await task.task_get_by_identifier(query_params)
+    return await task.task_get_by_id_without_questions(query_params)
 
 @tasks_router.get("/task_id/to_solve")
 async def get_task_to_solve_by_id(
