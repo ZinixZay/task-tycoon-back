@@ -3,8 +3,11 @@ from importlib import import_module
 from peewee import UUIDField, CharField, BooleanField, BigIntegerField
 from pydantic import EmailStr, SecretStr
 import time
+from argon2 import PasswordHasher
 
 entities = import_module('src.entity')
+
+HASHER = PasswordHasher()
 
 class UserEntity(entities.Base):
     id: UUID = UUIDField(unique=True, primary_key=True, default=uuid4())
@@ -21,4 +24,11 @@ class UserEntity(entities.Base):
     
     class Meta:
         table_name = 'users'
+    
+    @staticmethod
+    def hash_password(password):
+        return HASHER.hash(password)
+    
+    def verify_password(self, password):
+        return HASHER.verify(self.hashed_password, password)
     

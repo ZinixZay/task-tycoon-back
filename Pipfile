@@ -12,7 +12,8 @@ pydantic = "*"
 psycopg2 = "*"
 peewee-migrate = "*"
 pyjwt = "*"
-passlib = {extras = ["bcrypt"], version = "*"}
+passlib = {extras = ["bcrypt"] }
+argon2-cffi = "*"
 
 [dev-packages]
 
