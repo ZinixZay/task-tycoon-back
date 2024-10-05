@@ -11,6 +11,8 @@ python-dotenv = "*"
 pydantic = "*"
 psycopg2 = "*"
 peewee-migrate = "*"
+pyjwt = "*"
+passlib = {extras = ["bcrypt"], version = "*"}
 
 [dev-packages]
 
