@@ -12,11 +12,9 @@ async def task_get_by_id_without_questions(
 ) -> GetWithoutQuestions:
     id = query_params.id
     task_entity = await TaskRepository.find_by_id(id)
-    response: GetWithoutQuestions = GetWithoutQuestions()
     result: IsolatedTask = IsolatedTask.model_validate(task_entity.__dict__)
     if task_entity.user_id == user_entity.id:
-        response.mode = 'full'
+        response: GetWithoutQuestions = GetWithoutQuestions(mode='full', task=result)
     else:
-        response.mode = 'general'
-    response.task = result
+        response: GetWithoutQuestions = GetWithoutQuestions(mode='general', task=result)
     return response
