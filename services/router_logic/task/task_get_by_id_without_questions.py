@@ -18,5 +18,5 @@ async def task_get_by_id_without_questions(
         response.mode = 'full'
     else:
         response.mode = 'general'
-    response.task = task_entity
+    response.task = result
     return response
