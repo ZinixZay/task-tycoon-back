@@ -1,0 +1,14 @@
+from .BaseEntity import BaseEntity as Base
+from .UserEntity import UserEntity as User
+from .GroupEntity import GroupEntity as Group
+from .TaskEntity import TaskEntity as Task
+from .TaskFilesEntity import TaskFilesEntity as TaskFiles
+from .GroupFilesEntity import GroupFilesEntity as GroupFiles
+from .GroupPermissionsEntity import GroupPermissionEntity as GroupPermission
+from .GroupTasksEntity import GroupTasksEntity as GroupTasks
+from .AttemptEntity import AttemptEntity as Attempt
+from .QuestionEntity import QuestionEntity as Question
+from .TaskQuestionsEntity import TaskQuestionsEntity as TaskQuestions
+from .AnswerEntity import AnswerEntity as Answer
+from .QuestionFilesEntity import QuestionFilesEntity as QuestionFiles
+from .QuestionHintsEntity import QuestionHintsEntity as QuestionHints

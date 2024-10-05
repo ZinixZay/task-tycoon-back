@@ -10,8 +10,15 @@ uvicorn = "*"
 python-dotenv = "*"
 pydantic = "*"
 psycopg2 = "*"
+peewee-migrate = "*"
 
 [dev-packages]
 
 [requires]
 python_version = "3.12"
+
+[scripts]
+dev = "uvicorn main:app --reload"
+mgc = "pw_migrate create"
+mgm = "pw_migrate migrate"
+mgr = "pw_migrate rollback"
