@@ -40,19 +40,40 @@ async def task_patch(
     question_entities = await QuestionRepository.find_by_task(task_entity.id)
     question_models: List[QuestionModel] = question_dto_to_model(task_schema.questions, task_entity)
 
-    for question_entity, question_model in zip(question_entities, question_models):
+    question_for_transactions = list()
+    for question_model, question_entity in zip(question_models, question_entities):
         question_entity.question_body = question_model.question_body
         question_entity.type = question_model.type
         question_entity.content = question_model.content
         question_entity.order = question_model.order
-        models_for_transaction.append(question_entity)
+        question_for_transactions.append(question_entity)
 
-    transaction_payload: List[TransactionPayload] = [
+    transaction_payload: List[TransactionPayload] = list()
+
+    if len(question_entities) < len(question_models):
+        to_ins_count = len(question_models) - len(question_entities)
+        transaction_payload.append(
+            TransactionPayload(
+                method=TransactionMethodsEnum.INSERT,
+                models=question_models[to_ins_count:]
+            )
+        )
+    elif len(question_entities) > len(question_models):
+        print("DEBUG")
+        transaction_payload.append(
+            TransactionPayload(
+                method=TransactionMethodsEnum.DELETE,
+                models=[q for q in question_entities if q not in question_for_transactions]
+            )
+        )
+
+    models_for_transaction.extend(question_for_transactions)
+    transaction_payload.append(
         TransactionPayload(
             method=TransactionMethodsEnum.UPDATE,
             models=models_for_transaction
         )
-    ]
+    )
     await Transaction.create_and_run(transaction_payload)
 
     return PatchTaskResponse(task_id=task_schema.task_id)

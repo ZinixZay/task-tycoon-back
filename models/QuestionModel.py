@@ -19,4 +19,4 @@ class QuestionModel(BaseModel):
     content: Mapped[JSONB] = mapped_column(JSONB)
     file_path: Mapped[Optional[str]] = mapped_column(String)
     
-    task: Mapped[ModelNameEnum.TASK.value] = relationship(cascade="all,delete", back_populates="questions")
+    task: Mapped[ModelNameEnum.TASK.value] = relationship(back_populates="questions")

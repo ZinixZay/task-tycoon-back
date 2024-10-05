@@ -38,19 +38,21 @@ class Transaction:
     
     async def __delete__(self, models):
         for model in models:
-            self.session.delete(model)
+            await self.session.delete(model)
     
     async def __update__(self, models):
         for model in models:
             params = list()
             updateQuery: str = f"UPDATE {model.__tablename__} SET "
             for key, value in model.__dict__.items():
+                if key == "order":
+                    key = '"order"'
                 if type(value) in [str, int]:
                     updateQuery += f"{key} = '{value}', "
                 elif type(value) == NoneType:
                     updateQuery += f"{key} = NULL, "
                 elif type(value) in [list]:
-                    updateQuery += f"{key} = '{str(value).replace("'", '"')}'::jsonb, "
+                    updateQuery += f"{key} = '{str(value).replace("'", '"').replace("False", "false").replace("True", "true")}'::jsonb, "
             updateQuery = updateQuery[:-2] + f" WHERE id='{model.id}'"
             await self.session.execute(text(updateQuery), params)
 
