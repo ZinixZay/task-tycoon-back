@@ -1,8 +1,10 @@
+from typing import Dict
 from fastapi import APIRouter, Body, Depends
 from src.jwt import JWTBearer
 from src.entity import User
 from src.users.dto import UserRegisterDto
 from src.jwt import sign_jwt, JWTBearer
+from src.users import service
 
 
 user_router: APIRouter = APIRouter(
@@ -12,25 +14,21 @@ user_router: APIRouter = APIRouter(
 
 
 @user_router.post('/signup')
-async def create_user(user_dto: UserRegisterDto = Body(...)):
-    try:
-        user: User = User.create(email=user_dto.email, hashed_password=User.hash_password(user_dto.password))
-    except Exception as e:
-        raise Exception('Не удалось зарегистрироваться')
-    return sign_jwt(str(user.id))
+async def signup_user(user_dto: UserRegisterDto = Body(...)) -> Dict[str, str]:
+    return await service.signup_user(user_dto)
 
 
 @user_router.post('/signin')
-async def login_user(user_dto: UserRegisterDto = Body(...)):
-    try:
-        user: User = User.get_or_none(User.email == user_dto.email)
-        user.verify_password(user_dto.password)
-    except Exception as e:
-        raise Exception('Неверные логин или пароль')
-    return sign_jwt(str(user.id))
+async def signin_user(user_dto: UserRegisterDto = Body(...)) -> Dict[str, str]:
+    return await service.signin_user(user_dto)
 
 
-@user_router.post('/protected')
-async def say_meow(user: dict = Depends(JWTBearer())):
+@user_router.get('/logout')
+async def logout_user(user: dict = Depends(JWTBearer())) -> None:
+    return
+
+
+@user_router.post('/update')
+async def update_user(user: dict = Depends(JWTBearer())) -> None:
     print(user)
     
