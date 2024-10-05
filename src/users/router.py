@@ -1,9 +1,8 @@
-from typing import List
 from fastapi import APIRouter, Body, Depends
-from src.jwt.core.jwt_core import JWTBearer
+from src.jwt import JWTBearer
 from src.entity import User
 from src.users.dto import UserRegisterDto
-from src.jwt.core import sign_jwt
+from src.jwt import sign_jwt, JWTBearer
 
 
 user_router: APIRouter = APIRouter(

@@ -1,7 +1,7 @@
 import time
-from typing import Dict
-from src.env.env_variables_enum import EnvVariablesEnum
 import jwt
+from typing import Dict
+from src.env import EnvVariablesEnum
 from fastapi import Request, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
