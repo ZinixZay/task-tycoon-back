@@ -31,19 +31,20 @@ async def task_patch(
     # permission check
     if not user_has_permission:
         raise NoPermissionException(PermissionsEnum.ChangeOthersTasks)
-    
-    models_for_transaction = list()
 
     task_entity.title = task_schema.title
     task_entity.description_short = task_schema.description_short
     task_entity.description_full = task_schema.description_full
 
-    models_for_transaction.append(task_entity)
     question_models: List[QuestionModel] = question_dto_to_model(task_schema.questions, task_entity)
     
     async for session in get_async_session():
         transaction = await session.begin()
         try:
+            await Transaction.create_and_run([TransactionPayload(
+                method=TransactionMethodsEnum.UPDATE,
+                models=[task_entity]
+            )])
             query = delete(QuestionModel).where(QuestionModel.task_id == task_entity.id)
             await session.execute(query)
             for question in question_models:
