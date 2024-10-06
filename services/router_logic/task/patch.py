@@ -10,6 +10,9 @@ from services.transactions import Transaction
 from utils.custom_errors import NotFoundException, NoPermissionException
 from utils.enums import TransactionMethodsEnum, PermissionsEnum
 from services.permissions import Permissions
+from database.database import get_async_session
+from sqlalchemy import delete, insert
+from models import QuestionModel
 
 
 async def task_patch(
@@ -36,44 +39,19 @@ async def task_patch(
     task_entity.description_full = task_schema.description_full
 
     models_for_transaction.append(task_entity)
-
-    question_entities = await QuestionRepository.find_by_task(task_entity.id)
     question_models: List[QuestionModel] = question_dto_to_model(task_schema.questions, task_entity)
-
-    question_for_transactions = list()
-    for question_model, question_entity in zip(question_models, question_entities):
-        question_entity.question_body = question_model.question_body
-        question_entity.type = question_model.type
-        question_entity.content = question_model.content
-        question_entity.order = question_model.order
-        question_for_transactions.append(question_entity)
-
-    transaction_payload: List[TransactionPayload] = list()
-
-    if len(question_entities) < len(question_models):
-        to_ins_count = len(question_models) - len(question_entities)
-        transaction_payload.append(
-            TransactionPayload(
-                method=TransactionMethodsEnum.INSERT,
-                models=question_models[to_ins_count:]
-            )
-        )
-    elif len(question_entities) > len(question_models):
-        print("DEBUG")
-        transaction_payload.append(
-            TransactionPayload(
-                method=TransactionMethodsEnum.DELETE,
-                models=[q for q in question_entities if q not in question_for_transactions]
-            )
-        )
-
-    models_for_transaction.extend(question_for_transactions)
-    transaction_payload.append(
-        TransactionPayload(
-            method=TransactionMethodsEnum.UPDATE,
-            models=models_for_transaction
-        )
-    )
-    await Transaction.create_and_run(transaction_payload)
+    
+    async for session in get_async_session():
+        transaction = await session.begin()
+        try:
+            query = delete(QuestionModel).where(QuestionModel.task_id == task_entity.id)
+            await session.execute(query)
+            for question in question_models:
+                session.add(question)
+            await session.flush()
+            await transaction.commit()
+        except Exception as e:
+            await transaction.rollback()
+            raise e
 
     return PatchTaskResponse(task_id=task_schema.task_id)
