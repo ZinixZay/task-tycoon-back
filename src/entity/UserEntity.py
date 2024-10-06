@@ -4,6 +4,7 @@ from peewee import UUIDField, CharField, BooleanField, BigIntegerField
 from pydantic import EmailStr, SecretStr
 import time
 from argon2 import PasswordHasher
+from src.entity import Base
 
 entities = import_module('src.entity')
 

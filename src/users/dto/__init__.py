@@ -1,1 +1,2 @@
-from .UserRegisterDto import UserRegisterDto
+from .RegisterUserDto import RegisterUserDto
+from .UpdateUserDto import UpdateUserDto

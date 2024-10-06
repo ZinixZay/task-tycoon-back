@@ -1,7 +1,7 @@
 from pydantic import BaseModel, EmailStr
 
 
-class UserRegisterDto(BaseModel):
+class RegisterUserDto(BaseModel):
     email: EmailStr
     password: str
     
