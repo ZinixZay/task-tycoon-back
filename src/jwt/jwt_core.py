@@ -1,6 +1,7 @@
 import time
 import jwt
 from typing import Dict
+from src.jwt.dto import TokenDto
 from src.env import EnvVariablesEnum
 from fastapi import Request, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -17,8 +18,8 @@ def token_response(token: str):
     }
 
 
-def sign_jwt(user_id: str) -> Dict[str, str]:
-    payload = {
+def sign_jwt(user_id: str) -> TokenDto:
+    payload: TokenDto = {
         "user_id": user_id,
         "expires": time.time() + 600
     }
@@ -27,12 +28,12 @@ def sign_jwt(user_id: str) -> Dict[str, str]:
     return token_response(token)
 
 
-def decode_jwt(token: str) -> dict:
+def decode_jwt(token: str) -> TokenDto | None:
     try:
         decoded_token = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
         return decoded_token if decoded_token["expires"] >= time.time() else None
     except Exception as e:
-        return {}
+        return None
 
 
 class JWTBearer(HTTPBearer):
