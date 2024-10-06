@@ -29,6 +29,10 @@ class IsolatedTask(BaseModel):
     description_short: Optional[str]
 
 
+class GetWithoutQuestions(BaseModel):
+    task: IsolatedTask
+    mode: str
+
 class FullTaskResponse(BaseModel):
     task: IsolatedTask
     questions: Optional[List[Question]]
