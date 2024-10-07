@@ -29,6 +29,7 @@ from contextlib import suppress
 import peewee as pw
 from peewee_migrate import Migrator
 from importlib import import_module
+from src.env.env_variables_enum import EnvVariablesEnum
 
 entities = import_module('src.entity')
 
@@ -52,7 +53,7 @@ def migrate(migrator: Migrator, database: pw.Database, *, fake=False):
     migrator.create_model(entities.Answer)
     migrator.create_model(entities.QuestionFiles)
     migrator.create_model(entities.QuestionHints)
-    
+      
 
 
 def rollback(migrator: Migrator, database: pw.Database, *, fake=False):

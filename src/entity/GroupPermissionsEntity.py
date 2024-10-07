@@ -1,13 +1,11 @@
 from uuid import UUID, uuid4
-from importlib import import_module
 from peewee import UUIDField, ForeignKeyField, CharField
+from src.entity import Base, User, Group
 
-entities = import_module('src.entity')
-
-class GroupPermissionEntity(entities.Base):
+class GroupPermissionEntity(Base):
     id: UUID = UUIDField(unique=True, primary_key=True, default=uuid4())
-    user: UUID = ForeignKeyField(entities.User, backref='permissions')
-    group: UUID = ForeignKeyField(entities.Group, backref='permissions')
+    user: UUID = ForeignKeyField(User, backref='permissions')
+    group: UUID = ForeignKeyField(Group, backref='permissions')
     permissions: UUID = CharField(max_length=128, default='0' * 128)
     
     class Meta:

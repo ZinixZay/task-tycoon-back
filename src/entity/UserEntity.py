@@ -6,11 +6,9 @@ import time
 from argon2 import PasswordHasher
 from src.entity import Base
 
-entities = import_module('src.entity')
-
 HASHER = PasswordHasher()
 
-class UserEntity(entities.Base):
+class UserEntity(Base):
     id: UUID = UUIDField(unique=True, primary_key=True, default=uuid4())
     email: EmailStr = CharField(unique=True, index=True, max_length=62)
     hashed_password: SecretStr = CharField(max_length=1024)
@@ -32,4 +30,3 @@ class UserEntity(entities.Base):
     
     def verify_password(self, password):
         return HASHER.verify(self.hashed_password, password)
-    

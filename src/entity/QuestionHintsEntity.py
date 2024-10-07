@@ -1,12 +1,11 @@
 from uuid import UUID, uuid4
-from importlib import import_module
 from peewee import UUIDField, CharField, ForeignKeyField, SmallIntegerField
+from src.entity import Base, Question
 
-entities = import_module('src.entity')
 
-class QuestionHintsEntity(entities.Base):
+class QuestionHintsEntity(Base):
     id: UUID = UUIDField(unique=True, primary_key=True, default=uuid4())
-    question: UUID = ForeignKeyField(entities.Question, backref='hints')
+    question: UUID = ForeignKeyField(Question, backref='hints')
     message: str = CharField(max_length=512)
     order: int = SmallIntegerField()
     

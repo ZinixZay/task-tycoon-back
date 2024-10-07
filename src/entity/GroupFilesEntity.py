@@ -1,12 +1,10 @@
 from uuid import UUID, uuid4
-from importlib import import_module
 from peewee import UUIDField, CharField, ForeignKeyField
+from src.entity import Base, Group
 
-entities = import_module('src.entity')
-
-class GroupFilesEntity(entities.Base):
+class GroupFilesEntity(Base):
     id: UUID = UUIDField(unique=True, primary_key=True, default=uuid4())
-    group: UUID = ForeignKeyField(entities.Group, backref='files')
+    group: UUID = ForeignKeyField(Group, backref='files')
     file_path: str = CharField(max_length=1024)
     
     class Meta:

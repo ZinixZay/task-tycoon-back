@@ -1,13 +1,12 @@
 from uuid import UUID, uuid4
-from importlib import import_module
 from peewee import UUIDField, CharField, BigIntegerField, TextField, ForeignKeyField
 import time
+from src.entity import Base, User
 
-entities = import_module('src.entity')
 
-class TaskEntity(entities.Base):
+class TaskEntity(Base):
     id: UUID = UUIDField(unique=True, primary_key=True, default=uuid4())
-    user: UUID = ForeignKeyField(entities.User, backref='tasks')
+    user: UUID = ForeignKeyField(User, backref='tasks')
     title: str = CharField(max_length=256)
     description_full: str = TextField(null=True)
     description_short: str = CharField(max_length=2048, null=True)

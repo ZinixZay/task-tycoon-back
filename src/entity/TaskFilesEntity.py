@@ -1,12 +1,11 @@
 from uuid import UUID, uuid4
-from importlib import import_module
 from peewee import UUIDField, CharField, ForeignKeyField
+from src.entity import Base, Task
 
-entities = import_module('src.entity')
 
-class TaskFilesEntity(entities.Base):
+class TaskFilesEntity(Base):
     id: UUID = UUIDField(unique=True, primary_key=True, default=uuid4())
-    task: UUID = ForeignKeyField(entities.Task, backref='files')
+    task: UUID = ForeignKeyField(Task, backref='files')
     file_path: str = CharField(max_length=1024)
     
     class Meta:
