@@ -5,6 +5,7 @@ from src.jwt import JWTBearer
 from src.users.dto import RegisterUserDto, UpdateUserDto
 from src.jwt import JWTBearer
 from src.users import service
+from src.users.dto import UserDto
 
 
 user_router: APIRouter = APIRouter(
@@ -31,4 +32,9 @@ async def logout_user(user: TokenDto = Depends(JWTBearer())) -> None:
 @user_router.patch('/update')
 async def update_user(user: TokenDto = Depends(JWTBearer()), updateDto: UpdateUserDto = Body(...)) -> None:
     await service.update_user(user['user_id'], updateDto)
+    
+    
+@user_router.get('')
+async def get_user_info(user: TokenDto = Depends(JWTBearer())) -> UserDto:
+    return await service.get_user_info(user['user_id'])
     
