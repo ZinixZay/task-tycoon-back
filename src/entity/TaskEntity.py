@@ -3,7 +3,7 @@ from peewee import UUIDField, CharField, BigIntegerField, TextField, ForeignKeyF
 import time
 from src.entity import Base, User
 
-
+# TODO: ADD TAGS
 class TaskEntity(Base):
     id: UUID = UUIDField(unique=True, primary_key=True, default=uuid4())
     user: UUID = ForeignKeyField(User, backref='tasks')

@@ -1,31 +1,44 @@
 import time
 import jwt
-from typing import Dict
+import json
+from src.jwt.dto import JWTDto
 from src.jwt.dto import TokenDto
 from src.env import EnvVariablesEnum
 from fastapi import Request, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from src.cache import CacheService
+from src.users.dto import UserTokensDto
 
 
 JWT_SECRET = EnvVariablesEnum.JWT_SECRET.value
-JWT_ALGORITHM = "HS256" # add to env later
-JWT_EXPIRATION_MINUTES = 30 # add to env later
+JWT_ALGORITHM = EnvVariablesEnum.JWT_ALGORITHM.value
+JWT_ACCESS_EXPIRATION_SECONDS = int(EnvVariablesEnum.JWT_ACCESS_EXPIRATION_SECONDS.value)
+JWT_REFRESH_EXPIRATION_SECONDS = int(EnvVariablesEnum.JWT_REFRESH_EXPIRATION_SECONDS.value)
 
 
-def token_response(token: str):
-    return {
-        "access_token": token
-    }
-
-
-def sign_jwt(user_id: str) -> TokenDto:
-    payload: TokenDto = {
-        "user_id": user_id,
-        "expires": time.time() + 600
-    }
-    token = jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
+async def save_tokens_to_redis(JWT_tokens: JWTDto, user_id: str) -> None:
+    await CacheService.set(f'token_{user_id}', 
+                           json.dumps({"user_id": user_id, 
+                            "ACCESS_TOKEN": JWT_tokens.ACCESS_TOKEN, 
+                            "REFRESH_TOKEN": JWT_tokens.REFRESH_TOKEN}), 
+                           expires_in=int(JWT_REFRESH_EXPIRATION_SECONDS))
     
-    return token_response(token)
+
+
+async def sign_jwt(user_id: str) -> JWTDto:
+    access_payload: TokenDto = TokenDto(
+        user_id=user_id,
+        expires_in=time.time() + JWT_ACCESS_EXPIRATION_SECONDS,
+    )
+    refresh_payload: TokenDto = TokenDto(
+        user_id=user_id,
+        expires_in=time.time() + JWT_REFRESH_EXPIRATION_SECONDS,
+    )
+    access_token = jwt.encode(access_payload.model_dump(), JWT_SECRET, algorithm=JWT_ALGORITHM)
+    refresh_token = jwt.encode(refresh_payload.model_dump(), JWT_SECRET, algorithm=JWT_ALGORITHM)
+    jwt_dto = JWTDto(ACCESS_TOKEN=access_token, REFRESH_TOKEN=refresh_token)
+    await save_tokens_to_redis(jwt_dto, user_id)
+    return jwt_dto
 
 
 def decode_jwt(token: str) -> TokenDto | None:

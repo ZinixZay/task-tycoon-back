@@ -3,5 +3,6 @@ from pydantic import BaseModel
 
 
 class TokenDto(BaseModel):
-    user_id: UUID
-    expires: int
+    user_id: str
+    expires_in: float
+    
