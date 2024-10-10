@@ -44,7 +44,7 @@ async def sign_jwt(user_id: str) -> JWTDto:
 def decode_jwt(token: str) -> TokenDto | None:
     try:
         decoded_token = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
-        return decoded_token if decoded_token["expires"] >= time.time() else None
+        return decoded_token if decoded_token["expires_in"] >= time.time() else None
     except Exception as e:
         return None
 
@@ -66,7 +66,7 @@ class JWTBearer(HTTPBearer):
 
     def verify_jwt(self, jwtoken: str) -> bool:
         isTokenValid: bool = False
-
+        # what type if token i accept?
         try:
             payload = decode_jwt(jwtoken)
         except:
