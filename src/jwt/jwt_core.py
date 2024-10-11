@@ -1,6 +1,7 @@
 import time
 import jwt
 import json
+from src.jwt.dto.VerifyJWTResponseDto import VerifyJWTResponseDto
 from src.jwt.dto import JWTDto
 from src.jwt.dto import TokenDto
 from src.env import EnvVariablesEnum
@@ -58,20 +59,25 @@ class JWTBearer(HTTPBearer):
         if credentials:
             if not credentials.scheme == "Bearer":
                 raise HTTPException(status_code=403, detail="Invalid authentication scheme.")
-            if not self.verify_jwt(credentials.credentials):
+            if not self.verify_jwt(credentials.credentials, request.headers.get('refresh_token')):
                 raise HTTPException(status_code=403, detail="Invalid token or expired token.")
             return decode_jwt(credentials.credentials)
         else:
             raise HTTPException(status_code=403, detail="Invalid authorization code.")
 
-    def verify_jwt(self, jwtoken: str) -> bool:
-        isTokenValid: bool = False
-        # what type if token i accept?
+    def verify_jwt(self, jwtoken: str, refresh_token: str | None) -> VerifyJWTResponseDto:
+        isAccessTokenValid: bool = False
+        isRefreshTokenValid: bool = False
         try:
-            payload = decode_jwt(jwtoken)
+            access_payload = decode_jwt(jwtoken)
+            if refresh_token:
+                refresh_payload = decode_jwt(refresh_token)
         except:
-            payload = None
-        if payload:
-            isTokenValid = True
+            access_payload = None
+            refresh_payload = None
+        if access_payload:
+            if refresh_payload:
+                isRefreshTokenValid = True
+            isAccessTokenValid = True
 
-        return isTokenValid
+        return isAccessTokenValid, isRefreshTokenValid
