@@ -1,5 +1,5 @@
 from typing import List, Optional
-from sqlalchemy import select, delete
+from sqlalchemy import and_, select, delete
 from database.database import get_async_session
 from models import TaskModel
 from uuid import UUID
@@ -21,6 +21,14 @@ class TaskRepository:
             query = select(TaskModel).where(TaskModel.id == task_id)
             result = await session.execute(query)
             task_entity = result.scalars().one_or_none()
+            return task_entity
+        
+    @classmethod
+    async def find_by_ids_and_user(cls, task_ids: List[UUID], user: UUID) -> List[TaskModel] | None:
+        async for session in get_async_session():
+            query = select(TaskModel).where(and_(TaskModel.id in task_ids, TaskModel.user == user))
+            result = await session.execute(query)
+            task_entity = result.scalars().all()
             return task_entity
         
     @classmethod

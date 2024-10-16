@@ -55,6 +55,11 @@ class GetResultingAttemptStatsDto(BaseModel):
 
 
 class GetTaskStatsDto(BaseModel):
+    task_ids: Optional[List[UUID]] = []
+    get_all: Optional[bool] = True
+
+
+class GetResultingStatsDto(BaseModel):
     task_id: UUID
 
 
