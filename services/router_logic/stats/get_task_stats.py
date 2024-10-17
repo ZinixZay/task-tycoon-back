@@ -24,6 +24,8 @@ async def stats_get_task(
         cached_stats = json.loads(cached_stats)
         if (not cached_stats):
             cached_stats = await TaskStatsCalculate.calculate_task_stats(task.id)
+        else:
+            cached_stats = json.loads(cached_stats)
         cached_stats['task_id'] = task.id
         cached_stats['task_title'] = task.title
         task_stats.append(cached_stats)
