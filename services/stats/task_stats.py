@@ -14,11 +14,11 @@ class TaskStatsCalculate:
     async def calculate_task_stats(cls, task_id: UUID) -> dict:
         summary_stats_entities = await SummaryStatsRepository.get_by_task(task_id)
         if len(summary_stats_entities) == 0:
-            raise NotFoundException('Нет статистических данных')
+            return {}
         best_result = cls.__get_best_result__(summary_stats_entities)
         best_result_author = cls.__get_best_result_author__(summary_stats_entities, best_result)
         if not best_result_author:
-            raise Exception()
+            return {}
         task_stats = TaskStats(
             competitors_count=cls.__get_competitors_count__(summary_stats_entities),
             avg_result=cls.__get_avg_result__(summary_stats_entities),
