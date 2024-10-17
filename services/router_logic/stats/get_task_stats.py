@@ -1,9 +1,7 @@
 import json
 from typing import List
-from fastapi import Depends
 from dtos.tasks.stats.task_stats import TaskStatsResponse
 from repositories import TaskRepository
-from services.authentication import fastapi_users
 from dtos.attempt_stats.attempt_stats import GetTaskStatsDto
 from models import UserModel
 from services.cache.cache import Cache
