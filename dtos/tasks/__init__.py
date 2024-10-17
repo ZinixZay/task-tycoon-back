@@ -1,2 +1,2 @@
 from .task import *
-from .stats.task_stats import TaskStats
+from .stats.task_stats import TaskStatsResponse
