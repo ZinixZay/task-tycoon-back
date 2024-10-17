@@ -16,14 +16,10 @@ class TaskStatsCalculate:
         if len(summary_stats_entities) == 0:
             return {}
         best_result = cls.__get_best_result__(summary_stats_entities)
-        best_result_author = cls.__get_best_result_author__(summary_stats_entities, best_result)
-        if not best_result_author:
-            return {}
         task_stats = TaskStats(
             competitors_count=cls.__get_competitors_count__(summary_stats_entities),
             avg_result=cls.__get_avg_result__(summary_stats_entities),
             best_result=best_result,
-            best_result_author=best_result_author,
             total_attempts=cls.__get_total_attempts__(summary_stats_entities)
         )
         task_stats_json = task_stats.model_dump(mode='json')
@@ -46,10 +42,6 @@ class TaskStatsCalculate:
     @classmethod
     def __get_best_result__(cls, summary_stats: List[SummaryAttemptStatsModel]) -> float:
         return max([s.best_result for s in summary_stats])
-    
-    @classmethod
-    def __get_best_result_author__(cls, summary_stats: List[SummaryAttemptStatsModel], best_result: float) -> UUID | None:
-        return next((x.user_id for x in summary_stats if x.best_result == best_result), None)
 
     @classmethod
     def __get_total_attempts__(cls, summary_stats: List[SummaryAttemptStatsModel]):
