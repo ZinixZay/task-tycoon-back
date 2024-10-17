@@ -1,7 +1,8 @@
 from typing import List
+from uuid import UUID
 from fastapi import APIRouter, Depends
 from fastapi.responses import FileResponse
-from dtos.tasks.stats.task_stats import TaskStatsResponse
+from dtos.tasks.stats.task_stats import TaskStatsResponse, TaskStatsResultingResponse
 from services.authentication import fastapi_users
 from dtos.attempt_stats.attempt_stats import GetAttemptStatsDto, GetAttemptStatsResponse, GetResultingAttemptStatsDto, GetResultingStatsDto, GetTaskStatsDto
 from models import UserModel
@@ -36,6 +37,15 @@ async def get_task_stats(
     user: UserModel = Depends(fastapi_users.current_user())
 ) -> List[TaskStatsResponse]:
     return await stats.stats_get_task(get_task_stats_dto, user)
+
+
+@stats_router.get('/task_stats/resulting/{task_id}')
+async def get_task_stats_resulting(
+    task_id: UUID,
+    user: UserModel = Depends(fastapi_users.current_user()) 
+) -> List[TaskStatsResultingResponse]:
+    return await stats.stats_get_task_resulting(task_id, user)
+    
 
 
 @stats_router.get('/task_stats/download/excel')

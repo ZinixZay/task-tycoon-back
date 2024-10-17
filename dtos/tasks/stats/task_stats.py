@@ -9,6 +9,14 @@ class TaskStats(BaseModel):
     total_attempts: int
 
 
+class TaskStatsResultingResponse(BaseModel):
+    user_initials: str
+    best_result: float
+    avg_result: float
+    attempt_amount: int
+    
+
+
 class TaskStatsResponse(TaskStats):
     task_title: str
     task_id: UUID

@@ -1,18 +1,8 @@
-from typing import List
 from fastapi import APIRouter, Depends
-from dtos.questions import Question
 from dtos.tasks import *
-from dtos.transactions.transaction import TransactionPayload
-from repositories import TaskRepository, QuestionRepository
+from models import UserModel
 from services.authentication import fastapi_users
-from services.tasks import task_dto_to_model
-from services.questions import question_dto_to_model
 from uuid import UUID
-from models import UserModel, TaskModel, QuestionModel
-from services.transactions import Transaction
-from utils.custom_errors import ForbiddenException, NotFoundException, NoPermissionException
-from utils.enums import TransactionMethodsEnum, PermissionsEnum
-from services.permissions import Permissions
 from services.router_logic import task
 
 tasks_router: APIRouter = APIRouter(
