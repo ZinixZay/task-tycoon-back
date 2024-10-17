@@ -21,11 +21,10 @@ async def stats_get_task(
     task_stats = []
     for task in task_entities:
         cached_stats = await Cache.get(f"stats_task_{task.id}")
+        cached_stats = json.loads(cached_stats)
         if (not cached_stats):
             cached_stats = await TaskStatsCalculate.calculate_task_stats(task.id)
         cached_stats['task_id'] = task.id
         cached_stats['task_title'] = task.title
         task_stats.append(cached_stats)
-    task_stats = list(map(lambda x: json.loads(x), task_stats))
-
     return task_stats
