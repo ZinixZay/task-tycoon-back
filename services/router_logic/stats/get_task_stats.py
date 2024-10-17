@@ -1,7 +1,7 @@
 import json
 from typing import List
 from fastapi import Depends
-from dtos.tasks.stats.task_stats import TaskStats
+from dtos.tasks.stats.task_stats import TaskStatsResponse
 from repositories import TaskRepository
 from services.authentication import fastapi_users
 from dtos.attempt_stats.attempt_stats import GetTaskStatsDto
@@ -11,9 +11,9 @@ from services.stats import TaskStatsCalculate
 
 
 async def stats_get_task(
-    get_task_stats_dto: GetTaskStatsDto = Depends(),
-    user: UserModel = Depends(fastapi_users.current_user())
-) -> List[TaskStats]:
+    get_task_stats_dto: GetTaskStatsDto,
+    user: UserModel
+) -> List[TaskStatsResponse]:
     if get_task_stats_dto.get_all:
         task_entities = await TaskRepository.find_by_user(user.id)
     else:
@@ -25,6 +25,9 @@ async def stats_get_task(
         cached_stats = await Cache.get(f"stats_task_{task.id}")
         if (not cached_stats):
             cached_stats = await TaskStatsCalculate.calculate_task_stats(task.id)
+        cached_stats['task_id'] = task.id
+        cached_stats['task_title'] = task.title
         task_stats.append(cached_stats)
     task_stats = list(map(lambda x: json.loads(x), task_stats))
+
     return task_stats

@@ -1,7 +1,7 @@
 from typing import List
 from fastapi import APIRouter, Depends
 from fastapi.responses import FileResponse
-from dtos.tasks.stats.task_stats import TaskStats
+from dtos.tasks.stats.task_stats import TaskStatsResponse
 from services.authentication import fastapi_users
 from dtos.attempt_stats.attempt_stats import GetAttemptStatsDto, GetAttemptStatsResponse, GetResultingAttemptStatsDto, GetResultingStatsDto, GetTaskStatsDto
 from models import UserModel
@@ -34,7 +34,7 @@ async def get_resulting_attempt_stats(
 async def get_task_stats(
     get_task_stats_dto: GetTaskStatsDto = Depends(),
     user: UserModel = Depends(fastapi_users.current_user())
-) -> List[TaskStats]:
+) -> List[TaskStatsResponse]:
     return await stats.stats_get_task(get_task_stats_dto, user)
 
 
