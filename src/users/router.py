@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Body, Depends
-from src.jwt.jwt_core import sign_jwt
 from src.jwt.dto import TokenDto, JWTDto
 from src.jwt import AccessJWTBearer, RefreshJWTBearer
 from src.users.dto import RegisterUserDto, UpdateUserDto, UserDto
