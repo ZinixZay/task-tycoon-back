@@ -1,14 +1,14 @@
 import time
+from src.helpers.errors import ForbiddenException, UnauthorizedException
 import jwt
 import json
-from src.jwt.dto.VerifyJWTResponseDto import VerifyJWTResponseDto
+from src.jwt.dto.constDto import REFRESH_TOKEN_LABEL
 from src.jwt.dto import JWTDto
-from src.jwt.dto import TokenDto
+from src.jwt.dto import TokenDto, CacheUserInfo
 from src.env import EnvVariablesEnum
 from fastapi import Request, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from src.cache import CacheService
-from src.users.dto import UserTokensDto
 
 
 JWT_SECRET = EnvVariablesEnum.JWT_SECRET.value
@@ -42,42 +42,54 @@ async def sign_jwt(user_id: str) -> JWTDto:
     return jwt_dto
 
 
-def decode_jwt(token: str) -> TokenDto | None:
-    try:
-        decoded_token = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
-        return decoded_token if decoded_token["expires_in"] >= time.time() else None
-    except Exception as e:
-        return None
-
-
-class JWTBearer(HTTPBearer):
+class AccessJWTBearer(HTTPBearer):
     def __init__(self, auto_error: bool = True):
-        super(JWTBearer, self).__init__(auto_error=auto_error)
+        super(AccessJWTBearer, self).__init__(auto_error=auto_error)
 
-    async def __call__(self, request: Request):
-        credentials: HTTPAuthorizationCredentials = await super(JWTBearer, self).__call__(request)
+    async def __call__(self, request: Request) -> TokenDto:
+        credentials: HTTPAuthorizationCredentials = await super(AccessJWTBearer, self).__call__(request)
         if credentials:
             if not credentials.scheme == "Bearer":
                 raise HTTPException(status_code=403, detail="Invalid authentication scheme.")
-            if not self.verify_jwt(credentials.credentials, request.headers.get('refresh_token')):
+            decoded_token: TokenDto | None = await self.decode_jwt(credentials.credentials)
+            if not decoded_token:
                 raise HTTPException(status_code=403, detail="Invalid token or expired token.")
-            return decode_jwt(credentials.credentials)
+            return decoded_token
         else:
             raise HTTPException(status_code=403, detail="Invalid authorization code.")
 
-    def verify_jwt(self, jwtoken: str, refresh_token: str | None) -> VerifyJWTResponseDto:
-        isAccessTokenValid: bool = False
-        isRefreshTokenValid: bool = False
+    async def decode_jwt(self, access_token: str) -> TokenDto:
         try:
-            access_payload = decode_jwt(jwtoken)
-            if refresh_token:
-                refresh_payload = decode_jwt(refresh_token)
-        except:
-            access_payload = None
-            refresh_payload = None
-        if access_payload:
-            if refresh_payload:
-                isRefreshTokenValid = True
-            isAccessTokenValid = True
+            decoded_token: TokenDto = jwt.decode(access_token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+            current_auth_info: str = await CacheService.get(f'token_{decoded_token["user_id"]}')
+            current_auth_info_dict: CacheUserInfo = CacheUserInfo(**json.loads(current_auth_info))
+            if (access_token != current_auth_info_dict.ACCESS_TOKEN):
+                return None
+            return decoded_token if decoded_token["expires_in"] >= time.time() else None
+        except Exception:
+            return None
 
-        return isAccessTokenValid, isRefreshTokenValid
+
+class RefreshJWTBearer(HTTPBearer):
+    def __init__(self, auto_error: bool = True):
+        super(RefreshJWTBearer, self).__init__(auto_error=auto_error)
+
+    async def __call__(self, request: Request) -> TokenDto:
+        refresh_token = request.headers.get(REFRESH_TOKEN_LABEL)
+        if not refresh_token:
+            raise UnauthorizedException('Missing refresh token')
+        decoded_token: TokenDto = await self.decode_jwt(refresh_token)
+        if not decoded_token:
+            raise UnauthorizedException('Refresh token is expired or invalid')
+        return decoded_token
+
+    async def decode_jwt(self, refresh_token: str) -> TokenDto:
+        try:
+            decoded_token: TokenDto = jwt.decode(refresh_token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+            current_auth_info: str = await CacheService.get(f'token_{decoded_token["user_id"]}')
+            current_auth_info_dict: CacheUserInfo = CacheUserInfo(**json.loads(current_auth_info))
+            if (refresh_token != current_auth_info_dict.REFRESH_TOKEN):
+                return None
+            return decoded_token if decoded_token["expires_in"] >= time.time() else None
+        except Exception:
+            return None  
