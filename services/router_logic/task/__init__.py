@@ -7,3 +7,5 @@ from services.router_logic.task.get_by_title import *
 from services.router_logic.task.get_by_user import *
 from services.router_logic.task.get_many import *
 from services.router_logic.task.patch import *
+from services.router_logic.task.upload_file import *
+from services.router_logic.task.download_file import *

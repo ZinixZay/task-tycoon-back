@@ -19,3 +19,4 @@ class EnvironmentVariables(Enum):
     SUPERUSER_PASSWORD = os.getenv('SUPERUSER_PASSWORD')
     TEST_USER = os.getenv('TEST_USER')
     TEST_USER_PASSWORD = os.getenv('TEST_USER_PASSWORD')
+    FILE_SAVE_ROOT = os.getenv('FILE_SAVE_ROOT')

@@ -72,3 +72,10 @@ class PatchTaskDto(BaseModel):
 
 class PatchTaskResponse(BaseModel):
     task_id: UUID
+
+
+class UploadFileDto(BaseModel):
+    task_id: UUID
+
+class DownloadFileDto(BaseModel):
+    task_id: UUID

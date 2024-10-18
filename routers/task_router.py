@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, UploadFile
+from fastapi.responses import FileResponse
 from dtos.tasks import *
 from models import UserModel
 from services.authentication import fastapi_users
@@ -71,7 +72,22 @@ async def get_task_to_observe_by_id(
 
 @tasks_router.delete("/")
 async def delete_task_by_id(
-        query_params: DeleteTaskByIdDto = Depends(),
-        user_entity: UserModel = Depends(fastapi_users.current_user())
+    query_params: DeleteTaskByIdDto = Depends(),
+    user_entity: UserModel = Depends(fastapi_users.current_user())
 ) -> UUID:
     return await task.task_delete_by_id(query_params, user_entity)
+
+
+@tasks_router.post("/upload/")
+async def upload_file(
+    file: UploadFile,
+    query_params: UploadFileDto = Depends(),
+) -> bool:
+    return await task.upload_file(query_params, file)
+    
+
+@tasks_router.get("/download/")
+async def download_file(
+    query_params: DownloadFileDto = Depends(),
+) -> FileResponse:
+    return await task.download_file(query_params)
