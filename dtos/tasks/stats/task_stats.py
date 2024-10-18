@@ -1,5 +1,9 @@
+from typing import List
 from uuid import UUID
 from pydantic import BaseModel
+
+from dtos.attempt_stats.attempt_stats import AttemptStatsField
+from utils.enums.attempt_type_enum import AttemptTypeEnum
 
 
 class TaskStats(BaseModel):
@@ -19,10 +23,9 @@ class TaskStatsResultingResponse(BaseModel):
 
 class TaskStatsAttemptResponse(BaseModel):
     attempt_id: UUID
-    stats: dict
+    stats: List[AttemptStatsField]
     result: float
-    type: str
-
+    type: AttemptTypeEnum
 
 class TaskStatsResponse(TaskStats):
     task_title: str
