@@ -1,5 +1,6 @@
 
 from typing import Dict, List, Optional
+from dtos.answers.answer import AnswerContent
 from pydantic import BaseModel
 from uuid import UUID
 from utils.enums.attempt_type_enum import AttemptStatsStatusEnum, AttemptTypeEnum
@@ -8,7 +9,7 @@ from utils.enums.attempt_type_enum import AttemptStatsStatusEnum, AttemptTypeEnu
 class AttemptStatsField(BaseModel):
     question_id: UUID
     status: AttemptStatsStatusEnum
-    content: Optional[List[Dict]] = None
+    content: Optional[List[AnswerContent]] = None
     
     def to_dict(self) -> dict:
         return {
