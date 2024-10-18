@@ -17,7 +17,8 @@ async def stats_get_resulting_attempt(
     result: List[TaskStatsResultingResponse] = []
     for stats in resulting_attempts:
         result.append(TaskStatsResultingResponse(
-            user_initials=user.name + user.surname,
+            user_id=user.id,
+            user_initials=' '.join([user.name, user.surname]),
             best_result=stats.best_result,
             avg_result=stats.avg_result,
             attempt_amount=stats.attempt_amount

@@ -10,6 +10,7 @@ class TaskStats(BaseModel):
 
 
 class TaskStatsResultingResponse(BaseModel):
+    user_id: UUID
     user_initials: str
     best_result: float
     avg_result: float
