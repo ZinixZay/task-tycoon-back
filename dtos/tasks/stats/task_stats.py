@@ -15,7 +15,13 @@ class TaskStatsResultingResponse(BaseModel):
     best_result: float
     avg_result: float
     attempt_amount: int
-    
+
+
+class TaskStatsAttemptResponse(BaseModel):
+    attempt_id: UUID
+    stats: dict
+    result: float
+    type: str
 
 
 class TaskStatsResponse(TaskStats):
