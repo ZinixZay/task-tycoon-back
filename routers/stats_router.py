@@ -44,7 +44,7 @@ async def get_task_stats_resulting(
     task_id: UUID,
     user: UserModel = Depends(fastapi_users.current_user()) 
 ) -> List[TaskStatsResultingResponse]:
-    return await stats.stats_get_task_resulting(task_id, user)
+    return await stats.stats_get_resulting_attempt(task_id, user)
     
 
 
