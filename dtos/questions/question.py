@@ -45,3 +45,11 @@ class CreateQuestionResponse(BaseModel):
 class AddQuestionToTask(BaseModel):
     task_id: UUID
     questions: List[CreateQuestion]
+
+
+class UploadFileDto(BaseModel):
+    question_id: UUID
+
+
+class DownloadFileDto(BaseModel):
+    question_id: UUID
