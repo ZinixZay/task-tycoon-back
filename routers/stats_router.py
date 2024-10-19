@@ -54,8 +54,6 @@ async def get_task_stats_attempts(
     user: UserModel = Depends(fastapi_users.current_user()) 
 ) -> List[TaskStatsAttemptResponse]:
     return await (stats.stats_get_attempts(task_id, user_id, user))
-    
-
 
 
 @stats_router.get('/task_stats/download/excel')
