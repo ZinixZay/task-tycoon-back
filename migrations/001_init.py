@@ -71,7 +71,7 @@ def migrate(migrator: Migrator, database: pw.Database, *, fake=False):
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         user_id UUID REFERENCES {TableNamesEnum.USER_ENTITY.value}(id) ON DELETE CASCADE,
         title VARCHAR(256) NOT NULL,
-        type VARCHAR(10) NOT NULL,
+        type VARCHAR(256) NOT NULL,
         parent_id UUID,
         price SMALLINT,
         created_at BIGINT DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)
