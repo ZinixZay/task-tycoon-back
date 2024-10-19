@@ -1,5 +1,5 @@
 import time
-from src.helpers.errors import ForbiddenException, UnauthorizedException
+from src.helpers.errors import UnauthorizedException
 import jwt
 import json
 from src.jwt.dto.constDto import REFRESH_TOKEN_LABEL
@@ -60,12 +60,12 @@ class AccessJWTBearer(HTTPBearer):
 
     async def decode_jwt(self, access_token: str) -> TokenDto:
         try:
-            decoded_token: TokenDto = jwt.decode(access_token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
-            current_auth_info: str = await CacheService.get(f'token_{decoded_token["user_id"]}')
+            decoded_token: TokenDto = TokenDto(**jwt.decode(access_token, JWT_SECRET, algorithms=[JWT_ALGORITHM]))
+            current_auth_info: str = await CacheService.get(f'token_{decoded_token.user_id}')
             current_auth_info_dict: CacheUserInfo = CacheUserInfo(**json.loads(current_auth_info))
             if (access_token != current_auth_info_dict.ACCESS_TOKEN):
                 return None
-            return decoded_token if decoded_token["expires_in"] >= time.time() else None
+            return decoded_token if decoded_token.expires_in >= time.time() else None
         except Exception:
             return None
 
@@ -85,11 +85,11 @@ class RefreshJWTBearer(HTTPBearer):
 
     async def decode_jwt(self, refresh_token: str) -> TokenDto:
         try:
-            decoded_token: TokenDto = jwt.decode(refresh_token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
-            current_auth_info: str = await CacheService.get(f'token_{decoded_token["user_id"]}')
+            decoded_token: TokenDto = TokenDto(**jwt.decode(refresh_token, JWT_SECRET, algorithms=[JWT_ALGORITHM]))
+            current_auth_info: str = await CacheService.get(f'token_{decoded_token.user_id}')
             current_auth_info_dict: CacheUserInfo = CacheUserInfo(**json.loads(current_auth_info))
             if (refresh_token != current_auth_info_dict.REFRESH_TOKEN):
                 return None
-            return decoded_token if decoded_token["expires_in"] >= time.time() else None
+            return decoded_token if decoded_token.expires_in >= time.time() else None
         except Exception:
             return None  

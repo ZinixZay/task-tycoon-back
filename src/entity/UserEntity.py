@@ -1,10 +1,10 @@
 from uuid import UUID, uuid4
-from importlib import import_module
 from peewee import UUIDField, CharField, BooleanField, BigIntegerField
 from pydantic import EmailStr, SecretStr
 import time
 from argon2 import PasswordHasher
 from src.entity import Base
+from src.users.dto.enums import USER_ROLES, UserRolesEnum
 
 HASHER = PasswordHasher()
 
@@ -15,7 +15,7 @@ class UserEntity(Base):
     nickname: str = CharField(max_length=62, null=True)
     name: str = CharField(max_length=50, null=True)
     surname: str = CharField(max_length=50, null=True)
-    role: str = CharField(choices=['teacher', 'pupil'], default='teacher')
+    role: str = CharField(choices=USER_ROLES, default=UserRolesEnum.PUPIL.value)
     created_at: float = BigIntegerField(default=time.time())
     is_active: bool = BooleanField(default=False)
     is_superuser: bool = BooleanField(default=False)

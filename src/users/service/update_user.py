@@ -4,6 +4,5 @@ from src.entity import User
 
 
 def update_user(user: TokenDto, updateDto: UpdateUserDto) -> None:
-    user: TokenDto = TokenDto(**user)
     User.update(updateDto.model_dump(exclude_none=True)).where(User.id == user.user_id).execute()
     
