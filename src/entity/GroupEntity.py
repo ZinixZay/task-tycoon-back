@@ -5,7 +5,7 @@ from src.entity import Base, User
 
 class GroupEntity(Base):
     id: UUID = UUIDField(unique=True, primary_key=True, default=uuid4())
-    user: UUID = ForeignKeyField(User, backref='tasks')
+    user: UUID = ForeignKeyField(User, backref='groups')
     title: str = CharField(max_length=256)
     type: str = CharField(choices=['channel', 'group'], default='group')
     parent_id: UUID = UUIDField(null=False)
