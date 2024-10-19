@@ -25,27 +25,30 @@ Some examples (model - class or model name)::
 """
 
 from contextlib import suppress
+from enum import Enum
 import time
 
+from argon2 import PasswordHasher
 import peewee as pw
 from peewee_migrate import Migrator
-from src.entity import User
 from src.env.env_variables_enum import EnvVariablesEnum
 
 
-with suppress(ImportError):
-    import playhouse.postgres_ext as pw_pext
+HASHER = PasswordHasher()
+
+class TableNamesEnum(Enum):
+    USER_ENTITY = 'users'
 
 
 def migrate(migrator: Migrator, database: pw.Database, *, fake=False):
     """Write your migrations here."""
     database.execute_sql(f'''INSERT INTO 
-                                users 
+                                {TableNamesEnum.USER_ENTITY.value} 
                                     (id, email, hashed_password, role, created_at, is_active, is_superuser, is_verified)
                                 VALUES
                                     (gen_random_uuid(), 
                                     '{EnvVariablesEnum.SUPERUSER_LOGIN.value}', 
-                                    '{User.hash_password(EnvVariablesEnum.SUPERUSER_PASSWORD.value)}',
+                                    '{HASHER.hash(EnvVariablesEnum.SUPERUSER_PASSWORD.value)}',
                                     'teacher',
                                     {time.time()},
                                     true,
@@ -57,7 +60,7 @@ def migrate(migrator: Migrator, database: pw.Database, *, fake=False):
                                 VALUES
                                     (gen_random_uuid(), 
                                     '{EnvVariablesEnum.TEST_USER.value}', 
-                                    '{User.hash_password(EnvVariablesEnum.TEST_USER_PASSWORD.value)}',
+                                    '{HASHER.hash(EnvVariablesEnum.TEST_USER_PASSWORD.value)}',
                                     'pupil',
                                     {time.time()},
                                     true,
@@ -70,7 +73,7 @@ def rollback(migrator: Migrator, database: pw.Database, *, fake=False):
     """Write your rollback migrations here."""
     database.execute_sql(f'''
                          DELETE FROM 
-                            users 
+                            {TableNamesEnum.USER_ENTITY.value} 
                         WHERE 
                             email = '{EnvVariablesEnum.SUPERUSER_LOGIN.value}'
                         ''')

@@ -1,16 +1,17 @@
 from uuid import UUID, uuid4
 from peewee import UUIDField, ForeignKeyField, CharField
 from playhouse.postgres_ext import JSONField
-from src.answers.dto.enums import AnswerStatusEnum
+from src.entity.dto.enums import TableNamesEnum
+from src.answers.dto.enums import AnswerStatusEnum, ANSWER_STATUSES
 from src.entity import Base, Attempt, Question
 
 class AnswerEntity(Base):
     id: UUID = UUIDField(unique=True, primary_key=True, default=uuid4())
-    attempt: UUID = ForeignKeyField(Attempt, backref='answers')
-    question: UUID = ForeignKeyField(Question, backref='answers')
-    status: AnswerStatusEnum = CharField()
+    attempt_id: UUID = ForeignKeyField(Attempt, backref='answers')
+    question_id: UUID = ForeignKeyField(Question, backref='answers')
+    status: AnswerStatusEnum = CharField(choices=ANSWER_STATUSES)
     content: dict = JSONField(default=dict())
     
     class Meta:
-        table_name = 'answers'
+        table_name = TableNamesEnum.ANSWER_ENTITY.value
     
