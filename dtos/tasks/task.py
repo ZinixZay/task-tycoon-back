@@ -1,10 +1,20 @@
+import json
 from typing import List, Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, model_validator
 from uuid import UUID
 from dtos.questions.question import CreateQuestion, Question
 
 
-class CreateTaskDto(BaseModel):
+class JsonValidatable:
+    @model_validator(mode='before')
+    @classmethod
+    def validate_to_json(cls, value):
+        if isinstance(value, str):
+            return cls(**json.loads(value))
+        return value
+
+
+class CreateTaskDto(BaseModel, JsonValidatable):
     title: str
     description_full: Optional[str] = None
     description_short: Optional[str] = None
@@ -62,7 +72,7 @@ class DeleteTaskByIdDto(BaseModel):
     task_id: UUID
 
 
-class PatchTaskDto(BaseModel):
+class PatchTaskDto(BaseModel, JsonValidatable):
     task_id: UUID
     title: Optional[str] = None
     description_full: Optional[str] = None

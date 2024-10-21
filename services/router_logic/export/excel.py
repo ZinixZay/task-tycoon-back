@@ -1,3 +1,4 @@
+from fastapi.responses import FileResponse
 from uuid import UUID
 from models import UserModel
 from repositories import TaskRepository
@@ -9,7 +10,7 @@ from utils.enums.permissions_enum import PermissionsEnum
 async def export_excel(
     task_id: UUID,
     user: UserModel
-) -> None:
+) -> FileResponse:
     task_entity = await TaskRepository.find_by_id(task_id)
     if not task_entity:
         raise NotFoundException({'task': task_id})
@@ -17,3 +18,9 @@ async def export_excel(
         raise NoPermissionException(PermissionsEnum.Other)
     exporter: ExporterExcel = await ExporterExcel.create(task_entity)
     await exporter.export()
+    return FileResponse(
+        media_type='application/octet-stream',
+        path=f"resources/excel/task_{exporter.task.id}.xlsx",
+        filename="statistics.xlsx"
+    )
+    

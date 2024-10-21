@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends, UploadFile
+from typing import List, Tuple
+from fastapi import APIRouter, Depends, UploadFile, Body
 from fastapi.responses import FileResponse
 from dtos.tasks import *
 from models import UserModel
@@ -14,18 +15,22 @@ tasks_router: APIRouter = APIRouter(
 
 @tasks_router.post("/")
 async def add_task(
-        task_schema: CreateTaskDto,
+        task_schema: CreateTaskDto = Body(CreateTaskDto),
+        task_file: Optional[UploadFile] = None,
+        question_files: Optional[List[UploadFile]] = None,
         user_entity: UserModel = Depends(fastapi_users.current_user())
 ) -> CreateTaskResponse:
-    return await task.task_add(task_schema, user_entity)
+    return await task.task_add(task_schema, task_file, question_files, user_entity)
 
 
 @tasks_router.patch("/")
 async def patch_task(
-    task_schema: PatchTaskDto,
+    task_schema: PatchTaskDto = Body(PatchTaskDto),
+    task_file: Optional[UploadFile] = None,
+    question_files: Optional[List[UploadFile]] = None,
     user_entity: UserModel = Depends(fastapi_users.current_user())
 ) -> PatchTaskResponse:
-    return await task.task_patch(task_schema, user_entity)
+    return await task.task_patch(task_schema, task_file, question_files, user_entity)
 
 
 @tasks_router.get("/")

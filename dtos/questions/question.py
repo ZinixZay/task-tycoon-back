@@ -1,5 +1,5 @@
 from typing import List, Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator, validator
 from uuid import UUID
 from utils.enums import QuestionTypeEnum
 
@@ -15,6 +15,11 @@ class Question(BaseModel):
     order: int
     type: QuestionTypeEnum
     content: List[QuestionContent]
+    file_path: Optional[str] = None
+
+    @validator("file_path", always=True)
+    def file_url(cls, v, values, **kwargs) -> str:
+        return f"http://127.0.0.1:8000/api/v1/questions/download/?question_id={values["id"]}"
 
 
 class GetQuestionsByTaskIdDto(BaseModel):
@@ -31,6 +36,7 @@ class ContentField(BaseModel):
 
 
 class CreateQuestion(BaseModel):
+    file_path: Optional[str] = None
     question_body: str
     type: QuestionTypeEnum
     content: List[ContentField]
