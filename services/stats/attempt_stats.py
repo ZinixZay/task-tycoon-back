@@ -28,7 +28,8 @@ class AttemptStatsCalculate:
                 stats.append(
                     AttemptStatsField(
                         question_id=question.id,
-                        status=AttemptStatsStatusEnum.correct
+                        status=AttemptStatsStatusEnum.correct,
+                        content=[content.to_dict() for content in answered_question.content]
                     )
                 )
                 correct_amount += 1
