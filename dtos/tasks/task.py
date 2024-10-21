@@ -29,6 +29,11 @@ class IsolatedTask(BaseModel):
     description_short: Optional[str]
 
 
+class IsolatedTaskWithParsedUser(IsolatedTask):
+    user_initials: str
+
+
+
 class GetWithoutQuestions(BaseModel):
     task: IsolatedTask
     mode: str
