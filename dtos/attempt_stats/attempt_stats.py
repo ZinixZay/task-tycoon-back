@@ -1,5 +1,6 @@
 
-from typing import Dict, List, Optional
+import datetime
+from typing import List, Optional
 from dtos.answers.answer import AnswerContent
 from pydantic import BaseModel
 from uuid import UUID
@@ -66,5 +67,5 @@ class GetResultingStatsDto(BaseModel):
 
 class GetAttemptStatsResponse(BaseModel):
     stats: List[AttemptStatsField]
-    percent: float
-    created_at: int
+    result: float
+    created_at: datetime.datetime

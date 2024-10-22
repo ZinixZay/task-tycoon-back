@@ -6,7 +6,7 @@ from repositories import SummaryStatsRepository, TaskRepository
 from utils.custom_errors import ForbiddenException
 
 
-async def stats_get_resulting_attempt(
+async def stats_get_resulting_attempt_by_task(
     task_id: UUID,
     user: UserModel
 ) -> List[TaskStatsResultingResponse]:
