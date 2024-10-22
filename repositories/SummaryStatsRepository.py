@@ -39,7 +39,7 @@ class SummaryStatsRepository:
             )
         async for session in get_async_session():
             result = await session.execute(text(query), {"attempts_ids": attempts_ids})
-            result = [{'question_id': res[0], 'status': res[1]} for res in result.fetchall()]
+            result = [{'question_id': res[0], 'status': res[1], 'content': []} for res in result.fetchall()]
             return result
         
     @classmethod

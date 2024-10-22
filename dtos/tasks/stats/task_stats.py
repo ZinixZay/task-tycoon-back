@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from uuid import UUID
 from pydantic import BaseModel
 
@@ -7,10 +7,10 @@ from utils.enums.attempt_type_enum import AttemptTypeEnum
 
 
 class TaskStats(BaseModel):
-    competitors_count: int
-    avg_result: float
-    best_result: float
-    total_attempts: int
+    competitors_count: Optional[int] = 0
+    avg_result: Optional[float] = None
+    best_result: Optional[float] = None
+    total_attempts: Optional[int] = 0
 
 
 class TaskStatsResultingResponse(BaseModel):

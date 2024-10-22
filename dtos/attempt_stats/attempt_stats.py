@@ -9,13 +9,13 @@ from utils.enums.attempt_type_enum import AttemptStatsStatusEnum, AttemptTypeEnu
 class AttemptStatsField(BaseModel):
     question_id: UUID
     status: AttemptStatsStatusEnum
-    content: Optional[List[AnswerContent]] = None
+    content: Optional[List[AnswerContent]]
     
     def to_dict(self) -> dict:
         return {
             'question_id': str(self.question_id),
             'status': self.status.value,
-            'content': self.content
+            'content': [content.to_dict() for content in self.content]
         }
 
 
