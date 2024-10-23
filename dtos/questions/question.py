@@ -1,7 +1,8 @@
 from typing import List, Optional
-from pydantic import BaseModel, field_validator, validator
+from pydantic import BaseModel, computed_field
 from uuid import UUID
 from utils.enums import QuestionTypeEnum
+import os
 
 
 class QuestionContent(BaseModel):
@@ -17,9 +18,16 @@ class Question(BaseModel):
     content: List[QuestionContent]
     file_path: Optional[str] = None
 
-    @validator("file_path", always=True)
-    def file_url(cls, v, values, **kwargs) -> str:
-        return f"http://127.0.0.1:8000/api/v1/questions/download/?question_id={values["id"]}"
+    @computed_field
+    @property
+    def file_url(self) -> str:
+        return f"http://127.0.0.1:8000/api/v1/questions/download/?question_id={self.id}"
+    
+    @computed_field
+    @property
+    def file_name(self) -> str:
+        return os.path.basename(self.file_path)
+
 
 
 class GetQuestionsByTaskIdDto(BaseModel):
