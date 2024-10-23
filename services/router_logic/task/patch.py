@@ -108,7 +108,10 @@ async def update_file(
     if file.size > 21_000_000:
         return Error("file is too large")
 
-    if t.file_path is not None:
+    dirname = EnvironmentVariables.FILE_SAVE_ROOT.value
+    path = os.path.join(dirname, file.filename)
+    # skip if file name doesn't change
+    if t.file_path is not None and not os.path.exists(path):
         prev_extension = os.path.splitext(os.path.basename(t.file_path))[1]
         new_extension = os.path.splitext(file.filename)[1]
         
@@ -121,5 +124,5 @@ async def update_file(
         # otherwise uploads new file
         os.remove(t.file_path)
 
-    from services.router_logic.task.add import upload_file
-    return await upload_file(t, file)
+        from services.router_logic.task.add import upload_file
+        return await upload_file(t, file)

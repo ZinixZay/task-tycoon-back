@@ -81,7 +81,8 @@ async def upload_file(
 ) -> Error | None:
     if file.size > 21_000_000:
         return Error("file is too large")
-
+    if file.filename == "":
+        return Error("empty file")
     dirname = EnvironmentVariables.FILE_SAVE_ROOT.value
     os.makedirs(dirname, exist_ok=True)
     path = os.path.join(dirname, file.filename)
@@ -106,6 +107,11 @@ def prevent_name_doubling(path: str) -> str:
     i = 0
     while os.path.exists(path):
         name, extension = os.path.splitext(os.path.basename(path))
-        path = os.path.join(os.path.dirname(path), f"{name}_{i}{extension}")
+        parts = name.split("_")
+        if len(parts) < 2:
+            without_count = parts[0]
+        else:
+            without_count = "".join(parts[:-1])
+        path = os.path.join(os.path.dirname(path), f"{without_count}_{i}{extension}")
         i += 1
     return path
