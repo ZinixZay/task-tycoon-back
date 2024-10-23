@@ -23,10 +23,9 @@ async def stats_get_task(
         cached_stats = await Cache.get(f"stats_task_{task.id}")
         if (not cached_stats):
             cached_stats = await TaskStatsCalculate.calculate_task_stats(task.id)
-            cached_stats = json.loads(str(cached_stats))
-            
+            cached_stats = json.loads(json.loads(cached_stats))
         else:
-            cached_stats = json.loads(cached_stats)
+            cached_stats: dict = json.loads(json.loads(cached_stats))
         cached_stats['task_id'] = task.id
         cached_stats['task_title'] = task.title
         task_stats.append(cached_stats)
