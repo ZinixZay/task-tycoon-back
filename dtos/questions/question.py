@@ -20,12 +20,16 @@ class Question(BaseModel):
 
     @computed_field
     @property
-    def file_url(self) -> str:
+    def file_url(self) -> Optional[str]:
+        if self.file_path is None:
+            return None
         return f"http://127.0.0.1:8000/api/v1/questions/download/?question_id={self.id}"
     
     @computed_field
     @property
-    def file_name(self) -> str:
+    def file_name(self) -> Optional[str]:
+        if self.file_path is None:
+            return None
         return os.path.basename(self.file_path)
 
 
