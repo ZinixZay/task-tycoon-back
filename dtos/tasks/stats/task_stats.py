@@ -1,3 +1,4 @@
+import datetime
 from typing import List, Optional
 from uuid import UUID
 from pydantic import BaseModel
@@ -23,9 +24,11 @@ class TaskStatsResultingResponse(BaseModel):
 
 class TaskStatsAttemptResponse(BaseModel):
     attempt_id: UUID
+    user_initials: str
     stats: List[AttemptStatsField]
     result: float
     type: AttemptTypeEnum
+    created_at: datetime.datetime
 
 class TaskStatsResponse(TaskStats):
     task_title: str
