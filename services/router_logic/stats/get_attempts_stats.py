@@ -26,9 +26,7 @@ async def stats_get_attempts(task_id: UUID, user_id: UUID, user: UserModel) -> L
         result.append(TaskStatsAttemptResponse(
             attempt_id=stats.id,
             user_initials=user_initials,
-            stats=stats.stats,
             result=stats.result,
-            type=stats.type,
             created_at=stats.created_at
         ))
     return result
