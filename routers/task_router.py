@@ -42,7 +42,7 @@ async def get_tasks_by_user(
 @tasks_router.get("/task_title")
 async def get_tasks_by_title(
     query_params: GetTasksByTitleDto = Depends()
-) -> GetTasksResponse:
+) -> GetTaskByTitleResponse:
     return await task.task_get_by_title(query_params)
 
 

@@ -29,6 +29,7 @@ class IsolatedTask(BaseModel):
     description_short: Optional[str]
 
 
+
 class IsolatedTaskWithParsedUser(IsolatedTask):
     user_initials: str
 
@@ -45,6 +46,10 @@ class FullTaskResponse(BaseModel):
 
 class GetTasksResponse(BaseModel):
     tasks: List[IsolatedTask]
+    
+
+class GetTaskByTitleResponse(BaseModel):
+    tasks: List[IsolatedTaskWithParsedUser]
 
 
 class GetTasksByUserDto(BaseModel):
