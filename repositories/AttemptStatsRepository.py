@@ -11,6 +11,13 @@ from utils.enums.attempt_type_enum import AttemptTypeEnum
 
 class AttemptStatsRepository:
     @classmethod
+    async def find_by_ids(cls, ids: List[UUID]) -> List[AttemptStatsModel]:
+        query = select(AttemptStatsModel).where(AttemptStatsModel.id.in_(ids))
+        async for session in get_async_session():
+            result = await session.execute(query)
+            return result.scalars().all()
+    
+    @classmethod
     async def add_one(cls, attempt_stats: AttemptStatsCreate) -> AttemptStatsModel:
         async for session in get_async_session():
             attempt_stats_model = AttemptStatsModel(**attempt_stats.to_dict())

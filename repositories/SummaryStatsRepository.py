@@ -3,8 +3,10 @@ from uuid import UUID
 
 from sqlalchemy import and_, select, text, update
 from database.database import get_async_session
+from dtos.attempt_stats.attempt_stats import AttemptStatsField
 from dtos.summary_attempt_stats.summary_attempt_stats import SummaryAttemptStats
-from models import SummaryAttemptStatsModel
+from models import AttemptStatsModel, SummaryAttemptStatsModel, TaskModel
+from repositories import AttemptStatsRepository, TaskRepository
 from utils.enums.attempt_type_enum import AttemptStatsStatusEnum
 
 
@@ -41,6 +43,49 @@ class SummaryStatsRepository:
             result = await session.execute(text(query), {"attempts_ids": attempts_ids})
             result = [{'question_id': res[0], 'status': res[1], 'content': []} for res in result.fetchall()]
             return result
+        
+    @classmethod
+    async def calculate_resulting_stats_new(cls, attempts_ids: List[UUID], task_id: UUID) -> List[AttemptStatsField]:
+        attempt_entities: List[AttemptStatsModel] = await AttemptStatsRepository.find_by_ids(attempts_ids)
+        task_entity: TaskModel = await TaskRepository.find_by_id(task_id)
+        result: List[AttemptStatsField] = []
+        for question in task_entity.questions:
+            result.append(AttemptStatsField(question_id=question.id, status=AttemptStatsStatusEnum.no_answer, content=[]))
+        for attempt in attempt_entities:
+            for attempt_question in attempt.stats:
+                attempt_question = AttemptStatsField.model_validate(attempt_question)
+                if attempt_question.status == AttemptStatsStatusEnum.correct:
+                    try:
+                        result_question = next(filter(lambda stat: stat.question_id == attempt_question.question_id, result))
+                    except Exception:
+                        print(f"No matching question found for attempt {attempt.id} and question_id {attempt_question.question_id}")
+                        continue
+                    if result_question.status == AttemptStatsStatusEnum.correct:
+                        result_question.content = attempt_question.content
+                    elif result_question.status == AttemptStatsStatusEnum.wrong:
+                        result_question.status = AttemptStatsStatusEnum.correct
+                        result_question.content = attempt_question.content
+                    else:
+                        result_question.status = AttemptStatsStatusEnum.correct
+                        result_question.content = attempt_question.content
+                elif attempt_question.status == AttemptStatsStatusEnum.wrong:
+                    try:
+                        result_question = next(filter(lambda stat: stat.question_id == attempt_question.question_id, result))
+                    except Exception:
+                        print(f"No matching question found for attempt {attempt.id} and question_id {attempt_question.question_id}")
+                        continue
+                    if result_question.status == AttemptStatsStatusEnum.correct:
+                        pass
+                    elif result_question.status == AttemptStatsStatusEnum.wrong:
+                        result_question.content = attempt_question.content
+                    else:
+                        result_question.status = AttemptStatsStatusEnum.wrong
+                        result_question.content = attempt_question.content
+                else:
+                    pass
+        return result  
+                
+        
         
     @classmethod
     async def add_one(cls, summary_stats: SummaryAttemptStats) -> SummaryAttemptStatsModel:
