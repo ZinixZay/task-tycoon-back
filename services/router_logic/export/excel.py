@@ -9,13 +9,13 @@ from utils.enums.permissions_enum import PermissionsEnum
 
 async def export_excel(
     task_id: UUID,
-    user: UserModel
+    # user: UserModel
 ) -> FileResponse:
     task_entity = await TaskRepository.find_by_id(task_id)
     if not task_entity:
         raise NotFoundException({'task': task_id})
-    if task_entity.user_id != user.id and not user.is_superuser:
-        raise NoPermissionException(PermissionsEnum.Other)
+    # if task_entity.user_id != user.id and not user.is_superuser:
+    #     raise NoPermissionException(PermissionsEnum.Other)
     exporter: ExporterExcel = await ExporterExcel.create(task_entity)
     await exporter.export()
     return FileResponse(
