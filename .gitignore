@@ -3,3 +3,4 @@ __pycache__*
 .vscode
 .resources
 /uploads
+/resources

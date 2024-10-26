@@ -12,7 +12,7 @@ export_router: APIRouter = APIRouter(
 )
 
 
-@export_router.post("/stats/excel")
+@export_router.get("/stats/excel")
 async def export_stats_excel(
     task_id: UUID,
     user: UserModel = Depends(fastapi_users.current_user())

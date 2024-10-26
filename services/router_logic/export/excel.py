@@ -23,4 +23,3 @@ async def export_excel(
         path=f"resources/excel/task_{exporter.task.id}.xlsx",
         filename="statistics.xlsx"
     )
-    
