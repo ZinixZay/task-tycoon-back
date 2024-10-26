@@ -27,6 +27,7 @@ async def stats_get_attempts(task_id: UUID, user_id: UUID, user: UserModel) -> L
             attempt_id=stats.id,
             user_initials=user_initials,
             result=stats.result,
-            created_at=stats.created_at
+            created_at=stats.created_at,
+            attempt_type=stats.type
         ))
     return result

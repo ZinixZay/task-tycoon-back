@@ -25,7 +25,10 @@ async def answer_get(
                 task_title=task_entity.title,
                 created_at=answer_stat.created_at,
                 result=answer_stat.result,
-                type=answer_stat.type
+                type=answer_stat.type,
+                user_id=user.id,
+                task_id=task_entity.id,
+                attempt_id=answer_stat.id
             )
         )
     return response

@@ -30,6 +30,9 @@ class AnswerDto(BaseModel):
 
 
 class AnswersGetResponse(BaseModel):
+    task_id: UUID
+    user_id: UUID
+    attempt_id: UUID
     task_title: str
     created_at: datetime.datetime
     result: float
