@@ -75,6 +75,7 @@ class AttemptStatsFieldExtended(BaseModel):
     user_content: List[AnswerContent]
     source_content: List[AnswerContent]
     question_type: QuestionTypeEnum
+    question_title: str
     
     def to_dict(self) -> dict:
         return {
