@@ -4,7 +4,7 @@ from fastapi import Depends, UploadFile
 from dtos.tasks import PatchTaskDto, PatchTaskResponse
 from dtos.transactions.transaction import TransactionPayload
 
-from repositories import TaskRepository
+from repositories import TaskRepository, QuestionRepository
 from services.authentication import fastapi_users
 from services.questions import question_dto_to_model
 from services.transactions import Transaction
@@ -56,28 +56,22 @@ async def task_patch(
             os.remove(task_entity.file_path)
         task_entity.file_path = None
 
+    question_entities: List[QuestionModel] = await QuestionRepository.find_by_task(task_entity.id)
     question_models: List[QuestionModel] = question_dto_to_model(task_schema.questions, task_entity)
-    if question_files is not None:
-        question_files_dict = {q.filename: q for q in question_files}
-        for question_model in question_models:
-            if question_model.file_path is None:
-                continue
-            filename = os.path.basename(question_model.file_path)
-            if filename in question_files_dict:
-                res: Error | None = await update_file(question_model, question_files_dict[filename])
-                if res is not None:
-                    raise BadRequestException(res.msg)
-            else:
-                raise BadRequestException(f"no file provided with name '{filename}'")
-    else:
-        
-        for question_model in question_models:
-            if question_model.file_path is None:
-                continue
-            dirname = EnvironmentVariables.FILE_SAVE_ROOT.value
-            os.makedirs(dirname, exist_ok=True)
-            path = os.path.join(dirname, question_model.file_path)
-            question_model.file_path = path
+    for question_model in question_models:
+        if question_model.file_path is None:
+            continue
+        question_model.file_path = make_filepath_with_dir(question_model.file_path)
+    question_files_dict = {q.filename: q for q in question_files} if question_files is not None else None
+    for question_model, question_entity in zip(question_models, question_entities):
+        if question_model.file_path is None and question_entity.file_path is not None:
+            os.remove(question_entity.file_path)
+        elif question_model.file_path != question_entity.file_path:
+            continue
+        elif question_files_dict is None:
+            continue
+        elif question_model.file_path in question_files_dict:
+            update_file(question_model, question_files_dict[question_model.file_path])
     await update_transaction(task_entity, question_models)
 
     return PatchTaskResponse(task_id=task_schema.task_id)
@@ -134,3 +128,8 @@ async def update_file(
 
         from services.router_logic.task.add import upload_file
         return await upload_file(t, file)
+
+
+def make_filepath_with_dir(filename: str) -> str:
+    dirname = EnvironmentVariables.FILE_SAVE_ROOT.value
+    return os.path.join(dirname, filename)
