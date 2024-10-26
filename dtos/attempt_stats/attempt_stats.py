@@ -59,6 +59,34 @@ class GetResultingAttemptStatsDto(BaseModel):
 class GetTaskStatsDto(BaseModel):
     task_ids: Optional[List[UUID]] = []
     get_all: Optional[bool] = True
+    
+
+class GetAttemptStatsDetailedDto(BaseModel):
+    task_id: UUID
+    attempt_id: UUID
+    user_id: UUID
+
+
+class AttemptStatsFieldExtended(BaseModel):
+    question_id: UUID
+    order: int
+    status: AttemptStatsStatusEnum
+    user_content: List[AnswerContent]
+    source_content: List[AnswerContent]
+    
+    def to_dict(self) -> dict:
+        return {
+            'question_id': str(self.question_id),
+            'status': self.status.value,
+            'user_content': [content.to_dict() for content in self.user_content],
+            'source_content': [content.to_dict() for content in self.source_content]
+        }
+
+
+class AttemptStatsDetailedResponse(BaseModel):
+    user_initials: str
+    result: float
+    stats: List[AttemptStatsFieldExtended]
 
 
 class GetResultingStatsDto(BaseModel):

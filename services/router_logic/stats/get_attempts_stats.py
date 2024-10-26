@@ -16,10 +16,10 @@ async def stats_get_attempts(task_id: UUID, user_id: UUID, user: UserModel) -> L
         raise NotFoundException('Пользователь, прошедший задание не найден')
     if user_executor.name and user_executor.surname:
         user_initials = ' '.join([user_executor.name, user_executor.surname])
-    elif user.nickname:
+    elif user_executor.nickname:
         user_initials = user_executor.nickname
     else:
-        user_initials = user.email
+        user_initials = user_executor.email
     attempts = await AttemptStatsRepository.find_by_user_task(user_id, task_id)
     result: List[TaskStatsAttemptResponse] = []
     for stats in attempts:

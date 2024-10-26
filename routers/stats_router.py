@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import FileResponse
 from dtos.tasks.stats.task_stats import TaskStatsAttemptResponse, TaskStatsResponse, TaskStatsResultingResponse
 from services.authentication import fastapi_users
-from dtos.attempt_stats.attempt_stats import GetAttemptStatsDto, GetAttemptStatsResponse, GetResultingAttemptStatsDto, GetResultingStatsDto, GetTaskStatsDto
+from dtos.attempt_stats.attempt_stats import AttemptStatsDetailedResponse, AttemptStatsFieldExtended, GetAttemptStatsDetailedDto, GetAttemptStatsDto, GetAttemptStatsResponse, GetResultingAttemptStatsDto, GetResultingStatsDto, GetTaskStatsDto
 from models import UserModel
 from services.router_logic import stats
 
@@ -62,4 +62,12 @@ async def download_excel_task_stats(
     user: UserModel = Depends(fastapi_users.current_user())
 ) -> FileResponse:
     return await stats.stats_download_excel_task(query_params, user)
+
+
+@stats_router.get('/attempt_stats/detailed')
+async def attempt_stats_detailed(
+    query_params: GetAttemptStatsDetailedDto = Depends(),
+    user: UserModel = Depends(fastapi_users.current_user())
+) -> AttemptStatsDetailedResponse:
+    return await stats.attempt_stats_detailed(query_params, user)
     
