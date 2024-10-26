@@ -1,7 +1,10 @@
+import datetime
 from typing import List
 from uuid import UUID
 
 from pydantic import BaseModel
+
+from utils.enums.attempt_type_enum import AttemptTypeEnum
 
 
 class AnswerContent(BaseModel):
@@ -27,10 +30,10 @@ class AnswerDto(BaseModel):
 
 
 class AnswersGetResponse(BaseModel):
-    id: UUID
-    question_id: UUID
-    content: List[AnswerContent]
-
+    task_title: str
+    created_at: datetime.datetime
+    result: float
+    type: AttemptTypeEnum
 
 class CreateAnswerDto(BaseModel):
     task_id: UUID

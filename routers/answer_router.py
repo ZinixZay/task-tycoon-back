@@ -1,5 +1,4 @@
 from typing import List
-from uuid import UUID
 
 from fastapi import APIRouter, Depends
 
@@ -22,9 +21,8 @@ async def create_answer(
     await answers.answer_create(answer_schema, user)
 
 
-@answer_router.get('/task_id/{task_id}')
-async def get_answers_for_task(
-        task_id: UUID,
-        user: UserModel = Depends(fastapi_users.current_user())
+@answer_router.get('/')
+async def get_answers(
+    user: UserModel = Depends(fastapi_users.current_user())
 ) -> List[AnswersGetResponse]:
-    return await answers.answer_get_for_task(task_id, user)
+    return await answers.answer_get(user)
