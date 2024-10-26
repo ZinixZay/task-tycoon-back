@@ -27,6 +27,7 @@ class TaskStatsAttemptResponse(BaseModel):
     user_initials: str
     result: float
     created_at: datetime.datetime
+    attempt_type: AttemptTypeEnum
 
 class TaskStatsResponse(TaskStats):
     task_title: str

@@ -8,8 +8,8 @@ from models import TaskModel
 
 async def validate_task(task: TaskModel) -> IsolatedTaskWithParsedUser:
     user_model = await UserRepository.find_one_by_id(task.user_id)
-    if (user_model.name or user_model.surname): 
-        user_initials = user_model.name if user_model.name else '' + ' ' + user_model.surname if user_model.surname else ''
+    if (user_model.name and user_model.surname): 
+        user_initials = user_model.name + ' '  + user_model.surname
     elif user_model.nickname:
         user_initials = user_model.nickname
     else:
