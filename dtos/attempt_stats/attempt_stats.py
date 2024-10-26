@@ -5,6 +5,7 @@ from dtos.answers.answer import AnswerContent
 from pydantic import BaseModel
 from uuid import UUID
 from utils.enums.attempt_type_enum import AttemptStatsStatusEnum, AttemptTypeEnum
+from utils.enums.question_type_enum import QuestionTypeEnum
 
 
 class AttemptStatsField(BaseModel):
@@ -73,6 +74,7 @@ class AttemptStatsFieldExtended(BaseModel):
     status: AttemptStatsStatusEnum
     user_content: List[AnswerContent]
     source_content: List[AnswerContent]
+    question_type: QuestionTypeEnum
     
     def to_dict(self) -> dict:
         return {
@@ -87,6 +89,7 @@ class AttemptStatsDetailedResponse(BaseModel):
     user_initials: str
     result: float
     stats: List[AttemptStatsFieldExtended]
+    task_title: str
 
 
 class GetResultingStatsDto(BaseModel):

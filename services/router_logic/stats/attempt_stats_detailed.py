@@ -44,12 +44,13 @@ async def attempt_stats_detailed(dto: GetAttemptStatsDetailedDto, user: UserMode
             order=question.order,
             status=attempt_stat['status'],
             user_content=[AnswerContent.model_validate(i) for i in attempt_stat['content']],
-            source_content=[AnswerContent.model_validate(i) for i in question_entity.content]
+            source_content=[AnswerContent.model_validate(i) for i in question_entity.content],
+            question_type=question_entity.type
         )
         stats.append(stat)
         
     # collect
-    result: AttemptStatsDetailedResponse = AttemptStatsDetailedResponse(user_initials=user_initials, result=result, stats=stats)
+    result: AttemptStatsDetailedResponse = AttemptStatsDetailedResponse(user_initials=user_initials, result=result, stats=stats, task_title=task_entity.title)
     return result 
         
     
