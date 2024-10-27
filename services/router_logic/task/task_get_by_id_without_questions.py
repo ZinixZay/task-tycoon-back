@@ -16,8 +16,8 @@ async def task_get_by_id_without_questions(
     task_entity = await TaskRepository.find_by_id(id)
     result: IsolatedTask = IsolatedTask.model_validate(task_entity.__dict__)
     question_entities: List[QuestionModel] = await QuestionRepository.find_by_task(query_params.id)
-    detailed_amount = len(list(filter(lambda x: x.type == QuestionTypeEnum.DETAILED, question_entities)))
-    multi_amount = len(list(filter(lambda x: x.type == QuestionTypeEnum.MULTI, question_entities)))
+    detailed_amount = len(list(filter(lambda x: x.type == QuestionTypeEnum.DETAILED.value, question_entities)))
+    multi_amount = len(list(filter(lambda x: x.type == QuestionTypeEnum.MULTI.value, question_entities)))
     if (user_entity.name and user_entity.surname): 
         user_initials = user_entity.name + ' '  + user_entity.surname
     elif user_entity.nickname:
