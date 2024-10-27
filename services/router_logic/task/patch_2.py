@@ -45,17 +45,31 @@ async def task_patch(
     task_entity.description_short = task_schema.description_short
     task_entity.description_full = task_schema.description_full
 
-    # update file
-    if task_file is not None:
+    if task_entity.file_path is not None:
+        if task_schema.file_path != os.path.basename(task_entity.file_path):
+            if task_file is None:
+                task_entity.file_path = None
+            else:
+                res: Error | None = await update_file(task_entity, task_file)
+                if res is not None:
+                    raise BadRequestException(res.msg)
+                os.remove(task_entity.file_path)
+                task_entity.file_path = make_filepath_with_dir(task_schema.file_path)
+    elif task_file is not None:
         res: Error | None = await update_file(task_entity, task_file)
         if res is not None:
             raise BadRequestException(res.msg)
-    # if provided no file
-    else:
-        if task_entity.file_path is not None:
-            os.remove(task_entity.file_path)
-        task_entity.file_path = None
+        task_entity.file_path = make_filepath_with_dir(task_schema.file_path)
 
+    # update file
+    if task_schema.file_path is None and task_entity.file_path is not None:
+        os.remove(task_entity.file_path)
+    elif task_file is not None:
+        res: Error | None = await update_file(task_entity, task_file)
+        if res is not None:
+            raise BadRequestException(res.msg)
+        task_entity.file_path = make_filepath_with_dir(task_schema.file_path)
+    
     question_entities: List[QuestionModel] = await QuestionRepository.find_by_task(task_entity.id)
     question_models: List[QuestionModel] = question_dto_to_model(task_schema.questions, task_entity)
     for question_model in question_models:
@@ -71,7 +85,9 @@ async def task_patch(
         elif question_files_dict is None:
             continue
         elif question_model.file_path in question_files_dict:
-            update_file(question_model, question_files_dict[question_model.file_path])
+            res: Error | None = await update_file(question_model, question_files_dict[question_model.file_path])
+            if res is not None:
+                raise BadRequestException(res.msg)
     await update_transaction(task_entity, question_models)
 
     return PatchTaskResponse(task_id=task_schema.task_id)

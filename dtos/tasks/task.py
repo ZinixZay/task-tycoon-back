@@ -92,6 +92,7 @@ class PatchTaskDto(BaseModel, JsonValidatable):
     title: Optional[str] = None
     description_full: Optional[str] = None
     description_short: Optional[str] = None
+    file_path: Optional[str] = None
     questions: Optional[List[CreateQuestion]] = []
 
 
