@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 from enum import Enum
 
-load_dotenv()
+load_dotenv(override=True)
 
 class EnvironmentVariables(Enum):
     POSTGRES_PASSWORD = os.getenv('POSTGRES_PASSWORD')

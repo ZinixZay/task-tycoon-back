@@ -12,8 +12,8 @@ services:
       POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
     volumes:
       - pgdata:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
+    networks:
+      - tt-net
   redis:
     container_name: tt-redis
     image: redis
@@ -23,10 +23,57 @@ services:
       REDIS_PASSWORD: ${REDIS_PASSWORD}
       REDIS_DATABASES: ${REDIS_DATABASES}
     restart: always
-    ports:
-      - "6379:6379"
     volumes:
       - redisdata:/var/lib/redis/data
+    networks:
+      - tt-net
+  backend:
+    container_name: tt-backend
+    restart: always
+    image: zinix/tt-backend:1.0.0
+    environment:
+      POSTGRES_HOST: db
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+      REDIS_HOST: redis
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_USER: ${REDIS_USER}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      REDIS_DATABASES: ${REDIS_DATABASES}
+      JWT_SECRET: ${JWT_SECRET}
+      SUPERUSER_LOGIN: ${SUPERUSER_LOGIN}
+      SUPERUSER_PASSWORD: ${SUPERUSER_PASSWORD}
+      TEST_USER: ${TEST_USER}
+      TEST_USER_PASSWORD: ${TEST_USER_PASSWORD}
+      JWT_ALGORITHM: ${JWT_ALGORITHM}
+      JWT_ACCESS_EXPIRATION_SECONDS: ${JWT_ACCESS_EXPIRATION_SECONDS}
+      JWT_REFRESH_EXPIRATION_SECONDS: ${JWT_REFRESH_EXPIRATION_SECONDS}
+    depends_on:
+      - redis
+      - db
+    ports:
+      - "8000:8000"
+    networks:
+      - tt-net
+    command:
+      [
+        "pipenv",
+        "run",
+        "uvicorn",
+        "main:app",
+        "--reload",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8000",
+      ]
+
+networks:
+  tt-net:
+    name: tt-net
+    driver: bridge
 
 volumes:
   pgdata:
