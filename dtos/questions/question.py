@@ -1,5 +1,5 @@
 from typing import List, Optional
-from pydantic import BaseModel, computed_field
+from pydantic import BaseModel, computed_field, field_validator
 from uuid import UUID
 from utils.enums import QuestionTypeEnum
 import os
@@ -25,13 +25,11 @@ class Question(BaseModel):
             return None
         return f"http://127.0.0.1:8000/api/v1/questions/download/?question_id={self.id}"
     
-    @computed_field
-    @property
-    def file_name(self) -> Optional[str]:
-        if self.file_path is None:
+    @field_validator("file_path")
+    def remove_dir(cls, v) -> Optional[str]:
+        if v is None:
             return None
-        return os.path.basename(self.file_path)
-
+        return os.path.basename(v)
 
 
 class GetQuestionsByTaskIdDto(BaseModel):
