@@ -36,6 +36,9 @@ class IsolatedTaskWithParsedUser(IsolatedTask):
 
 
 class GetWithoutQuestions(BaseModel):
+    user_initials: str
+    detailed_count: int
+    multi_count: int
     task: IsolatedTask
     mode: str
 
