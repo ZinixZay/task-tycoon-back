@@ -54,7 +54,16 @@ class IsolatedTask(BaseModel):
         return os.path.basename(v)
 
 
+
+class IsolatedTaskWithParsedUser(IsolatedTask):
+    user_initials: str
+
+
+
 class GetWithoutQuestions(BaseModel):
+    user_initials: str
+    detailed_count: int
+    multi_count: int
     task: IsolatedTask
     mode: str
 
@@ -65,6 +74,10 @@ class FullTaskResponse(BaseModel):
 
 class GetTasksResponse(BaseModel):
     tasks: List[IsolatedTask]
+    
+
+class GetTaskByTitleResponse(BaseModel):
+    tasks: List[IsolatedTaskWithParsedUser]
 
 
 class GetTasksByUserDto(BaseModel):

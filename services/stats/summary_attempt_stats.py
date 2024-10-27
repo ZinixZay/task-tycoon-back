@@ -41,19 +41,19 @@ class SummaryAttemptStatsCalculate:
     async def __calculate_resulting_attempt__(cls, attemptStatsModels: List[AttemptStatsModel], user_id: UUID, task_id: UUID) -> float:
         current_resulting_attempt: AttemptStatsModel = await AttemptStatsRepository.find_resulting_by_user_task(user_id, task_id)
         if not current_resulting_attempt:
-            stats = await SummaryStatsRepository.calculate_resulting_stats(list(map(lambda x: x.id, attemptStatsModels)))
+            stats = await SummaryStatsRepository.calculate_resulting_stats_new(list(map(lambda x: x.id, attemptStatsModels)), task_id)
             attempt_stats: AttemptStatsCreate = AttemptStatsCreate(
                 user_id=user_id,
                 task_id=task_id,
-                stats=stats,
-                result=round(len(list(filter(lambda x: x['status'] == AttemptStatsStatusEnum.correct.value, stats))) / len(stats) * 100, 1),
+                stats=[stat.to_dict() for stat in stats],
+                result=round(len(list(filter(lambda x: x.status == AttemptStatsStatusEnum.correct, stats))) / len(stats) * 100, 1),
                 type=AttemptTypeEnum.resulting
             )
             new_attempt_model = await AttemptStatsRepository.add_one(attempt_stats)
             return new_attempt_model.id
         else:
-            stats = await SummaryStatsRepository.calculate_resulting_stats(list(map(lambda x: x.id, attemptStatsModels)))
-            result=round(len(list(filter(lambda x: x['status'] == AttemptStatsStatusEnum.correct.value, stats))) / len(stats) * 100, 1)
-            await AttemptStatsRepository.update_one(current_resulting_attempt.id, stats, result)
+            stats = await SummaryStatsRepository.calculate_resulting_stats_new(list(map(lambda x: x.id, attemptStatsModels)), task_id)
+            result=round(len(list(filter(lambda x: x.status == AttemptStatsStatusEnum.correct, stats))) / len(stats) * 100, 1)
+            await AttemptStatsRepository.update_one(current_resulting_attempt.id, [stat.to_dict() for stat in stats], result)
             return current_resulting_attempt.id
     

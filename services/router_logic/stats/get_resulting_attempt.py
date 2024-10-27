@@ -10,7 +10,7 @@ async def stats_get_resulting_attempt(
     query_params: GetResultingAttemptStatsDto = Depends(),
     user: UserModel = Depends(fastapi_users.current_user())
 ) -> GetAttemptStatsResponse:
-    attempt_stats_entity = await AttemptStatsRepository.find_resulting_by_user_task(query_params.attempt_id)
+    attempt_stats_entity = await AttemptStatsRepository.find_resulting_by_user_task(query_params.user_id, query_params.task_id)
     if not attempt_stats_entity:
         raise NotFoundException()
     if user.is_superuser:

@@ -14,7 +14,7 @@ class TaskStatsCalculate:
     async def calculate_task_stats(cls, task_id: UUID) -> dict:
         summary_stats_entities = await SummaryStatsRepository.get_by_task(task_id)
         if len(summary_stats_entities) == 0:
-            return {}
+            return TaskStats().model_dump_json()
         best_result = cls.__get_best_result__(summary_stats_entities)
         task_stats = TaskStats(
             competitors_count=cls.__get_competitors_count__(summary_stats_entities),
@@ -22,7 +22,7 @@ class TaskStatsCalculate:
             best_result=best_result,
             total_attempts=cls.__get_total_attempts__(summary_stats_entities)
         )
-        task_stats_json = task_stats.model_dump(mode='json')
+        task_stats_json = task_stats.model_dump_json()
         await Cache.set(f'stats_task_{task_id}', json.dumps(task_stats_json))
         return task_stats_json
 

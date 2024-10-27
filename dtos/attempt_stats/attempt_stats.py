@@ -1,20 +1,23 @@
 
-from typing import Dict, List, Optional
+import datetime
+from typing import List, Optional
+from dtos.answers.answer import AnswerContent
 from pydantic import BaseModel
 from uuid import UUID
 from utils.enums.attempt_type_enum import AttemptStatsStatusEnum, AttemptTypeEnum
+from utils.enums.question_type_enum import QuestionTypeEnum
 
 
 class AttemptStatsField(BaseModel):
     question_id: UUID
     status: AttemptStatsStatusEnum
-    content: Optional[List[Dict]] = None
+    content: Optional[List[AnswerContent]]
     
     def to_dict(self) -> dict:
         return {
             'question_id': str(self.question_id),
             'status': self.status.value,
-            'content': self.content
+            'content': [content.to_dict() for content in self.content]
         }
 
 
@@ -57,6 +60,37 @@ class GetResultingAttemptStatsDto(BaseModel):
 class GetTaskStatsDto(BaseModel):
     task_ids: Optional[List[UUID]] = []
     get_all: Optional[bool] = True
+    
+
+class GetAttemptStatsDetailedDto(BaseModel):
+    task_id: UUID
+    attempt_id: UUID
+    user_id: UUID
+
+
+class AttemptStatsFieldExtended(BaseModel):
+    question_id: UUID
+    order: int
+    status: AttemptStatsStatusEnum
+    user_content: List[AnswerContent]
+    source_content: List[AnswerContent]
+    question_type: QuestionTypeEnum
+    question_title: str
+    
+    def to_dict(self) -> dict:
+        return {
+            'question_id': str(self.question_id),
+            'status': self.status.value,
+            'user_content': [content.to_dict() for content in self.user_content],
+            'source_content': [content.to_dict() for content in self.source_content]
+        }
+
+
+class AttemptStatsDetailedResponse(BaseModel):
+    user_initials: str
+    result: float
+    stats: List[AttemptStatsFieldExtended]
+    task_title: str
 
 
 class GetResultingStatsDto(BaseModel):
@@ -65,5 +99,5 @@ class GetResultingStatsDto(BaseModel):
 
 class GetAttemptStatsResponse(BaseModel):
     stats: List[AttemptStatsField]
-    percent: float
-    created_at: int
+    result: float
+    created_at: datetime.datetime

@@ -2,9 +2,9 @@ from typing import List
 from uuid import UUID
 from fastapi import APIRouter, Depends
 from fastapi.responses import FileResponse
-from dtos.tasks.stats.task_stats import TaskStatsResponse, TaskStatsResultingResponse
+from dtos.tasks.stats.task_stats import TaskStatsAttemptResponse, TaskStatsResponse, TaskStatsResultingResponse
 from services.authentication import fastapi_users
-from dtos.attempt_stats.attempt_stats import GetAttemptStatsDto, GetAttemptStatsResponse, GetResultingAttemptStatsDto, GetResultingStatsDto, GetTaskStatsDto
+from dtos.attempt_stats.attempt_stats import AttemptStatsDetailedResponse, AttemptStatsFieldExtended, GetAttemptStatsDetailedDto, GetAttemptStatsDto, GetAttemptStatsResponse, GetResultingAttemptStatsDto, GetResultingStatsDto, GetTaskStatsDto
 from models import UserModel
 from services.router_logic import stats
 
@@ -44,8 +44,16 @@ async def get_task_stats_resulting(
     task_id: UUID,
     user: UserModel = Depends(fastapi_users.current_user()) 
 ) -> List[TaskStatsResultingResponse]:
-    return await stats.stats_get_resulting_attempt(task_id, user)
-    
+    return await stats.stats_get_resulting_attempt_by_task(task_id, user)
+
+
+@stats_router.get('/task_stats/{task_id}/attempts/{user_id}')
+async def get_task_stats_attempts(
+    task_id: UUID,
+    user_id: UUID,
+    user: UserModel = Depends(fastapi_users.current_user()) 
+) -> List[TaskStatsAttemptResponse]:
+    return await (stats.stats_get_attempts(task_id, user_id, user))
 
 
 @stats_router.get('/task_stats/download/excel')
@@ -54,4 +62,12 @@ async def download_excel_task_stats(
     user: UserModel = Depends(fastapi_users.current_user())
 ) -> FileResponse:
     return await stats.stats_download_excel_task(query_params, user)
+
+
+@stats_router.get('/attempt_stats/detailed')
+async def attempt_stats_detailed(
+    query_params: GetAttemptStatsDetailedDto = Depends(),
+    user: UserModel = Depends(fastapi_users.current_user())
+) -> AttemptStatsDetailedResponse:
+    return await stats.attempt_stats_detailed(query_params, user)
     
