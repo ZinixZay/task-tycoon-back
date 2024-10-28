@@ -38,7 +38,11 @@ async def attempt_stats_detailed(dto: GetAttemptStatsDetailedDto, user: UserMode
     question: QuestionModel
     for question in task_entity.questions:
         question_entity: QuestionModel = await QuestionRepository.find_one_by_id(question.id)
-        attempt_stat = next(filter(lambda stat: stat['question_id'] == str(question.id), attempt_entity.stats))
+        try:
+            attempt_stat = next(filter(lambda stat: stat['question_id'] == str(question.id), attempt_entity.stats))
+        except Exception as e:
+            print(e)
+            continue
         stat: AttemptStatsFieldExtended = AttemptStatsFieldExtended(
             question_id=question.id,
             order=question.order,
