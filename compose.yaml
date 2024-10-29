@@ -14,8 +14,6 @@ services:
       - pgdata:/var/lib/postgresql/data
     networks:
       - tt-net
-    ports:
-      - "5432:5432"
   redis:
     container_name: tt-redis
     image: redis
@@ -29,8 +27,28 @@ services:
       - redisdata:/var/lib/redis/data
     networks:
       - tt-net
+  backend:
+    container_name: tt-backend
+    restart: always
+    image: zinix/tt-backend:1.0.0
+    depends_on:
+      - redis
+      - db
     ports:
-      - "6379:6379"
+      - "8000:8000"
+    networks:
+      - tt-net
+    command: sh -c "pipenv run alembic upgrade head && pipenv run uvicorn main:app --host 0.0.0.0 --port 8000"
+  frontend:
+    container_name: tt-frontend
+    restart: always
+    image: zinix/tt-frontend:1.0.1
+    depends_on:
+      - backend
+    ports:
+      - "80:3000"
+    networks:
+      - tt-net
 
 networks:
   tt-net:
