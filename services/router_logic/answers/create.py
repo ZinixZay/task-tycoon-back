@@ -6,6 +6,7 @@ from models import UserModel, AnswerModel
 from repositories import AttemptStatsRepository
 from services.authentication import fastapi_users
 from services.stats import AttemptStatsCalculate, SummaryAttemptStatsCalculate
+from services.stats.task_stats import TaskStatsCalculate
 from services.transactions import Transaction
 from utils.enums import TransactionMethodsEnum
 from repositories import SummaryStatsRepository
@@ -34,3 +35,4 @@ async def answer_create(
         await SummaryStatsRepository.update_one(current_summary_stats.id, summary_stats)
     else:
         await SummaryStatsRepository.add_one(summary_stats)
+    await TaskStatsCalculate.calculate_task_stats(answer_schema.task_id)

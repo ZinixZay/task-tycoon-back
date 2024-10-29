@@ -82,4 +82,14 @@ class AttemptStatsRepository:
                 )
             result = await session.execute(query)
             return result.scalar_one_or_none()
+    
+    @classmethod
+    async def find_by_task_single(cls, task_id: UUID) -> List[AttemptStatsModel]:
+        async for session in get_async_session():
+            query = select(AttemptStatsModel).where(
+                and_(AttemptStatsModel.task_id == task_id,
+                     AttemptStatsModel.type == AttemptTypeEnum.single.value)
+                )
+            result = await session.execute(query)
+            return result.scalars().all()
         
