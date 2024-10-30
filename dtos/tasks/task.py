@@ -21,6 +21,28 @@ class CreateTaskDto(BaseModel, JsonValidatable):
     description_short: Optional[str] = None
     questions: List[CreateQuestion]
 
+    @field_validator('title')
+    def validate_title(val: str) -> str:
+        if not (1 <= len(val) <= 100):
+            raise ValueError('Длина наименования задания должна быть от 1 до 100')
+        return val
+    
+    @field_validator('description_full')
+    def validate_description_fill(val: str) -> str:
+        if not val:
+            return val
+        if not (len(val) <= 5000):
+            raise ValueError('Длина полного описания должна быть менее 5000 символов')
+        return val
+    
+    @field_validator('description_short')
+    def validate_description_short(val: str) -> str:
+        if not val:
+            return val
+        if not (len(val) <= 255):
+            raise ValueError('Длина короткого описания должна быть менее 255 символов')
+        return val
+
 
 class CreateTaskResponse(BaseModel):
     task_id: UUID
@@ -108,6 +130,29 @@ class PatchTaskDto(BaseModel, JsonValidatable):
     file_path: Optional[str] = None
     questions: Optional[List[CreateQuestion]] = []
 
+    @field_validator('title')
+    def validate_title(val: str) -> str:
+        if not val:
+            return val
+        if not (1 <= len(val) <= 100):
+            raise ValueError('Длина наименования задания должна быть от 1 до 100')
+        return val
+    
+    @field_validator('description_full')
+    def validate_description_fill(val: str) -> str:
+        if not val:
+            return val
+        if not (len(val) <= 5000):
+            raise ValueError('Длина полного описания должна быть менее 5000 символов')
+        return val
+    
+    @field_validator('description_short')
+    def validate_description_short(val: str) -> str:
+        if not val:
+            return val
+        if not (len(val) <= 255):
+            raise ValueError('Длина короткого описания должна быть менее 255 символов')
+        return val
 
 class PatchTaskResponse(BaseModel):
     task_id: UUID

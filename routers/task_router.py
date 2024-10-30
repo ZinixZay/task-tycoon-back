@@ -53,7 +53,7 @@ async def get_tasks_by_title(
 
 
 @tasks_router.get("/task_id/without_questions")
-async def get_task_by_identifier(
+async def get_task_by_id(
     query_params: GetTaskByIdWithoutQuestions = Depends(),
     user: UserModel = Depends(fastapi_users.current_user())
 ) -> GetWithoutQuestions:
