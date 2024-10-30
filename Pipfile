@@ -3,6 +3,10 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 name = "pypi"
 
+[scripts]
+migrate = "alembic upgrade head"
+run = "uvicorn main:app --reload"
+
 [packages]
 asyncpg = "*"
 fastapi = "*"
