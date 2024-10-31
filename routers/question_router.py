@@ -23,13 +23,6 @@ async def get_question_by_id(
 ) -> Question:
     return await question.question_get_by_id(query_params)
 
-@questions_router.post("/upload/")
-async def upload_file(
-    file: UploadFile,
-    query_params: UploadFileDto = Depends(),
-) -> bool:
-    return await question.upload_file(query_params, file)
-
 
 @questions_router.get("/download/")
 async def download_file(

@@ -2,7 +2,7 @@
 import datetime
 from typing import List, Optional
 from dtos.answers.answer import AnswerContent
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from uuid import UUID
 from utils.enums.attempt_type_enum import AttemptStatsStatusEnum, AttemptTypeEnum
 from utils.enums.question_type_enum import QuestionTypeEnum
@@ -36,16 +36,12 @@ class AttemptStatsCreate(BaseModel):
             'result': self.result,
             'type': self.type.value
         }
-
-
-class AttemptStatsValidated(BaseModel):
-    id: UUID
-    user_id: UUID
-    task_id: UUID
-    stats: List[AttemptStatsField]
-    result: float
-    type: AttemptTypeEnum
-    created_at: int
+    
+    @field_validator('result')
+    def validate_result(cls, val: float) -> float:
+        if not (0 <= len(val) <= 100):
+            raise ValueError('Результат должен быть в диапазоне от 0 до 100')
+        return val
 
 
 class GetAttemptStatsDto(BaseModel):
@@ -84,6 +80,12 @@ class AttemptStatsFieldExtended(BaseModel):
             'user_content': [content.to_dict() for content in self.user_content],
             'source_content': [content.to_dict() for content in self.source_content]
         }
+    
+    @field_validator('question_title')
+    def validate_question_title(cls, val: str) -> str:
+        if not (1 <= len(val) <= 1000):
+            raise ValueError('Длина текста вопроса может быть от 1 до 1000')
+        return val
 
 
 class AttemptStatsDetailedResponse(BaseModel):
