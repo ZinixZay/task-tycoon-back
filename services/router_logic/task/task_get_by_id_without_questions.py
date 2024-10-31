@@ -18,13 +18,14 @@ async def task_get_by_id_without_questions(
     question_entities: List[QuestionModel] = await QuestionRepository.find_by_task(query_params.id)
     detailed_amount = len(list(filter(lambda x: x.type == QuestionTypeEnum.DETAILED.value, question_entities)))
     multi_amount = len(list(filter(lambda x: x.type == QuestionTypeEnum.MULTI.value, question_entities)))
-    if (user_entity.name and user_entity.surname): 
-        user_initials = user_entity.name + ' '  + user_entity.surname
-    elif user_entity.nickname:
-        user_initials = user_entity.nickname
+    task_creator: UserModel = task_entity.user
+    if (task_creator.name and task_creator.surname): 
+        user_initials = task_creator.name + ' '  + task_creator.surname
+    elif task_creator.nickname:
+        user_initials = task_creator.nickname
     else:
-        user_initials = user_entity.email
-    if task_entity.user_id == user_entity.id:
+        user_initials = task_creator.email
+    if task_entity.user_id == task_creator.id:
         mode = 'full'
     else:
         mode = 'general'

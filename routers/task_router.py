@@ -6,6 +6,8 @@ from models import UserModel
 from services.authentication import fastapi_users
 from uuid import UUID
 from services.router_logic import task
+from services.permissions import Permissions
+from utils.enums import PermissionsEnum
 
 tasks_router: APIRouter = APIRouter(
     prefix="/tasks",
@@ -53,7 +55,7 @@ async def get_tasks_by_title(
 
 
 @tasks_router.get("/task_id/without_questions")
-async def get_task_by_identifier(
+async def get_task_by_id(
     query_params: GetTaskByIdWithoutQuestions = Depends(),
     user: UserModel = Depends(fastapi_users.current_user())
 ) -> GetWithoutQuestions:
@@ -81,14 +83,6 @@ async def delete_task_by_id(
     user_entity: UserModel = Depends(fastapi_users.current_user())
 ) -> UUID:
     return await task.task_delete_by_id(query_params, user_entity)
-
-
-@tasks_router.post("/upload/")
-async def upload_file(
-    file: UploadFile,
-    query_params: UploadFileDto = Depends(),
-) -> bool:
-    return await task.upload_file(query_params, file)
     
 
 @tasks_router.get("/download/")
