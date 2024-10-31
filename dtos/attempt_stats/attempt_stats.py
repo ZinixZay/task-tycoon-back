@@ -39,7 +39,7 @@ class AttemptStatsCreate(BaseModel):
     
     @field_validator('result')
     def validate_result(cls, val: float) -> float:
-        if not (0 <= len(val) <= 100):
+        if not (0 <= val <= 100):
             raise ValueError('Результат должен быть в диапазоне от 0 до 100')
         return val
 
