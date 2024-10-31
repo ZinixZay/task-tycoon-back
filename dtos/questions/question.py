@@ -23,7 +23,7 @@ class Question(BaseModel):
     def file_url(self) -> Optional[str]:
         if self.file_path is None:
             return None
-        return f"http://127.0.0.1:8000/api/v1/questions/download/?question_id={self.id}"
+        return f"https://task-tycoon.ru/api/v1/questions/download/?question_id={self.id}"
     
     @field_validator("file_path")
     def remove_dir(cls, v) -> Optional[str]:
