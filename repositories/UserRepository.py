@@ -46,10 +46,7 @@ class UserRepository:
     async def change_profile(cls, user_model: UserModel, schema: UpdateProfileDto) -> None:
         async for session in get_async_session():
             query = update(UserModel).where(UserModel.id == user_model.id).values(
-                    email=schema.email,
-                    nickname=schema.nickname,
-                    name=schema.name,
-                    surname=schema.surname
+                    **schema.model_dump(exclude_none=True)
                 )
 
             await session.execute(query)

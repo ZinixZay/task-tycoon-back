@@ -20,7 +20,7 @@ async def stats_get_attempts(task_id: UUID, user_id: UUID, user: UserModel) -> L
         user_initials = user_executor.nickname
     else:
         user_initials = user_executor.email
-    attempts = await AttemptStatsRepository.find_by_user_task(user_id, task_id)
+    attempts = await AttemptStatsRepository.find_by_user_task_all(user_id, task_id)
     result: List[TaskStatsAttemptResponse] = []
     for stats in attempts:
         result.append(TaskStatsAttemptResponse(

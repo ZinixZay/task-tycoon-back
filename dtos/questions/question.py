@@ -44,6 +44,12 @@ class ContentField(BaseModel):
     title: str
     is_correct: bool
 
+    @field_validator('title')
+    def validate_title(val: str) -> str:
+        if not (1 <= len(val) <= 255):
+            raise ValueError('Длина текста варианта ответа должна быть от 1 до 255')
+        return val
+
 
 class CreateQuestion(BaseModel):
     file_path: Optional[str] = None
@@ -51,6 +57,13 @@ class CreateQuestion(BaseModel):
     type: QuestionTypeEnum
     content: List[ContentField]
     order: int
+
+    @field_validator('question_body')
+    def validate_question_body(val: str) -> str:
+        if not (1 <= len(val) <= 1000):
+            raise ValueError('Длина текста вопроса должна быть от 1 до 1000')
+        return val
+
 
 
 class CreateQuestionResponse(BaseModel):

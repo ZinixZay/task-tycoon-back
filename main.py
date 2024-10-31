@@ -5,16 +5,12 @@ from dtos.users import CreateUser, GetUser, UpdateUser
 from services.authentication import auth_backend, fastapi_users
 from routers import stats_router, tasks_router, questions_router, permission_router, profile_router, answer_router, export_router
 
-origins = [
-    "http://localhost",
-    "http://localhost:3000",
-]
 
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=['*'],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
