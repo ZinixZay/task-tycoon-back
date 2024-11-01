@@ -1,11 +1,9 @@
 from typing import Optional
-from pydantic import BaseModel
+from helpers.pydantic import CustomBaseModel
 
 
-class CreateTaskDto(BaseModel):
+
+class CreateTaskDto(CustomBaseModel):
     title: str
     description_full: Optional[str]
     description_short: Optional[str]
-
-    class Config:
-        exclude_none = True

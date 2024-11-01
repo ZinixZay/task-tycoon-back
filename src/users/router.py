@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Body, Depends
+from pydantic import EmailStr
 from src.jwt.dto import TokenDto, JWTDto
 from src.jwt import AccessJWTBearer, RefreshJWTBearer
 from src.users.dto import RegisterUserDto, UpdateUserDto, UserDto
@@ -12,7 +13,7 @@ user_router: APIRouter = APIRouter(
 
 
 @user_router.post('/signup')
-async def signup_user(user_dto: RegisterUserDto = Body(...)) -> JWTDto:
+async def signup_user(user_dto: RegisterUserDto = Body(...)) -> EmailStr:
     return await service.signup_user(user_dto)
 
 
@@ -36,7 +37,7 @@ async def update_user(user: TokenDto = Depends(AccessJWTBearer()), updateDto: Up
     await service.update_user(user, updateDto)
     
     
-@user_router.get('')
+@user_router.get('/me')
 async def get_user_info(user: TokenDto = Depends(AccessJWTBearer())) -> UserDto:
     return service.get_user_info(user)
     

@@ -1,8 +1,7 @@
-from pydantic import BaseModel
-from src.jwt.dto import TokenDto
+from helpers.pydantic import CustomBaseModel
 
 
-class JWTDto(BaseModel):
+class JWTDto(CustomBaseModel):
     ACCESS_TOKEN: str
     REFRESH_TOKEN: str
     
