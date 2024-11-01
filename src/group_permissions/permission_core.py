@@ -1,8 +1,7 @@
 from typing import List, Dict
-from src.entity import UserEntity
-from src.group_permissions.dto.enums.GroupPermissionsEnum import GroupPermissionsEnum
+from src.entity import User, GroupPermission
+from src.group_permissions.dto.enums.GroupPermissionsEnum import GroupPermissionsEnum, GROUP_PERMISSIONS_ENUM_KEYS
 from src.group_permissions.dto.PermissionFieldDto import PermissionFieldDto
-from repositories import 
 
 
 class Permissions:
@@ -30,26 +29,27 @@ class Permissions:
         return perm
 
     @classmethod
-    def from_user_model(cls, user_model:UserEntity):
+    def from_user_model(cls, user_model: User):
         '''
         Creates instance of Permissions from UserEntity
         :param user_model: UserEntity instance
         :return: instance of Permissions
         '''
-
-        return Permissions.from_varchar()
+        user_permission: GroupPermission
+        user_permission = GroupPermission.get(GroupPermission.user == user_model.id)
+        return Permissions.from_varchar(user_permission.permissions)
 
     @classmethod
     def to_binary(cls, str_permissions: str, permission_names: List[str]) -> List[bool]:
-        binary_permissions: str = str_permissions.rjust(len(permission_names), "0")
-        if len(binary_permissions) != len(list(GroupPermissionsEnum.__members__.keys())):
+        binary_permissions = str_permissions.rjust(len(permission_names), "0")
+        if len(binary_permissions) != len(GROUP_PERMISSIONS_ENUM_KEYS):
             raise ValueError("len of binary representation isn't equal to len of permissions")
-        result = [bool(int(binary_permission)) for binary_permission in binary_permissions]
+        result = [binary_permission == '1' for binary_permission in binary_permissions]
         return result
 
     def __init__(self) -> None:
         self.permissions: Dict[GroupPermissionsEnum.name, bool] = \
-            {name: False for name in list(GroupPermissionsEnum.__members__.keys())}
+            {name: False for name in GROUP_PERMISSIONS_ENUM_KEYS}
 
     def __str__(self) -> str:
         return " ".join([f"<{name}: {value}>" for name, value in self.permissions.items() if not name.startswith("_")])
@@ -60,7 +60,7 @@ class Permissions:
         :param number: VARCHAR
         :return: None
         '''
-        names: List[str] = list(GroupPermissionsEnum.__members__.keys())
+        names: List[str] = GROUP_PERMISSIONS_ENUM_KEYS
 
         for index, boolean in enumerate(self.to_binary(varchar, names)):
             self.permissions[names[index]] = boolean
@@ -96,7 +96,7 @@ class Permissions:
         :return: VARCHAR of permissions
         '''
         bin_repr: str = ""
-        for enum_value in list(GroupPermissionsEnum.__members__.keys()):
+        for enum_value in GROUP_PERMISSIONS_ENUM_KEYS:
             bin_repr += str(int(self.permissions[enum_value]))
         return bin_repr
 
