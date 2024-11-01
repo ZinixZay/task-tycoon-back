@@ -2,11 +2,11 @@ from src.groups.dto import CreateGroupResponseDto, CreateGroupDto
 from src.helpers.errors import NotFoundException, ForbiddenException
 from src.jwt.dto import TokenDto
 from src.users.dto.enums import UserRolesEnum
+from src.entity.UserEntity import UserEntity as User
+from src.entity.GroupEntity import GroupEntity as Group
 
 
 def create_group(user: TokenDto, create_group_dto: CreateGroupDto) -> CreateGroupResponseDto:
-    from src.entity import User, Group
-
     user_entity: User | None = User.get_or_none(User.id == user.user_id)
     if not user_entity:
         raise NotFoundException("Пользователь не найден")

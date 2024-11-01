@@ -1,5 +1,4 @@
 from pydantic import EmailStr
-from src.jwt.jwt_core import sign_jwt
 from src.entity.UserEntity import UserEntity
 from src.users.dto import RegisterUserDto
 from src.helpers.errors import BadRequestException
