@@ -22,7 +22,8 @@ python_version = "3.12"
 
 [scripts]
 dev = "uvicorn main:app --reload"
+dev-no-rel = "uvicorn main:app"
 mgc = "pw_migrate create"
 mgm = "pw_migrate migrate"
 mgr = "pw_migrate rollback"
-docker = "docker compose up -d"
+docker-dev = "docker compose -p task-tycoon-dev up -d"
