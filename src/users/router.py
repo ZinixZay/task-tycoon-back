@@ -1,3 +1,4 @@
+from uuid import UUID
 from fastapi import APIRouter, Body, Depends
 from pydantic import EmailStr
 from src.jwt.dto import TokenDto, JWTDto
@@ -32,7 +33,7 @@ async def logout_user(user: TokenDto = Depends(AccessJWTBearer())) -> None:
     await service.logout_user(user)
                                                            
 
-@user_router.patch('/update')
+@user_router.patch('/me')
 async def update_user(user: TokenDto = Depends(AccessJWTBearer()), updateDto: UpdateUserDto = Body(...)) -> None:
     await service.update_user(user, updateDto)
     
@@ -40,4 +41,14 @@ async def update_user(user: TokenDto = Depends(AccessJWTBearer()), updateDto: Up
 @user_router.get('/me')
 async def get_user_info(user: TokenDto = Depends(AccessJWTBearer())) -> UserDto:
     return service.get_user_info(user)
+
+
+@user_router.delete('/me')
+async def delete_user(user: TokenDto = Depends(AccessJWTBearer())) -> EmailStr:
+    return service.delete_user(user)
+
+
+@user_router.get('/user/{target_id}')
+async def get_another_user_info(target_id: UUID, user: TokenDto = Depends(AccessJWTBearer())) -> UserDto:
+    return service.get_another_user_info(target_id)
     
