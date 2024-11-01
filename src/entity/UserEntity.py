@@ -8,7 +8,7 @@ from src.entity.BaseEntity import BaseEntity as Base
 from src.users.dto.enums import USER_ROLES, UserRolesEnum
 
 HASHER = PasswordHasher()
-print('initialized user')
+
 class UserEntity(Base):
     id: UUID = UUIDField(unique=True, primary_key=True, default=uuid4())
     email: EmailStr = CharField(unique=True, index=True, max_length=62)
