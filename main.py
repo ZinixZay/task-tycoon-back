@@ -4,16 +4,11 @@ from src.users import user_router
 from src.groups import group_router
 
 
-origins = [
-    "http://localhost",
-    "http://localhost:3000",
-]
-
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=['*'],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
