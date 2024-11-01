@@ -1,7 +1,8 @@
 from uuid import UUID, uuid4
 from peewee import UUIDField, CharField, ForeignKeyField, SmallIntegerField
 from src.entity.dto.enums import TableNamesEnum
-from src.entity import Base, Question
+from src.entity.BaseEntity import BaseEntity as Base
+from src.entity.QuestionEntity import QuestionEntity as Question
 
 
 class QuestionHintsEntity(Base):

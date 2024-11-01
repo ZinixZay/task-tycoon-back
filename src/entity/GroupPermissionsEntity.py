@@ -1,7 +1,9 @@
 from uuid import UUID, uuid4
 from peewee import UUIDField, ForeignKeyField, CharField
 from src.entity.dto.enums import TableNamesEnum
-from src.entity import Base, User, Group
+from src.entity.BaseEntity import BaseEntity as Base
+from src.entity.UserEntity import UserEntity as User
+from src.entity.GroupEntity import GroupEntity as Group
 
 class GroupPermissionEntity(Base):
     id: UUID = UUIDField(unique=True, primary_key=True, default=uuid4())

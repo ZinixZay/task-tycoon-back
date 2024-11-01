@@ -4,7 +4,7 @@ from playhouse.postgres_ext import JSONField
 import time
 from src.entity.dto.enums import TableNamesEnum
 from src.questions.dto.enums import QuestionTypeEnum, QUESTION_TYPES
-from src.entity import Base
+from src.entity.BaseEntity import BaseEntity as Base
 
 class QuestionEntity(Base):
     id: UUID = UUIDField(unique=True, primary_key=True, default=uuid4())

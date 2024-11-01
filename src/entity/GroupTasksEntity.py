@@ -2,7 +2,9 @@ from uuid import UUID, uuid4
 from peewee import UUIDField, ForeignKeyField, SmallIntegerField, BigIntegerField, BooleanField
 import time
 from src.entity.dto.enums import TableNamesEnum
-from src.entity import Base, Group, Task
+from src.entity.BaseEntity import BaseEntity as Base
+from src.entity.GroupEntity import GroupEntity as Group
+from src.entity.TaskEntity import TaskEntity as Task
 
 class GroupTasksEntity(Base):
     id: UUID = UUIDField(unique=True, primary_key=True, default=uuid4())

@@ -3,7 +3,9 @@ from peewee import UUIDField, ForeignKeyField, CharField
 from playhouse.postgres_ext import JSONField
 from src.entity.dto.enums import TableNamesEnum
 from src.answers.dto.enums import AnswerStatusEnum, ANSWER_STATUSES
-from src.entity import Base, Attempt, Question
+from src.entity.BaseEntity import BaseEntity as Base
+from src.entity.AttemptEntity import AttemptEntity as Attempt
+from src.entity.QuestionEntity import QuestionEntity as Question
 
 class AnswerEntity(Base):
     id: UUID = UUIDField(unique=True, primary_key=True, default=uuid4())

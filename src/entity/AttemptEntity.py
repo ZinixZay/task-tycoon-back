@@ -2,8 +2,10 @@ from uuid import UUID, uuid4
 from peewee import UUIDField, ForeignKeyField, SmallIntegerField, BigIntegerField, BooleanField
 from playhouse.postgres_ext import JSONField
 import time
-from src.entity import Base, User, GroupTasks
 from src.entity.dto.enums import TableNamesEnum
+from src.entity.BaseEntity import BaseEntity as Base
+from src.entity.UserEntity import UserEntity as User
+from src.entity.GroupTasksEntity import GroupTasksEntity as GroupTasks
 
 class AttemptEntity(Base):
     id: UUID = UUIDField(unique=True, primary_key=True, default=uuid4())

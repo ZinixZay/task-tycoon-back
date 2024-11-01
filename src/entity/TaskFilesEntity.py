@@ -1,7 +1,8 @@
 from uuid import UUID, uuid4
 from peewee import UUIDField, CharField, ForeignKeyField
 from src.entity.dto.enums import TableNamesEnum
-from src.entity import Base, Task
+from src.entity.BaseEntity import BaseEntity as Base
+from src.entity.TaskEntity import TaskEntity as Task
 
 
 class TaskFilesEntity(Base):
