@@ -2,7 +2,7 @@ import time
 from src.helpers.errors import UnauthorizedException
 import jwt
 import json
-from jwt.dto.const import REFRESH_TOKEN_LABEL
+from src.jwt.dto.const import REFRESH_TOKEN_LABEL
 from src.jwt.dto import JWTDto, TokenDto, CacheUserInfo
 from src.env import EnvVariablesEnum
 from fastapi import Request, HTTPException

@@ -1,4 +1,4 @@
-from helpers.pydantic import CustomBaseModel
+from src.helpers.pydantic import CustomBaseModel
 
 
 class JWTDto(CustomBaseModel):

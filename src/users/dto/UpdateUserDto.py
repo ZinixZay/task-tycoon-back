@@ -1,6 +1,6 @@
 from typing import Optional
 from pydantic import EmailStr
-from helpers.pydantic import CustomBaseModel
+from src.helpers.pydantic import CustomBaseModel
 
 
 class UpdateUserDto(CustomBaseModel):

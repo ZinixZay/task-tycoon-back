@@ -1,5 +1,5 @@
 from uuid import UUID
-from helpers.pydantic import CustomBaseModel
+from src.helpers.pydantic import CustomBaseModel
 
 
 class TokenDto(CustomBaseModel):

@@ -1,7 +1,7 @@
 from typing import Optional
 from uuid import UUID
 from pydantic import EmailStr
-from helpers.pydantic import CustomBaseModel
+from src.helpers.pydantic import CustomBaseModel
 
 
 class UserDto(CustomBaseModel):
