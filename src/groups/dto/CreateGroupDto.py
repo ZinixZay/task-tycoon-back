@@ -1,6 +1,6 @@
 from typing import Optional
 from uuid import UUID
-from helpers.pydantic import CustomBaseModel
+from src.helpers.pydantic import CustomBaseModel
 from src.groups.dto.enums import GroupTypeEnum
 
 
