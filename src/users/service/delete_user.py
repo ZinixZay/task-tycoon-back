@@ -1,7 +1,6 @@
 from pydantic import EmailStr
 from src.jwt.dto import TokenDto
-from src.entity import User
-from src.users.dto import UserDto
+from src.entity.UserEntity import UserEntity as User
 
 
 def delete_user(userDto: TokenDto) -> EmailStr:

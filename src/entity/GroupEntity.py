@@ -3,7 +3,8 @@ from peewee import UUIDField, CharField, ForeignKeyField, SmallIntegerField, Big
 import time
 from src.entity.dto.enums import TableNamesEnum
 from src.groups.dto.enums import GROUP_TYPES, GroupTypeEnum
-from src.entity import Base, User
+from src.entity.BaseEntity import BaseEntity as Base
+from src.entity.UserEntity import UserEntity as User
 
 class GroupEntity(Base):
     id: UUID = UUIDField(unique=True, primary_key=True, default=uuid4())

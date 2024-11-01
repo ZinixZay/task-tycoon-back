@@ -1,10 +1,9 @@
 from src.helpers.errors import NotFoundException
 from src.jwt.dto import TokenDto
 from src.jwt.jwt_core import sign_jwt
-from src.entity import User
+from src.entity.UserEntity import UserEntity as User
 from src.users.dto import RegisterUserDto
 from src.helpers.errors import BadRequestException
-from src.cache import CacheService
 
 
 async def signin_user(user_register_dto: RegisterUserDto) -> TokenDto:

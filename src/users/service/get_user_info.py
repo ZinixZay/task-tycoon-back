@@ -1,5 +1,5 @@
 from src.jwt.dto.TokenDto import TokenDto
-from src.entity import User
+from src.entity.UserEntity import UserEntity as User
 from src.users.dto import UserDto
 
 
