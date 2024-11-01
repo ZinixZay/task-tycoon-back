@@ -2,6 +2,7 @@ from typing import List, Dict
 from src.entity import UserEntity
 from src.group_permissions.dto.enums.GroupPermissionsEnum import GroupPermissionsEnum
 from src.group_permissions.dto.PermissionFieldDto import PermissionFieldDto
+from repositories import 
 
 
 class Permissions:
@@ -14,7 +15,7 @@ class Permissions:
         :return: instance of Permissions
         '''
         perm: Permissions = Permissions()
-        perm._parse_varchar(varchar)
+        perm._parse_string(varchar)
         return perm
 
     @classmethod
@@ -35,7 +36,7 @@ class Permissions:
         :param user_model: UserEntity instance
         :return: instance of Permissions
         '''
-        raise NotImplemented
+
         return Permissions.from_varchar()
 
     @classmethod
@@ -53,7 +54,7 @@ class Permissions:
     def __str__(self) -> str:
         return " ".join([f"<{name}: {value}>" for name, value in self.permissions.items() if not name.startswith("_")])
 
-    def _parse_varchar(self, varchar: str) -> None:
+    def _parse_string(self, varchar: str) -> None:
         '''
         Setting values from string
         :param number: VARCHAR
