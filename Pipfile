@@ -3,6 +3,10 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 name = "pypi"
 
+[scripts]
+migrate = "alembic upgrade head"
+run = "uvicorn main:app --reload"
+
 [packages]
 peewee = "*"
 fastapi = "*"
@@ -19,10 +23,4 @@ argon2-cffi = "*"
 
 [requires]
 python_version = "3.12"
-
-[scripts]
-dev = "uvicorn main:app --reload"
-mgc = "pw_migrate create"
-mgm = "pw_migrate migrate"
-mgr = "pw_migrate rollback"
-docker = "docker compose up -d"
+python_full_version = "3.12.6"

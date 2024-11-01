@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 from enum import Enum
 
-load_dotenv()
+load_dotenv(override=True)
 
 class EnvVariablesEnum(Enum):
     POSTGRES_PASSWORD = os.getenv('POSTGRES_PASSWORD')
@@ -20,4 +20,4 @@ class EnvVariablesEnum(Enum):
     SUPERUSER_PASSWORD = os.getenv('SUPERUSER_PASSWORD')
     TEST_USER = os.getenv('TEST_USER')
     TEST_USER_PASSWORD = os.getenv('TEST_USER_PASSWORD')
-    
+    FILE_SAVE_ROOT = os.getenv('FILE_SAVE_ROOT')
