@@ -2,6 +2,6 @@ from pydantic import BaseModel
 from .enums.GroupPermissionsEnum import GroupPermissionsEnum
 
 
-class PermissionField(BaseModel):
+class PermissionFieldDto(BaseModel):
     permission: GroupPermissionsEnum
     state: bool

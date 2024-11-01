@@ -1,18 +1,10 @@
 from typing import List, Dict
 from src.entity import UserEntity
 from src.group_permissions.dto.enums.GroupPermissionsEnum import GroupPermissionsEnum
-from src.group_permissions.dto.change import PermissionField
+from src.group_permissions.dto.PermissionFieldDto import PermissionFieldDto
 
 
 class Permissions:
-    @classmethod
-    def get_empty(cls):
-        '''
-        Creates empty instance of Permissions
-        :return: instance of Permissions
-        '''
-        perm: Permissions = cls()
-        return perm
 
     @classmethod
     def from_varchar(cls, varchar: str):
@@ -21,18 +13,18 @@ class Permissions:
         :param number: VARCHAR
         :return: instance of Permissions
         '''
-        perm: Permissions = Permissions.get_empty()
+        perm: Permissions = Permissions()
         perm._parse_varchar(varchar)
         return perm
 
     @classmethod
-    def from_data(cls, data: List[PermissionField]):
+    def from_data(cls, data: List[PermissionFieldDto]):
         '''
         Creates instance of Permissions from list of PermissionsField
         :param data: list of PermissionField
         :return: instance of Permissions
         '''
-        perm: Permissions = Permissions.get_empty()
+        perm: Permissions = Permissions()
         perm.update(data)
         return perm
 
@@ -43,7 +35,8 @@ class Permissions:
         :param user_model: UserEntity instance
         :return: instance of Permissions
         '''
-        return Permissions.from_number(user_model.permissions)
+        raise NotImplemented
+        return Permissions.from_varchar()
 
     @classmethod
     def to_binary(cls, str_permissions: str, permission_names: List[str]) -> List[bool]:
@@ -71,7 +64,7 @@ class Permissions:
         for index, boolean in enumerate(self.to_binary(varchar, names)):
             self.permissions[names[index]] = boolean
 
-    def update(self, data: List[PermissionField]) -> None:
+    def update(self, data: List[PermissionFieldDto]) -> None:
         '''
         Setting values from list of permission fields
         :param data: list of permission fields
@@ -106,14 +99,14 @@ class Permissions:
             bin_repr += str(int(self.permissions[enum_value]))
         return bin_repr
 
-    def to_data(self) -> List[PermissionField]:
+    def to_data(self) -> List[PermissionFieldDto]:
         '''
         Converts current instance permissions to list of permission fields
         :return: list of permission fields
         '''
-        result: List[PermissionField] = list()
+        result: List[PermissionFieldDto] = list()
         for permission_title, boolean in self.permissions.items():
-            result.append(PermissionField(
+            result.append(PermissionFieldDto(
                     permission=GroupPermissionsEnum[permission_title],
                     state=boolean
                 ))
