@@ -1,3 +1,4 @@
+from uuid import UUID
 from fastapi import APIRouter, Body, Depends
 from src.groups.dto import CreateGroupResponseDto, CreateGroupDto
 from src.groups import service
@@ -14,3 +15,8 @@ group_router: APIRouter = APIRouter(
 @group_router.post('/create')
 async def create_group(user: TokenDto = Depends(AccessJWTBearer()), create_group_dto: CreateGroupDto = Body(...)) -> CreateGroupResponseDto:
     return service.create_group(user, create_group_dto)
+
+
+@group_router.delete('/delete/{target_id}')
+async def delete_group(target_id: UUID, user: TokenDto = Depends(AccessJWTBearer())) -> UUID:
+    return service.delete_group(target_id, user)
