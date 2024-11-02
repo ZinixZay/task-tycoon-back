@@ -1,17 +1,19 @@
 from uuid import UUID, uuid4
-from importlib import import_module
 from peewee import UUIDField, ForeignKeyField, SmallIntegerField, BigIntegerField
 import time
-from src.entity import Base, Task, Question
+from src.entity.dto.enums import TableNamesEnum
+from src.entity.BaseEntity import BaseEntity as Base
+from src.entity.TaskEntity import TaskEntity as Task
+from src.entity.QuestionEntity import QuestionEntity as Question
 
 class TaskQuestionsEntity(Base):
     id: UUID = UUIDField(unique=True, primary_key=True, default=uuid4())
-    task: UUID = ForeignKeyField(Task, backref='questions')
-    question: UUID = ForeignKeyField(Question)
+    task_id: UUID = ForeignKeyField(Task, backref='questions')
+    question_id: UUID = ForeignKeyField(Question)
     order: int = SmallIntegerField()
     cost: int = SmallIntegerField(default=1)
     created_at: float = BigIntegerField(default=time.time())
     
     class Meta:
-        table_name = 'task_questions'
+        table_name = TableNamesEnum.TASK_QUESTIONS_ENTITY.value
     

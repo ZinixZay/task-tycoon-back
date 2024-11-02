@@ -1,17 +1,20 @@
 from uuid import UUID, uuid4
 from peewee import UUIDField, CharField, ForeignKeyField, SmallIntegerField, BigIntegerField
 import time
-from src.entity import Base, User
+from src.entity.dto.enums import TableNamesEnum
+from src.groups.dto.enums import GROUP_TYPES, GroupTypeEnum
+from src.entity.BaseEntity import BaseEntity as Base
+from src.entity.UserEntity import UserEntity as User
 
 class GroupEntity(Base):
     id: UUID = UUIDField(unique=True, primary_key=True, default=uuid4())
-    user: UUID = ForeignKeyField(User, backref='tasks')
+    user_id: UUID = ForeignKeyField(User, backref='groups')
     title: str = CharField(max_length=256)
-    type: str = CharField(choices=['channel', 'group'], default='group')
-    parent_id: UUID = UUIDField(null=False)
-    price: int = SmallIntegerField(null=False)
+    type: GroupTypeEnum = CharField(choices=GROUP_TYPES)
+    parent_id: UUID = UUIDField(null=True)
+    price: int = SmallIntegerField(null=True)
     created_at: float = BigIntegerField(default=time.time())
     
     class Meta:
-        table_name = 'groups'
+        table_name = TableNamesEnum.GROUP_ENTITY.value
     
