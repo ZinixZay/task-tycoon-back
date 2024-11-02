@@ -5,6 +5,7 @@ from sqlalchemy import func, select, update
 from database.database import get_async_session
 from dtos.profiles import UpdateProfileDto
 from models import UserModel
+from utils.custom_errors import BadRequestException
 
 class UserRepository:
     @classmethod
@@ -45,9 +46,11 @@ class UserRepository:
     @classmethod
     async def change_profile(cls, user_model: UserModel, schema: UpdateProfileDto) -> None:
         async for session in get_async_session():
-            query = update(UserModel).where(UserModel.id == user_model.id).values(
-                    **schema.model_dump(exclude_none=True)
-                )
-
-            await session.execute(query)
-            await session.commit()
+            try:
+                query = update(UserModel).where(UserModel.id == user_model.id).values(
+                        **schema.model_dump(exclude_none=True)
+                    )
+                await session.execute(query)
+                await session.commit()
+            except Exception as e:
+                raise BadRequestException('Никнейм уже занят')
