@@ -1,5 +1,6 @@
 from typing import List, Dict
-from src.entity import User, GroupPermission
+from src.entity.UserEntity import UserEntity as User
+from src.entity.GroupPermissionsEntity import GroupPermissionEntity as GroupPermission
 from src.group_permissions.dto.enums.GroupPermissionsEnum import GroupPermissionsEnum, GROUP_PERMISSIONS_ENUM_KEYS
 from src.group_permissions.dto.PermissionFieldDto import PermissionFieldDto
 
