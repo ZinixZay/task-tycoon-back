@@ -1,3 +1,4 @@
+# type: ignore
 import os
 from enum import Enum
 from dotenv import load_dotenv
@@ -18,7 +19,7 @@ class EnvVariablesEnum(Enum):
 {os.getenv('POSTGRES_DB')}'''
     REDIS_USER = os.getenv('REDIS_USER')
     REDIS_PASSWORD = os.getenv('REDIS_PASSWORD')
-    REDIS_PORT = os.getenv('REDIS_PORT')
+    REDIS_PORT = int(os.getenv('REDIS_PORT'))
     REDIS_HOST = os.getenv('REDIS_HOST')
     JWT_SECRET = os.getenv('JWT_SECRET')
     SUPERUSER_LOGIN = os.getenv('SUPERUSER_LOGIN')
@@ -28,3 +29,7 @@ class EnvVariablesEnum(Enum):
     JWT_ALGORITHM = os.getenv('JWT_ALGORITHM')
     JWT_ACCESS_EXPIRATION_SECONDS = os.getenv('JWT_ACCESS_EXPIRATION_SECONDS')
     JWT_REFRESH_EXPIRATION_SECONDS = os.getenv('JWT_REFRESH_EXPIRATION_SECONDS')
+    RMQ_HOST = os.getenv('RMQ_HOST')
+    RMQ_PORT = os.getenv('RMQ_PORT')
+    RMQ_USER = os.getenv('RMQ_USER')
+    RMQ_PASSWORD = os.getenv('RMQ_PASSWORD')

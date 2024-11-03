@@ -16,6 +16,8 @@ pyjwt = "*"
 jwt = "*"
 peewee = "*"
 types-peewee = "*"
+pika = "*"
+pika-stubs = "*"
 
 [dev-packages]
 
