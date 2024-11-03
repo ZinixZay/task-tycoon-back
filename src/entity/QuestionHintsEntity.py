@@ -10,7 +10,6 @@ class QuestionHintsEntity(Base):
     question_id: UUID = ForeignKeyField(Question, backref='hints')
     message: str = CharField(max_length=512)
     order: int = SmallIntegerField()
-    
+
     class Meta:
         table_name = TableNamesEnum.QUESTION_HINTS_ENTITY.value
-    

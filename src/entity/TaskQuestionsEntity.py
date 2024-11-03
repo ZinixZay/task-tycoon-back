@@ -13,7 +13,6 @@ class TaskQuestionsEntity(Base):
     order: int = SmallIntegerField()
     cost: int = SmallIntegerField(default=1)
     created_at: float = BigIntegerField(default=time.time())
-    
+
     class Meta:
         table_name = TableNamesEnum.TASK_QUESTIONS_ENTITY.value
-    

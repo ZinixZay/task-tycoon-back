@@ -12,8 +12,7 @@ class AnswerEntity(Base):
     attempt_id: UUID = ForeignKeyField(Attempt, backref='answers')
     question_id: UUID = ForeignKeyField(Question, backref='answers')
     status: AnswerStatusEnum = CharField(choices=ANSWER_STATUSES)
-    content: dict = JSONField(default=dict())
-    
+    content: dict = JSONField(default={})
+
     class Meta:
         table_name = TableNamesEnum.ANSWER_ENTITY.value
-    

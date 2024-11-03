@@ -13,7 +13,8 @@ group_router: APIRouter = APIRouter(
 
 
 @group_router.post('/create')
-async def create_group(user: TokenDto = Depends(AccessJWTBearer()), create_group_dto: CreateGroupDto = Body(...)) -> CreateGroupResponseDto:
+async def create_group(user: TokenDto = Depends(AccessJWTBearer()), 
+                       create_group_dto: CreateGroupDto = Body(...)) -> CreateGroupResponseDto:
     return service.create_group(user, create_group_dto)
 
 

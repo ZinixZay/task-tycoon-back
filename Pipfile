@@ -11,9 +11,11 @@ python-dotenv = "*"
 pydantic = "*"
 psycopg2 = "*"
 peewee-migrate = "*"
-pyjwt = "*"
 passlib = {extras = ["bcrypt"] }
 argon2-cffi = "*"
+types-peewee = "*"
+pyjwt = "*"
+jwt = "*"
 
 [dev-packages]
 

@@ -49,6 +49,7 @@ async def delete_user(user: TokenDto = Depends(AccessJWTBearer())) -> EmailStr:
 
 
 @user_router.get('/user/{target_id}')
-async def get_another_user_info(target_id: UUID, user: TokenDto = Depends(AccessJWTBearer())) -> UserDto:
+async def get_another_user_info(
+    target_id: UUID
+    ) -> UserDto:
     return service.get_another_user_info(target_id)
-    

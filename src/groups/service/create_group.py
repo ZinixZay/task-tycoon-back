@@ -14,4 +14,3 @@ def create_group(user: TokenDto, create_group_dto: CreateGroupDto) -> CreateGrou
         raise ForbiddenException("Нет прав на создание групп")
     group_entity: Group = Group.create(**create_group_dto.model_dump(exclude_unset=True))
     return CreateGroupResponseDto(group_id=group_entity.id)
-    
