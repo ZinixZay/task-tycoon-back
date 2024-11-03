@@ -31,13 +31,15 @@ async def refresh_token(user: TokenDto = Depends(RefreshJWTBearer())) -> JWTDto:
 @user_router.get('/logout')
 async def logout_user(user: TokenDto = Depends(AccessJWTBearer())) -> None:
     await service.logout_user(user)
-                                                           
+
 
 @user_router.patch('/me')
-async def update_user(user: TokenDto = Depends(AccessJWTBearer()), updateDto: UpdateUserDto = Body(...)) -> None:
+async def update_user(user: TokenDto = Depends(AccessJWTBearer()), 
+                      updateDto: UpdateUserDto = Body(...)
+                      ) -> None:
     await service.update_user(user, updateDto)
-    
-    
+
+
 @user_router.get('/me')
 async def get_user_info(user: TokenDto = Depends(AccessJWTBearer())) -> UserDto:
     return service.get_user_info(user)
