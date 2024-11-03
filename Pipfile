@@ -4,7 +4,6 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-peewee = "*"
 fastapi = "*"
 uvicorn = "*"
 python-dotenv = "*"
@@ -13,9 +12,9 @@ psycopg2 = "*"
 peewee-migrate = "*"
 passlib = {extras = ["bcrypt"] }
 argon2-cffi = "*"
-types-peewee = "*"
 pyjwt = "*"
 jwt = "*"
+peewee = "*"
 
 [dev-packages]
 
