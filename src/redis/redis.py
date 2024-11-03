@@ -1,6 +1,6 @@
 # type: ignore
 from coredis import Redis
-from src.env.env_variables_enum import EnvVariablesEnum
+from src.env import EnvVariablesEnum
 
 
 client: Redis = Redis(
