@@ -36,17 +36,16 @@ class Permissions:
         :param user_model: UserEntity instance
         :return: instance of Permissions
         '''
-        user_permission: GroupPermission
-        user_permission = GroupPermission.get(GroupPermission.user == user_model.id)
+        user_permission: GroupPermission = GroupPermission.get(GroupPermission.user_id == user_model.id)
         return Permissions.from_varchar(user_permission.permissions)
 
     @classmethod
-    def to_binary(cls, str_permissions: str, permission_names: List[str]) -> List[bool]:
+    def to_binary(cls, str_permissions: str, permission_names: List[str]) -> List[str]:
         binary_permissions = str_permissions.rjust(len(permission_names), "0")
         if len(binary_permissions) != len(GROUP_PERMISSIONS_ENUM_KEYS):
             raise ValueError("len of binary representation isn't equal to len of permissions")
-        result = [binary_permission == '1' for binary_permission in binary_permissions]
-        return result
+        # result = [binary_permission == '1' for binary_permission in binary_permissions]
+        return binary_permissions
 
     def __init__(self) -> None:
         self.permissions: Dict[GroupPermissionsEnum.name, bool] = \
@@ -58,13 +57,13 @@ class Permissions:
     def _parse_string(self, varchar: str) -> None:
         '''
         Setting values from string
-        :param number: VARCHAR
+        :param varchar: VARCHAR
         :return: None
         '''
         names: List[str] = GROUP_PERMISSIONS_ENUM_KEYS
 
-        for index, boolean in enumerate(self.to_binary(varchar, names)):
-            self.permissions[names[index]] = boolean
+        for index, val in enumerate(self.to_binary(varchar, names)):
+            self.permissions[names[index]] = val == '1'
 
     def update(self, data: List[PermissionFieldDto]) -> None:
         '''
@@ -98,7 +97,7 @@ class Permissions:
         '''
         bin_repr: str = ""
         for enum_value in GROUP_PERMISSIONS_ENUM_KEYS:
-            bin_repr += str(int(self.permissions[enum_value]))
+            bin_repr += "1" if self.permissions[enum_value] else "0"
         return bin_repr
 
     def to_data(self) -> List[PermissionFieldDto]:
