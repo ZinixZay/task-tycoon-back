@@ -1,7 +1,8 @@
+import sys
 import os
-from dotenv import load_dotenv
 
-load_dotenv()
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__name__))))
 
+from src.env import EnvVariablesEnum
 
-DATABASE = f'''postgres://{os.getenv('POSTGRES_USER')}:{os.getenv('POSTGRES_PASSWORD')}@{os.getenv('POSTGRES_HOST')}:{os.getenv('POSTGRES_PORT')}/{os.getenv('POSTGRES_DB')}'''
+DATABASE = EnvVariablesEnum.POSTGRES_CONNECTION_STRING.value

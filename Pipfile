@@ -15,6 +15,7 @@ argon2-cffi = "*"
 pyjwt = "*"
 jwt = "*"
 peewee = "*"
+types-peewee = "*"
 
 [dev-packages]
 

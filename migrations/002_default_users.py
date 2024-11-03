@@ -26,9 +26,9 @@ Some examples (model - class or model name)::
 
 from enum import Enum
 import time
-
 from argon2 import PasswordHasher
 import peewee as pw
+from peewee_migrate import Migrator
 from src.env.env_variables_enum import EnvVariablesEnum
 
 
@@ -38,7 +38,7 @@ class TableNamesEnum(Enum):
     USER_ENTITY = 'users'
 
 
-def migrate(database: pw.Database):
+def migrate(migrator: Migrator, database: pw.Database, *, fake=False):
     if EnvVariablesEnum.SUPERUSER_LOGIN.value:
         superuser_login: str = EnvVariablesEnum.SUPERUSER_LOGIN.value
     else:
@@ -86,7 +86,7 @@ def migrate(database: pw.Database):
 
 
 
-def rollback(database: pw.Database):
+def rollback(migrator: Migrator, database: pw.Database, *, fake=False):
     """Write your rollback migrations here."""
     database.execute_sql(f'''
                          DELETE FROM 

@@ -11,11 +11,11 @@ class EnvVariablesEnum(Enum):
     POSTGRES_HOST = os.getenv('POSTGRES_HOST')
     POSTGRES_PORT = os.getenv('POSTGRES_PORT')
     POSTGRES_CONNECTION_STRING = f'''postgres://
-    {os.getenv('POSTGRES_USER')}:
-    {os.getenv('POSTGRES_PASSWORD')}@
-    {os.getenv('POSTGRES_HOST')}:
-    {os.getenv('POSTGRES_PORT')}/
-    {os.getenv('POSTGRES_DB')}'''
+{os.getenv('POSTGRES_USER')}:
+{os.getenv('POSTGRES_PASSWORD')}@
+{os.getenv('POSTGRES_HOST')}:
+{os.getenv('POSTGRES_PORT')}/
+{os.getenv('POSTGRES_DB')}'''
     REDIS_USER = os.getenv('REDIS_USER')
     REDIS_PASSWORD = os.getenv('REDIS_PASSWORD')
     REDIS_PORT = os.getenv('REDIS_PORT')

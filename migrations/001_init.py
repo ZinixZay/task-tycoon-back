@@ -5,7 +5,7 @@ Some examples (model - class or model name)::
     > Model = migrator.orm['table_name']            # Return model in current state by name
     > Model = migrator.ModelClass                   # Return model in current state by name
 
-    > database.execute_sql(sql)                             # Run custom SQL
+    > migrator.sql(sql)                             # Run custom SQL
     > migrator.run(func, *args, **kwargs)           # Run python function with the given args
     > migrator.create_model(Model)                  # Create a model (could be used as decorator)
     > migrator.remove_model(model, cascade=True)    # Remove a model
@@ -26,6 +26,7 @@ Some examples (model - class or model name)::
 
 from enum import Enum
 import peewee as pw
+from peewee_migrate import Migrator
 
 class UserRolesEnum(Enum):
     PUPIL = 'pupil'
@@ -48,10 +49,10 @@ class TableNamesEnum(Enum):
     QUESTION_HINTS_ENTITY = 'question_hints'
 
 
-def migrate(database: pw.Database):
+def migrate(migrator: Migrator, database: pw.Database, *, fake=False):
     permissions_str: str = '0' * 128
-
-    database.execute_sql(f'''
+    
+    migrator.sql(f'''
     CREATE TABLE {TableNamesEnum.USER_ENTITY.value} (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         email VARCHAR(62) UNIQUE NOT NULL,
@@ -66,7 +67,7 @@ def migrate(database: pw.Database):
         is_verified BOOLEAN DEFAULT FALSE
     );
 ''')
-    database.execute_sql(f'''
+    migrator.sql(f'''
     CREATE TABLE {TableNamesEnum.GROUP_ENTITY.value} (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         user_id UUID REFERENCES {TableNamesEnum.USER_ENTITY.value}(id) ON DELETE CASCADE,
@@ -76,7 +77,7 @@ def migrate(database: pw.Database):
         price SMALLINT,
         created_at BIGINT DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)
     );''')
-    database.execute_sql(f'''
+    migrator.sql(f'''
     CREATE TABLE {TableNamesEnum.TASK_ENTITY.value} (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         user_id UUID REFERENCES {TableNamesEnum.USER_ENTITY.value}(id) ON DELETE CASCADE,
@@ -85,18 +86,18 @@ def migrate(database: pw.Database):
         description_short VARCHAR(2048),
         created_at BIGINT DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)
 );''')
-    database.execute_sql(f'''
+    migrator.sql(f'''
                  CREATE TABLE {TableNamesEnum.TASK_FILES_ENTITY.value} (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     task_id UUID REFERENCES {TableNamesEnum.TASK_ENTITY.value}(id) ON DELETE CASCADE,
     file_path VARCHAR(1024) NOT NULL
 );''')
-    database.execute_sql(f'''CREATE TABLE {TableNamesEnum.GROUP_FILES_ENTITY.value} (
+    migrator.sql(f'''CREATE TABLE {TableNamesEnum.GROUP_FILES_ENTITY.value} (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     group_id UUID REFERENCES {TableNamesEnum.GROUP_ENTITY.value}(id) ON DELETE CASCADE,
     file_path VARCHAR(1024) NOT NULL
 );''')
-    database.execute_sql(f'''
+    migrator.sql(f'''
     CREATE TABLE {TableNamesEnum.GROUP_PERMISSIONS_ENTITY.value} (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         user_id UUID REFERENCES {TableNamesEnum.USER_ENTITY.value}(id) ON DELETE CASCADE,
@@ -104,7 +105,7 @@ def migrate(database: pw.Database):
         permissions VARCHAR(128) DEFAULT '{permissions_str}' NOT NULL
 );
 ''')
-    database.execute_sql(f'''
+    migrator.sql(f'''
 CREATE TABLE {TableNamesEnum.GROUP_TASKS_ENTITY.value} (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     group_id UUID REFERENCES {TableNamesEnum.GROUP_ENTITY.value}(id) ON DELETE CASCADE,
@@ -115,7 +116,7 @@ CREATE TABLE {TableNamesEnum.GROUP_TASKS_ENTITY.value} (
     is_educational BOOLEAN DEFAULT FALSE,
     created_at BIGINT DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)
 );''')
-    database.execute_sql(f"""CREATE TABLE {TableNamesEnum.ATTEMPT_ENTITY.value} (
+    migrator.sql(f"""CREATE TABLE {TableNamesEnum.ATTEMPT_ENTITY.value} (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     task_id UUID REFERENCES {TableNamesEnum.GROUP_TASKS_ENTITY.value}(id) ON DELETE CASCADE,
     user_id UUID REFERENCES {TableNamesEnum.USER_ENTITY.value}(id) ON DELETE CASCADE,
@@ -126,7 +127,7 @@ CREATE TABLE {TableNamesEnum.GROUP_TASKS_ENTITY.value} (
     is_expired BOOLEAN DEFAULT FALSE
 );
 """)
-    database.execute_sql(f'''CREATE TABLE {TableNamesEnum.QUESTION_ENTITY.value} (
+    migrator.sql(f'''CREATE TABLE {TableNamesEnum.QUESTION_ENTITY.value} (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     question_body VARCHAR(1024) NOT NULL,
     type VARCHAR NOT NULL,
@@ -134,7 +135,7 @@ CREATE TABLE {TableNamesEnum.GROUP_TASKS_ENTITY.value} (
     created_at BIGINT DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000) NOT NULL
 );
 ''')
-    database.execute_sql(f'''CREATE TABLE {TableNamesEnum.TASK_QUESTIONS_ENTITY.value} (
+    migrator.sql(f'''CREATE TABLE {TableNamesEnum.TASK_QUESTIONS_ENTITY.value} (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     task_id UUID REFERENCES {TableNamesEnum.TASK_ENTITY.value}(id) ON DELETE CASCADE,
     question_id UUID REFERENCES {TableNamesEnum.QUESTION_ENTITY.value}(id) ON DELETE CASCADE,
@@ -142,40 +143,41 @@ CREATE TABLE {TableNamesEnum.GROUP_TASKS_ENTITY.value} (
     cost SMALLINT DEFAULT 1,
     created_at BIGINT DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)
 );''')
-    database.execute_sql(f'''CREATE TABLE {TableNamesEnum.ANSWER_ENTITY.value} (
+    migrator.sql(f'''CREATE TABLE {TableNamesEnum.ANSWER_ENTITY.value} (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     attempt_id UUID REFERENCES {TableNamesEnum.ATTEMPT_ENTITY.value}(id) ON DELETE CASCADE,
     question_id UUID REFERENCES {TableNamesEnum.QUESTION_ENTITY.value}(id) ON DELETE CASCADE,
     status VARCHAR NOT NULL,
     content JSONB DEFAULT '{{}}'::jsonb
 );''')
-    database.execute_sql(f'''CREATE TABLE {TableNamesEnum.QUESTION_FILES_ENTITY.value} (
+    migrator.sql(f'''CREATE TABLE {TableNamesEnum.QUESTION_FILES_ENTITY.value} (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     question_id UUID REFERENCES {TableNamesEnum.QUESTION_ENTITY.value}(id) ON DELETE CASCADE,
     file_path VARCHAR(1024) NOT NULL
 );''')
-    database.execute_sql(f'''CREATE TABLE {TableNamesEnum.QUESTION_HINTS_ENTITY.value} (
+    migrator.sql(f'''CREATE TABLE {TableNamesEnum.QUESTION_HINTS_ENTITY.value} (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     question_id UUID REFERENCES {TableNamesEnum.QUESTION_ENTITY.value}(id) ON DELETE CASCADE,
     message VARCHAR(512) NOT NULL,
     "order" SMALLINT
 );
 ''')
+      
 
 
-
-def rollback(database: pw.Database):
+def rollback(migrator: Migrator, database: pw.Database, *, fake=False):
     """Write your rollback migrations here."""
-    database.execute_sql(f'''DROP TABLE {TableNamesEnum.QUESTION_HINTS_ENTITY.value}''')
-    database.execute_sql(f'''DROP TABLE {TableNamesEnum.QUESTION_FILES_ENTITY.value}''')
-    database.execute_sql(f'''DROP TABLE {TableNamesEnum.ANSWER_ENTITY.value}''')
-    database.execute_sql(f'''DROP TABLE {TableNamesEnum.TASK_QUESTIONS_ENTITY.value}''')
-    database.execute_sql(f'''DROP TABLE {TableNamesEnum.QUESTION_ENTITY.value}''')
-    database.execute_sql(f'''DROP TABLE {TableNamesEnum.ATTEMPT_ENTITY.value}''')
-    database.execute_sql(f'''DROP TABLE {TableNamesEnum.GROUP_TASKS_ENTITY.value}''')
-    database.execute_sql(f'''DROP TABLE {TableNamesEnum.GROUP_PERMISSIONS_ENTITY.value}''')
-    database.execute_sql(f'''DROP TABLE {TableNamesEnum.GROUP_FILES_ENTITY.value}''')
-    database.execute_sql(f'''DROP TABLE {TableNamesEnum.TASK_FILES_ENTITY.value}''')
-    database.execute_sql(f'''DROP TABLE {TableNamesEnum.TASK_ENTITY.value}''')
-    database.execute_sql(f'''DROP TABLE {TableNamesEnum.GROUP_ENTITY.value}''')
-    database.execute_sql(f'''DROP TABLE {TableNamesEnum.USER_ENTITY.value}''')
+    migrator.sql(f'''DROP TABLE {TableNamesEnum.QUESTION_HINTS_ENTITY.value}''')
+    migrator.sql(f'''DROP TABLE {TableNamesEnum.QUESTION_FILES_ENTITY.value}''')
+    migrator.sql(f'''DROP TABLE {TableNamesEnum.ANSWER_ENTITY.value}''')
+    migrator.sql(f'''DROP TABLE {TableNamesEnum.TASK_QUESTIONS_ENTITY.value}''')
+    migrator.sql(f'''DROP TABLE {TableNamesEnum.QUESTION_ENTITY.value}''')
+    migrator.sql(f'''DROP TABLE {TableNamesEnum.ATTEMPT_ENTITY.value}''')
+    migrator.sql(f'''DROP TABLE {TableNamesEnum.GROUP_TASKS_ENTITY.value}''')
+    migrator.sql(f'''DROP TABLE {TableNamesEnum.GROUP_PERMISSIONS_ENTITY.value}''')
+    migrator.sql(f'''DROP TABLE {TableNamesEnum.GROUP_FILES_ENTITY.value}''')
+    migrator.sql(f'''DROP TABLE {TableNamesEnum.TASK_FILES_ENTITY.value}''')
+    migrator.sql(f'''DROP TABLE {TableNamesEnum.TASK_ENTITY.value}''')
+    migrator.sql(f'''DROP TABLE {TableNamesEnum.GROUP_ENTITY.value}''')
+    migrator.sql(f'''DROP TABLE {TableNamesEnum.USER_ENTITY.value}''')
+    
