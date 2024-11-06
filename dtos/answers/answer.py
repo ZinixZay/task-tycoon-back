@@ -19,8 +19,8 @@ class AnswerContent(BaseModel):
     
     @field_validator('title')
     def validate_title(cls, val: str) -> str:
-        if not (1 <= len(val) <= 255):
-            raise ValueError('Текст варианта ответа должен содержать от 1 до 255 символов')
+        if not (0 <= len(val) <= 255):
+            raise ValueError('Текст должен содержать от 0 до 255 символов')
         return val
         
 

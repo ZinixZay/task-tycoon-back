@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   db:
-    container_name: tt-postgres
+    container_name: tt-postgres-o
     image: postgres
     restart: always
     env_file:
@@ -14,7 +14,7 @@ services:
     ports:
       - "5432:5432"
   redis:
-    container_name: tt-redis
+    container_name: tt-redis-o
     image: redis
     env_file:
       - .env
