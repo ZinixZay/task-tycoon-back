@@ -1,5 +1,5 @@
 from typing import List, Optional
-from sqlalchemy import and_, select, delete
+from sqlalchemy import and_, or_, select, delete
 from database.database import get_async_session
 from models import TaskModel
 from uuid import UUID
@@ -42,7 +42,12 @@ class TaskRepository:
     @classmethod
     async def find_by_title(cls, task_title: str) -> List[TaskModel]:
         async for session in get_async_session():
-            query = select(TaskModel).where(TaskModel.title.ilike(f"%{task_title}%"))
+            query = select(TaskModel).where(
+    or_(
+        TaskModel.title.ilike(f"%{task_title.lower()}%"),
+        TaskModel.title.ilike(f"%{task_title.upper()}%")
+    )
+)
             result = await session.execute(query)
             task_entity = result.scalars().all()
             return task_entity

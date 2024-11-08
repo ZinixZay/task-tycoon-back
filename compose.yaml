@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   db:
-    container_name: tt-postgres
+    container_name: tt-postgres-o
     image: postgres
     restart: unless-stopped
     env_file:
@@ -13,7 +13,7 @@ services:
       - tt-net
 
   redis:
-    container_name: tt-redis
+    container_name: tt-redis-o
     image: redis
     env_file:
       - .env
