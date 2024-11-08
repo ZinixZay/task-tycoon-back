@@ -25,7 +25,7 @@ async def task_get_by_id_without_questions(
         user_initials = task_creator.nickname
     else:
         user_initials = task_creator.email
-    if task_entity.user_id == task_creator.id:
+    if task_entity.user_id == user_entity.id:
         mode = 'full'
     else:
         mode = 'general'
