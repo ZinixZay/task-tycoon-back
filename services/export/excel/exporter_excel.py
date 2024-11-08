@@ -82,7 +82,7 @@ class ExporterExcel:
         self.__reset_cell__()
         
         # title
-        answer_sheet.merge_cells(f'{self.cell}:{self.__column_plus__(len(self.questions), False)+self.r}')
+        answer_sheet.merge_cells(f'{self.cell}:{self.__column_plus__(len(self.questions) + 1, False)+self.r}')
         self.__stylize_cell__(answer_sheet[self.cell], font=self.header_font, fill=self.header_fill)
         answer_sheet[self.cell] = 'Вопросы'
 
@@ -94,6 +94,9 @@ class ExporterExcel:
             self.__column_plus__()
             answer_sheet[self.cell] = question_id
             self.__stylize_cell__(answer_sheet[self.cell], font=self.label_font, fill=self.header2_fill)
+        self.__column_plus__()
+        answer_sheet[self.cell] = "Верно"
+        self.__stylize_cell__(answer_sheet[self.cell], font=self.header2_font, fill=self.header2_fill)
         
         # results
         self.__row_down__()
@@ -104,14 +107,19 @@ class ExporterExcel:
             user = users_map[stats.user_id]
             answer_sheet[self.cell] = f'{user.name} {user.surname}'
             self.__stylize_cell__(answer_sheet[self.cell], font=self.header2_font, fill=self.header3_fill)
+            c_correct = 0
             for question_stats in stats.stats:
                 self.__column_plus__()
                 if question_stats['status'] == AttemptStatsStatusEnum.correct.value:
+                    c_correct += 1
                     self.__stylize_cell__(answer_sheet[self.cell], fill=self.t_answer_fill)
                 elif question_stats['status'] == AttemptStatsStatusEnum.no_answer.value:
                     self.__stylize_cell__(answer_sheet[self.cell], fill=self.n_answer_fill)
                 elif question_stats['status'] == AttemptStatsStatusEnum.wrong.value:
-                    self.__stylize_cell__(answer_sheet[self.cell], fill=self.f_answer_fill)        
+                    self.__stylize_cell__(answer_sheet[self.cell], fill=self.f_answer_fill)
+            self.__column_plus__()
+            answer_sheet[self.cell] = f'{c_correct}'
+            self.__stylize_cell__(answer_sheet[self.cell], font=self.header2_font)
             self.__row_down__()
         
         

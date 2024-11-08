@@ -16,10 +16,11 @@ async def attempt_stats_detailed(dto: GetAttemptStatsDetailedDto, user: UserMode
     attempt_entity = await AttemptStatsRepository.find_one_by_id(dto.attempt_id)
     if not attempt_entity:
         raise NotFoundException('Статистика по попытке не найдена')
-    # unblocked for now
-    # if task_entity.user_id != user.id:
-    #     if not user.is_superuser:
-    #         raise ForbiddenException('Недостаточно прав')
+    creators_attempt = True
+    if task_entity.user_id != user.id:
+        if not user.is_superuser:
+            creators_attempt = False
+            # raise ForbiddenException('Недостаточно прав')
     
     # get initials
     if user_entity.name and user_entity.surname:
@@ -49,7 +50,7 @@ async def attempt_stats_detailed(dto: GetAttemptStatsDetailedDto, user: UserMode
             order=question.order,
             status=attempt_stat['status'],
             user_content=[AnswerContent.model_validate(i) for i in attempt_stat['content']],
-            source_content=[AnswerContent.model_validate(i) for i in question_entity.content],
+            source_content=[AnswerContent.model_validate(i) for i in question_entity.content] if not creators_attempt else [],
             question_type=question_entity.type,
             question_title=question_entity.question_body
         )
