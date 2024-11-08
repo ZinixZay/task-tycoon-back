@@ -27,3 +27,4 @@ mgc = "pw_migrate create"
 mgm = "pw_migrate migrate"
 mgr = "pw_migrate rollback"
 docker-dev = "docker compose -p task-tycoon-dev up -d"
+

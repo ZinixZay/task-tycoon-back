@@ -1,7 +1,7 @@
 from src.redis import client
 
 
-class Cache:
+class CacheService:
     @staticmethod
     async def get_or_add(key: str, value: str) -> str:
         current_value: str = await client.get(key)

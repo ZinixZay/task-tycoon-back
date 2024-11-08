@@ -1,11 +1,8 @@
-import os
-from dotenv import load_dotenv
 from enum import Enum
-
-load_dotenv()
 
 class QuestionTypeEnum(Enum):
     DETAILED = 'detailed'
     MULTI = 'MULTI'
     
     
+QUESTION_TYPES = list(question_type.value for question_type in QuestionTypeEnum)

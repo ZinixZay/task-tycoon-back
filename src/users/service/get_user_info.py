@@ -1,11 +1,8 @@
-from typing import Dict
-from uuid import UUID
-from src.jwt.jwt_core import sign_jwt
-from src.entity import User
-from src.helpers.errors import BadRequestException
+from src.jwt.dto.TokenDto import TokenDto
+from src.entity.UserEntity import UserEntity as User
 from src.users.dto import UserDto
 
 
-async def get_user_info(user_id: UUID) -> UserDto:
-    user: User = User.get_or_none(User.id == user_id)
+def get_user_info(userDto: TokenDto) -> UserDto:
+    user: User = User.get_or_none(User.id == userDto.user_id)
     return UserDto.model_validate(user.__data__)
