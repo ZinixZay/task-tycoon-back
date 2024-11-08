@@ -16,9 +16,10 @@ async def attempt_stats_detailed(dto: GetAttemptStatsDetailedDto, user: UserMode
     attempt_entity = await AttemptStatsRepository.find_one_by_id(dto.attempt_id)
     if not attempt_entity:
         raise NotFoundException('Статистика по попытке не найдена')
-    if task_entity.user_id != user.id:
-        if not user.is_superuser:
-            raise ForbiddenException('Недостаточно прав')
+    # unblocked for now
+    # if task_entity.user_id != user.id:
+    #     if not user.is_superuser:
+    #         raise ForbiddenException('Недостаточно прав')
     
     # get initials
     if user_entity.name and user_entity.surname:
