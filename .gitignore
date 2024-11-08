@@ -5,3 +5,4 @@ __pycache__*
 .resources
 /uploads
 /resources
+/.mypy_cache
