@@ -42,6 +42,7 @@ class Permissions:
         user_permission = GroupPermission.get_or_none(GroupPermission.user == user_model.id and GroupPermission.id == group_id)
         if user_permission is None:
             raise NotFoundException(f"user {user_model.id} with group {group_id} not found")
+        return user_permission
 
     @classmethod
     def to_binary(cls, str_permissions: str, permission_names: List[str]) -> List[str]:
