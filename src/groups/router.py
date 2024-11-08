@@ -1,9 +1,11 @@
 from uuid import UUID
 from fastapi import APIRouter, Body, Depends
+from src.email import send_confirmation
 from src.groups.dto import CreateGroupResponseDto, CreateGroupDto
 from src.groups import service
 from src.jwt.dto import TokenDto
 from src.jwt.jwt_core import AccessJWTBearer
+
 
 
 group_router: APIRouter = APIRouter(
@@ -21,3 +23,8 @@ async def create_group(user: TokenDto = Depends(AccessJWTBearer()),
 @group_router.delete('/delete/{target_id}')
 async def delete_group(target_id: UUID, user: TokenDto = Depends(AccessJWTBearer())) -> UUID:
     return service.delete_group(target_id, user)
+
+
+@group_router.get('/PING')
+async def ping():
+    await send_confirmation()

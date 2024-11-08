@@ -1,7 +1,0 @@
-syntax = "proto3";
-
-package email;
-
-message SendEmail {
-    string to = 1;
-}
