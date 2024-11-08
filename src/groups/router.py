@@ -1,6 +1,7 @@
 from uuid import UUID
 from fastapi import APIRouter, Body, Depends
-from src.email import send_confirmation
+from src.email.dto import SendMailDto
+from src.email import subscribe_grpc_send_email
 from src.groups.dto import CreateGroupResponseDto, CreateGroupDto
 from src.groups import service
 from src.jwt.dto import TokenDto
@@ -27,4 +28,4 @@ async def delete_group(target_id: UUID, user: TokenDto = Depends(AccessJWTBearer
 
 @group_router.get('/PING')
 async def ping():
-    await send_confirmation()
+    subscribe_grpc_send_email(params=SendMailDto(email_to='zxc@zxc.zxc'))

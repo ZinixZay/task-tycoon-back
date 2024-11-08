@@ -1,1 +1,2 @@
 from .service.get_blocking_connection import get_blocking_connection
+from .service.get_blocking_channel import subscribe_grpc

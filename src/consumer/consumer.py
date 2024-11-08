@@ -1,0 +1,1 @@
+from src.rmq.service import get_blocking_connection

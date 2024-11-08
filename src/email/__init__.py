@@ -1,1 +1,1 @@
-from .service.send_confirmation import send_confirmation
+from .service.subscribe_grpc_send_email import subscribe_grpc_send_email
