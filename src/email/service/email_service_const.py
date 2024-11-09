@@ -1,3 +1,0 @@
-EMAIL_EXCHANGE = ""
-EMAIL_QUEUE = "email"
-EMAIL_ROUTING_KEY = "email"

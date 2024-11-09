@@ -1,1 +1,1 @@
-from .service.subscribe_grpc_send_email import subscribe_grpc_send_email
+from .service.grpc_send_email import send_email

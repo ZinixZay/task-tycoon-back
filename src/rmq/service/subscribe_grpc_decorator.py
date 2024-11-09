@@ -1,7 +1,8 @@
 from functools import wraps
-from src.rmq import get_blocking_connection
+from src.rmq.service.get_blocking_connection import get_blocking_connection
+from src.rmq.dto import RmqQueuesEnum
 
-def subscribe_grpc(queue: str):
+def subscribe_grpc(queue: RmqQueuesEnum):
     def with_blocking_channel(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
@@ -9,7 +10,7 @@ def subscribe_grpc(queue: str):
                 print('opened rmq connection')
                 with blocking_connection.channel() as blocking_channel:
                     print('opened rmq channel')
-                    blocking_channel.queue_declare(queue=queue)
+                    blocking_channel.queue_declare(queue=queue.value)
                     kwargs['params'].blocking_channel = blocking_channel
                     func(*args, **kwargs)
                 print('closed rmq channel')

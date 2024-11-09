@@ -1,12 +1,13 @@
 from uuid import UUID
 from fastapi import APIRouter, Body, Depends
+from src.rmq.dto import BlockingChannelDto
+from src.consumer.consumer import Consumer
 from src.email.dto import SendMailDto
-from src.email import subscribe_grpc_send_email
+from src.email import send_email
 from src.groups.dto import CreateGroupResponseDto, CreateGroupDto
 from src.groups import service
 from src.jwt.dto import TokenDto
 from src.jwt.jwt_core import AccessJWTBearer
-
 
 
 group_router: APIRouter = APIRouter(
@@ -28,4 +29,10 @@ async def delete_group(target_id: UUID, user: TokenDto = Depends(AccessJWTBearer
 
 @group_router.get('/PING')
 async def ping():
-    subscribe_grpc_send_email(params=SendMailDto(email_to='zxc@zxc.zxc'))
+    send_email(params=SendMailDto(email_to='zxc@zxc.zxc'))
+    
+
+@group_router.get('/PING2')
+async def ping2():
+    consumer = Consumer()
+    consumer.start_consuming(params=BlockingChannelDto())
