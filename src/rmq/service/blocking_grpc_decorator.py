@@ -14,8 +14,12 @@ def grpc_blocking(queue: RmqQueueDataEnum):
                     blocking_channel.queue_declare(queue=queue.value.QUEUE_NAME)
                     if 'params' in kwargs:
                         kwargs['params'].blocking_channel = blocking_channel
+                        kwargs['params'].blocking_connection = blocking_connection
                     else:
-                        kwargs['params'] = BlockingChannelDto(blocking_channel = blocking_channel)
+                        kwargs['params'] = BlockingChannelDto(
+                            blocking_channel = blocking_channel,
+                            blocking_connection = blocking_connection
+                            )
                     func(*args, **kwargs)
                 print(f'Closed rmq channel for {func.__name__}')
             print(f'Closed rmq connection for {func.__name__}')
