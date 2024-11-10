@@ -1,5 +1,5 @@
 from src.cache import CacheService
-from src.jwt.dto import TokenDto
+from src.jwt_strategy.dto import TokenDto
 
 
 async def logout_user(user: TokenDto) -> None:

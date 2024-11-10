@@ -1,5 +1,5 @@
-from src.jwt.dto import TokenDto
-from src.jwt.jwt_core import sign_jwt
+from src.jwt_strategy.dto import TokenDto
+from src.jwt_strategy.jwt_core import sign_jwt
 
 
 async def refresh_token(user: TokenDto) -> TokenDto:

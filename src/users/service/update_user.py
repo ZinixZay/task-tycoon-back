@@ -1,4 +1,4 @@
-from src.jwt.dto.TokenDto import TokenDto
+from src.jwt_strategy.dto.TokenDto import TokenDto
 from src.users.dto import UpdateUserDto
 from src.entity.UserEntity import UserEntity as User
 

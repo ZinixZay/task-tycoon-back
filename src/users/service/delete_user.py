@@ -1,5 +1,5 @@
 from pydantic import EmailStr
-from src.jwt.dto import TokenDto
+from src.jwt_strategy.dto import TokenDto
 from src.entity.UserEntity import UserEntity as User
 
 

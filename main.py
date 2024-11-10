@@ -15,6 +15,8 @@ async def lifespan(app: FastAPI):
 
     yield
 
+    email_worker_process.join()
+
 
 app = FastAPI(lifespan=lifespan)
 

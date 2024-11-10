@@ -1,8 +1,8 @@
 from uuid import UUID
 from fastapi import APIRouter, Body, Depends
 from pydantic import EmailStr
-from src.jwt.dto import TokenDto, JWTDto
-from src.jwt import AccessJWTBearer, RefreshJWTBearer
+from src.jwt_strategy.dto import TokenDto, JWTDto
+from src.jwt_strategy import AccessJWTBearer, RefreshJWTBearer
 from src.users.dto import RegisterUserDto, UpdateUserDto, UserDto
 from src.users import service
 

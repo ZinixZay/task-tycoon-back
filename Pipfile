@@ -12,12 +12,12 @@ psycopg2 = "*"
 peewee-migrate = "*"
 passlib = {extras = ["bcrypt"] }
 argon2-cffi = "*"
-pyjwt = "*"
-jwt = "*"
 peewee = "*"
 types-peewee = "*"
 pika = "*"
 pika-stubs = "*"
+types-pyjwt = "*"
+pyjwt = "*"
 
 [dev-packages]
 

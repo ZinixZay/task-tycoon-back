@@ -3,8 +3,8 @@ from fastapi import APIRouter, Body, Depends
 from pydantic import EmailStr
 from src.groups.dto import CreateGroupResponseDto, CreateGroupDto
 from src.groups import service
-from src.jwt.dto import TokenDto
-from src.jwt.jwt_core import AccessJWTBearer
+from src.jwt_strategy.dto import TokenDto
+from src.jwt_strategy.jwt_core import AccessJWTBearer
 from src.email.service.grpc_send_email import grpc_send_email
 
 

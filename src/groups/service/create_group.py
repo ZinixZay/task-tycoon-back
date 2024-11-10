@@ -1,6 +1,6 @@
 from src.groups.dto import CreateGroupResponseDto, CreateGroupDto
 from src.helpers.errors import NotFoundException, ForbiddenException
-from src.jwt.dto import TokenDto
+from src.jwt_strategy.dto import TokenDto
 from src.users.dto.enums import UserRolesEnum
 from src.entity.UserEntity import UserEntity as User
 from src.entity.GroupEntity import GroupEntity as Group

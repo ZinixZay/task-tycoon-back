@@ -2,3 +2,4 @@
 disable=C0115,C0116,C0103,C0114,W0718,W0707
 [MASTER]
 ignore-patterns=.*_pb2\.py$
+extension-pkg-allow-list=pyjwt
