@@ -1,14 +1,10 @@
-from src.email.dto import SendMailDto
-from src.rmq import subscribe_grpc
-from src.email.dto import SendMailMessage
-from src.rmq.dto import RmqExchangesEnum, RmqQueuesEnum, RmqRoutingKeysEnum
+from pydantic import EmailStr
+from src.rmq.dto import RmqQueueDataEnum
+from src.rmq import Publisher
 
-@subscribe_grpc(RmqQueuesEnum.EMAIL_QUEUE)
-def send_email(params: SendMailDto):
-    message: SendMailMessage = SendMailMessage(to=params.email_to) 
-    params.blocking_channel.basic_publish(
-        exchange=RmqExchangesEnum.EMAIL_EXCHANGE.value,
-        routing_key=RmqRoutingKeysEnum.EMAIL_ROUTING_KEY.value,
-        body=message.SerializeToString()
+
+def grpc_send_email(to: EmailStr):
+    Publisher.publish_message(
+        RmqQueueDataEnum.EMAIL_QUEUE,
+        RmqQueueDataEnum.EMAIL_QUEUE.value.MESSAGE_DTO(to=to)
     )
-    print('subscribed')

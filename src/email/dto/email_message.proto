@@ -1,5 +1,5 @@
 syntax = "proto3";
 
-message SendMailMessage {
+message EmailMessage {
     string to = 1;
 }
