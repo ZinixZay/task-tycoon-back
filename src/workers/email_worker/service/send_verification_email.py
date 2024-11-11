@@ -1,11 +1,14 @@
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import smtplib
+from src.helpers.templates import TemplateEngine, TemplatesEnum
+from src.helpers.funcs import gen_random_string
+from src.cache import CacheService
 from src.email.dto import EmailMessageDto
 from src.env import EnvVariablesEnum
 
 
-def send_verification_email(params: EmailMessageDto):
+async def send_verification_email(params: EmailMessageDto):
     subject = 'Тестовый заголовок'
     body = 'Тестовый бади'
     to_email = params.to
@@ -13,6 +16,8 @@ def send_verification_email(params: EmailMessageDto):
     password = EnvVariablesEnum.SMTP_APP_PASSWORD.value
     smtp_server = EnvVariablesEnum.SMTP_SERVER.value
     smtp_port = EnvVariablesEnum.SMTP_PORT.value
+
+    confirmation_code = gen_random_string()
 
     msg = MIMEMultipart()
     msg['From'] = from_email
@@ -29,5 +34,8 @@ def send_verification_email(params: EmailMessageDto):
         server.sendmail(from_email, to_email, msg.as_string())
         print(f'Сообщение отправлено на почту {params.to}')
         server.quit()
-    except Exception as e: 
+    except Exception as e:
         print(e)
+
+    confirmation_key: str = TemplateEngine.build_string(TemplatesEnum.CACHE.value.CONFIRMATION_RECORD.value, params.to)
+    await CacheService.set(confirmation_key, confirmation_code, expires_in=60 * 60 * 3)

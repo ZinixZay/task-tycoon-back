@@ -37,7 +37,7 @@ async def logout_user(user: TokenDto = Depends(AccessJWTBearer())) -> None:
 async def update_user(user: TokenDto = Depends(AccessJWTBearer()), 
                       updateDto: UpdateUserDto = Body(...)
                       ) -> None:
-    await service.update_user(user, updateDto)
+    service.update_user(user, updateDto)
 
 
 @user_router.get('/me')
@@ -55,3 +55,7 @@ async def get_another_user_info(
     target_id: UUID
     ) -> UserDto:
     return service.get_another_user_info(target_id)
+
+@user_router.get('/verify_user/{code}')
+async def verify_user_by_code(code: str) -> None:
+    await service.verify_user_by_code(code)
