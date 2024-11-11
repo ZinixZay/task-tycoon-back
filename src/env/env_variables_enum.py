@@ -33,3 +33,8 @@ class EnvVariablesEnum(Enum):
     RMQ_PORT = os.getenv('RMQ_PORT')
     RMQ_USER = os.getenv('RMQ_USER')
     RMQ_PASSWORD = os.getenv('RMQ_PASSWORD')
+    SMTP_PASSWORD = os.getenv('SMTP_PASSWORD')
+    SMTP_EMAIL = os.getenv('SMTP_EMAIL')
+    SMTP_APP_PASSWORD = os.getenv('SMTP_APP_PASSWORD')
+    SMTP_SERVER = os.getenv('SMTP_SERVER')
+    SMTP_PORT = os.getenv('SMTP_PORT')

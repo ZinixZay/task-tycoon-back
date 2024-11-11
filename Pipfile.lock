@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "eba094f57f1d55dccd90b4d46a67e7c1399bb10c8705f09b361f8b3eb0dc949b"
+            "sha256": "efd91f3975a516d706eb968866409d94d7a5f3f83e5a0acd03b18c7a11bfa333"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -257,6 +257,24 @@
             "markers": "python_version >= '3.8'",
             "version": "==0.1.3"
         },
+        "protobuf": {
+            "hashes": [
+                "sha256:0c4eec6f987338617072592b97943fdbe30d019c56126493111cf24344c1cc24",
+                "sha256:135658402f71bbd49500322c0f736145731b16fc79dc8f367ab544a17eab4535",
+                "sha256:27b246b3723692bf1068d5734ddaf2fccc2cdd6e0c9b47fe099244d80200593b",
+                "sha256:3e6101d095dfd119513cde7259aa703d16c6bbdfae2554dfe5cfdbe94e32d548",
+                "sha256:3fa2de6b8b29d12c61911505d893afe7320ce7ccba4df913e2971461fa36d584",
+                "sha256:64badbc49180a5e401f373f9ce7ab1d18b63f7dd4a9cdc43c92b9f0b481cef7b",
+                "sha256:70585a70fc2dd4818c51287ceef5bdba6387f88a578c86d47bb34669b5552c36",
+                "sha256:712319fbdddb46f21abb66cd33cb9e491a5763b2febd8f228251add221981135",
+                "sha256:91fba8f445723fcf400fdbe9ca796b19d3b1242cd873907979b9ed71e4afe868",
+                "sha256:a3f6857551e53ce35e60b403b8a27b0295f7d6eb63d10484f12bc6879c715687",
+                "sha256:cee1757663fa32a1ee673434fcf3bf24dd54763c79690201208bafec62f19eed"
+            ],
+            "index": "pypi",
+            "markers": "python_version >= '3.8'",
+            "version": "==5.28.3"
+        },
         "psycopg2": {
             "hashes": [
                 "sha256:0435034157049f6846e95103bd8f5a668788dd913a7c30162ca9503fdf542cb4",
@@ -448,7 +466,7 @@
                 "sha256:04e5ca0351e0f3f85c6853954072df659d0d13fac324d0072316b67d7794700d",
                 "sha256:1a7ead55c7e559dd4dee8856e3a88b41225abfe1ce8df57b7c13915fe121ffb8"
             ],
-            "markers": "python_version < '3.13'",
+            "markers": "python_version >= '3.8'",
             "version": "==4.12.2"
         },
         "uvicorn": {

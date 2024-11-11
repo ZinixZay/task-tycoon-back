@@ -18,6 +18,7 @@ pika = "*"
 pika-stubs = "*"
 types-pyjwt = "*"
 pyjwt = "*"
+protobuf = "*"
 
 [dev-packages]
 
