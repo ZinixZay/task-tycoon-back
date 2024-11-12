@@ -7,11 +7,13 @@ from src.helpers.errors import BadRequestException, NotFoundException
 
 
 async def verify_user_by_code(code: str) -> None:
-    confirmation_key: str = TemplateEngine.build_string(TemplatesEnum.CACHE.value.CONFIRMATION_RECORD.value, code)
+    confirmation_key: str = TemplateEngine.build_string(
+        TemplatesEnum.CACHE.value.CONFIRMATION_RECORD.value, code
+        )
     user_email: EmailStr = await CacheService.get(confirmation_key)
     if not user_email:
         raise BadRequestException('Ссылка недействительна')
-    user_entity: User | None = User.get_or_none(User.email == user_email)
+    user_entity: User = User.get_or_none(User.email == user_email)
     if not user_entity:
         raise NotFoundException('Пользователь с таким email не найден')
     user_entity.is_verified = True

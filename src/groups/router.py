@@ -5,8 +5,6 @@ from src.groups.dto import CreateGroupResponseDto, CreateGroupDto
 from src.groups import service
 from src.jwt_strategy.dto import TokenDto
 from src.jwt_strategy.jwt_core import AccessJWTBearer
-from src.email.service.grpc_send_email import grpc_send_email
-
 
 group_router: APIRouter = APIRouter(
     prefix='/groups',
@@ -25,6 +23,6 @@ async def delete_group(target_id: UUID, user: TokenDto = Depends(AccessJWTBearer
     return service.delete_group(target_id, user)
 
 
-@group_router.get('/PING/{to}')
-async def ping(to: EmailStr):
-    grpc_send_email(to=to)
+# @group_router.get('/PING/{to}') # for testing
+# async def ping(to: EmailStr):
+#     grpc_send_email(to=to)

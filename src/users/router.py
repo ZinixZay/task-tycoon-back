@@ -1,6 +1,7 @@
 from uuid import UUID
 from fastapi import APIRouter, Body, Depends
 from pydantic import EmailStr
+from src.email.service.grpc_send_verification_email import grpc_send_verification_email
 from src.jwt_strategy.dto import TokenDto, JWTDto
 from src.jwt_strategy import AccessJWTBearer, RefreshJWTBearer
 from src.users.dto import RegisterUserDto, UpdateUserDto, UserDto
@@ -15,7 +16,9 @@ user_router: APIRouter = APIRouter(
 
 @user_router.post('/signup')
 async def signup_user(user_dto: RegisterUserDto = Body(...)) -> EmailStr:
-    return await service.signup_user(user_dto)
+    user: EmailStr = await service.signup_user(user_dto)
+    grpc_send_verification_email(user)
+    return user
 
 
 @user_router.post('/signin')
