@@ -19,9 +19,7 @@ class CacheService:
 
     @classmethod
     async def set(cls, key: str, value: str, expires_in: int = 3600) -> str:
-        print(client)
         await client.set(key, value, ex=expires_in)
-        print(value)
         return value
 
     @classmethod

@@ -26,7 +26,7 @@ class EmailWorker():
         self.__channel.start_consuming()
 
     def __callback_wrapper__(self, ch, method, properties, body):
-        ща (self.__process_new_message__(ch, method, properties, body))
+        asyncio.get_event_loop().run_until_complete(self.__process_new_message__(ch, method, properties, body))
 
     async def __process_new_message__(self,
         ch: pika.adapters.blocking_connection.BlockingChannel,
