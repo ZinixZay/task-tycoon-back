@@ -1,1 +1,1 @@
-from .run_async import run_async
+from .sync import sync

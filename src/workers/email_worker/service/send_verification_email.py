@@ -9,15 +9,15 @@ from src.env import EnvVariablesEnum
 
 
 async def send_verification_email(params: EmailMessageDto):
+    confirmation_code = gen_random_string()
+
     subject = 'Тестовый заголовок'
-    body = 'Тестовый бади'
+    body = confirmation_code
     to_email = params.to
     from_email = EnvVariablesEnum.SMTP_EMAIL.value
     password = EnvVariablesEnum.SMTP_APP_PASSWORD.value
     smtp_server = EnvVariablesEnum.SMTP_SERVER.value
     smtp_port = EnvVariablesEnum.SMTP_PORT.value
-
-    confirmation_code = gen_random_string()
 
     msg = MIMEMultipart()
     msg['From'] = from_email
@@ -34,8 +34,9 @@ async def send_verification_email(params: EmailMessageDto):
         server.sendmail(from_email, to_email, msg.as_string())
         print(f'Сообщение отправлено на почту {params.to}')
         server.quit()
+        confirmation_key: str = TemplateEngine.build_string(TemplatesEnum.CACHE.value.CONFIRMATION_RECORD.value, params.to)
+        await CacheService.set(confirmation_key, confirmation_code, expires_in=60 * 60 * 3)
+        print(f'Верификация записана в кеш {params.to}')
     except Exception as e:
         print(e)
 
-    confirmation_key: str = TemplateEngine.build_string(TemplatesEnum.CACHE.value.CONFIRMATION_RECORD.value, params.to)
-    await CacheService.set(confirmation_key, confirmation_code, expires_in=60 * 60 * 3)
