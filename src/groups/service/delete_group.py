@@ -25,5 +25,5 @@ def delete_group(target_id: UUID, user: TokenDto) -> UUID:
         permissions_service = PermissionsService.from_varchar(permissions_entity.permissions)
         if not permissions_service.has(GroupPermissionsEnum.DeleteGroup):
             raise PermissionException(GroupPermissionsEnum.DeleteGroup)
-    group.delete_instance() # TODO: recursive deletion
+    group.delete_instance() # TODO: recursive deletion on force flag true
     return group.id
