@@ -9,7 +9,7 @@ from src.helpers.errors import NotFoundException
 
 class Permissions:
 
-    permissions: Dict[GroupPermissionsEnum.name, bool]
+    permissions: Dict[GroupPermissionsEnum, bool]
 
     @classmethod
     def from_varchar(cls, varchar: str):
@@ -56,7 +56,7 @@ class Permissions:
         return binary_permissions
 
     def __init__(self) -> None:
-        self.permissions: Dict[GroupPermissionsEnum.name, bool] = \
+        self.permissions: Dict[GroupPermissionsEnum, bool] = \
             {name: False for name in GROUP_PERMISSIONS_ENUM_KEYS}
 
     def __str__(self) -> str:
@@ -97,6 +97,14 @@ class Permissions:
         :return: None
         '''
         self.permissions[field.name] = False
+
+    def grant_all(self) -> None:
+        '''
+        Sets all permissions True
+        :return: None
+        '''
+        for permission in self.permissions.keys():
+            self.permissions[permission] = True
 
     def to_varchar(self) -> str:
         '''

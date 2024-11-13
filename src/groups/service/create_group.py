@@ -1,9 +1,11 @@
+from src.group_permissions.Permissions import Permissions
 from src.groups.dto import CreateGroupResponseDto, CreateGroupDto
 from src.helpers.errors import NotFoundException, ForbiddenException
 from src.jwt_strategy.dto import TokenDto
 from src.users.dto.enums import UserRolesEnum
 from src.entity.UserEntity import UserEntity as User
 from src.entity.GroupEntity import GroupEntity as Group
+from src.entity.GroupPermissionsEntity import GroupPermissionEntity
 
 
 def create_group(user: TokenDto, create_group_dto: CreateGroupDto) -> CreateGroupResponseDto:
@@ -12,5 +14,9 @@ def create_group(user: TokenDto, create_group_dto: CreateGroupDto) -> CreateGrou
         raise NotFoundException("Пользователь не найден")
     if user_entity.role != UserRolesEnum.TEACHER and not user_entity.is_superuser:
         raise ForbiddenException("Нет прав на создание групп")
-    group_entity: Group = Group.create(**create_group_dto.model_dump(exclude_unset=True))
+    group_entity: Group = Group.create(**create_group_dto.model_dump(exclude_unset=True), user_id=user_entity.id) # TODO: Transaction???
+    # TODO: hints
+    group_permissions: Permissions = Permissions()
+    group_permissions.grant_all()
+    GroupPermissionEntity.create(user_id=user_entity.id, group_id=group_entity.id, permissions=group_permissions.to_varchar())
     return CreateGroupResponseDto(group_id=group_entity.id)
