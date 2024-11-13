@@ -1,7 +1,7 @@
 from uuid import UUID
 from src.group_permissions.dto.enums.GroupPermissionsEnum import GroupPermissionsEnum
 from src.entity.GroupPermissionsEntity import GroupPermissionEntity
-from src.helpers.errors import ForbiddenException, NotFoundException, PermissionException
+from src.helpers.errors import NotFoundException, PermissionException
 from src.jwt_strategy.dto import TokenDto
 from src.entity.GroupEntity import GroupEntity as Group
 from src.entity.UserEntity import UserEntity as User
