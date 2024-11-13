@@ -47,8 +47,8 @@ class Permissions:
             raise NotFoundException(f"user {user_model.id} with group {group_id} not found")
         return user_permission
 
-    @classmethod
-    def to_binary(cls, str_permissions: str, permission_names: List[str]) -> List[str]:
+
+    def adjust_to_binary(self, str_permissions: str, permission_names: List[str]) -> List[str]:
         binary_permissions = str_permissions.rjust(len(permission_names), "0")
         if len(binary_permissions) != len(GROUP_PERMISSIONS_ENUM_KEYS):
             raise ValueError("len of binary representation isn't equal to len of permissions")
@@ -70,7 +70,7 @@ class Permissions:
         '''
         names: List[str] = GROUP_PERMISSIONS_ENUM_KEYS
 
-        for index, val in enumerate(self.to_binary(varchar, names)):
+        for index, val in enumerate(self.adjust_to_binary(varchar, names)):
             self.permissions[names[index]] = val == '1'
 
     def update(self, data: List[PermissionFieldDto]) -> None:
