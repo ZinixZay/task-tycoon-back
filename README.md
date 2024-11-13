@@ -8,7 +8,7 @@ pipenv install --ignore-pipfile
 
 docker compose up -d
 
-alembic upgrade head
+pipenv run mgm
 
-uvicorn main:app --reload
+pipenv run dev
 ```
