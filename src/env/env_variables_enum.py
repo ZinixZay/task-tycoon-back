@@ -1,6 +1,7 @@
+# type: ignore
 import os
-from dotenv import load_dotenv
 from enum import Enum
+from dotenv import load_dotenv
 
 load_dotenv(override=True)
 
@@ -10,10 +11,15 @@ class EnvVariablesEnum(Enum):
     POSTGRES_DB = os.getenv('POSTGRES_DB')
     POSTGRES_HOST = os.getenv('POSTGRES_HOST')
     POSTGRES_PORT = os.getenv('POSTGRES_PORT')
-    POSTGRES_CONNECTION_STRING = f"postgres://{os.getenv('POSTGRES_USER')}:{os.getenv('POSTGRES_PASSWORD')}@{os.getenv('POSTGRES_HOST')}:{os.getenv('POSTGRES_PORT')}/{os.getenv('POSTGRES_DB')}"
+    POSTGRES_CONNECTION_STRING = f'''postgres://
+{os.getenv('POSTGRES_USER')}:
+{os.getenv('POSTGRES_PASSWORD')}@
+{os.getenv('POSTGRES_HOST')}:
+{os.getenv('POSTGRES_PORT')}/
+{os.getenv('POSTGRES_DB')}'''
     REDIS_USER = os.getenv('REDIS_USER')
     REDIS_PASSWORD = os.getenv('REDIS_PASSWORD')
-    REDIS_PORT = os.getenv('REDIS_PORT')
+    REDIS_PORT = int(os.getenv('REDIS_PORT'))
     REDIS_HOST = os.getenv('REDIS_HOST')
     JWT_SECRET = os.getenv('JWT_SECRET')
     SUPERUSER_LOGIN = os.getenv('SUPERUSER_LOGIN')
@@ -24,3 +30,12 @@ class EnvVariablesEnum(Enum):
     JWT_ALGORITHM = os.getenv('JWT_ALGORITHM')
     JWT_ACCESS_EXPIRATION_SECONDS = os.getenv('JWT_ACCESS_EXPIRATION_SECONDS')
     JWT_REFRESH_EXPIRATION_SECONDS = os.getenv('JWT_REFRESH_EXPIRATION_SECONDS')
+    RMQ_HOST = os.getenv('RMQ_HOST')
+    RMQ_PORT = os.getenv('RMQ_PORT')
+    RMQ_USER = os.getenv('RMQ_USER')
+    RMQ_PASSWORD = os.getenv('RMQ_PASSWORD')
+    SMTP_PASSWORD = os.getenv('SMTP_PASSWORD')
+    SMTP_EMAIL = os.getenv('SMTP_EMAIL')
+    SMTP_APP_PASSWORD = os.getenv('SMTP_APP_PASSWORD')
+    SMTP_SERVER = os.getenv('SMTP_SERVER')
+    SMTP_PORT = os.getenv('SMTP_PORT')

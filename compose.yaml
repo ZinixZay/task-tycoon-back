@@ -1,6 +1,17 @@
 version: "3.8"
 
 services:
+  rabbitmq:
+    image: rabbitmq:4.0-management
+    container_name: tt-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "guest"
+    volumes:
+      - rabbitmqdata:/var/lib/rabbitmq
   db:
     container_name: tt-postgres
     image: postgres
@@ -31,3 +42,4 @@ services:
 volumes:
   pgdata:
   redisdata:
+  rabbitmqdata:

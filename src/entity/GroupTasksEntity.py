@@ -1,6 +1,6 @@
+import time
 from uuid import UUID, uuid4
 from peewee import UUIDField, ForeignKeyField, SmallIntegerField, BigIntegerField, BooleanField
-import time
 from src.entity.dto.enums import TableNamesEnum
 from src.entity.BaseEntity import BaseEntity as Base
 from src.entity.GroupEntity import GroupEntity as Group
@@ -15,7 +15,6 @@ class GroupTasksEntity(Base):
     expires_on: float = BigIntegerField(null=True)
     is_educational: bool = BooleanField(default=False)
     created_at: float = BigIntegerField(default=time.time())
-    
+
     class Meta:
         table_name = TableNamesEnum.GROUP_TASKS_ENTITY.value
-    

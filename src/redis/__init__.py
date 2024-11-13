@@ -1,1 +1,1 @@
-from .redis import client
+from .redis import *

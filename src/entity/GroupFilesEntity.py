@@ -8,7 +8,6 @@ class GroupFilesEntity(Base):
     id: UUID = UUIDField(unique=True, primary_key=True, default=uuid4())
     group_id: UUID = ForeignKeyField(Group, backref='files')
     file_path: str = CharField(max_length=1024)
-        
+
     class Meta:
         table_name = TableNamesEnum.GROUP_FILES_ENTITY.value
-    

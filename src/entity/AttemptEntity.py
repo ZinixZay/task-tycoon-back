@@ -1,7 +1,7 @@
+import time
 from uuid import UUID, uuid4
 from peewee import UUIDField, ForeignKeyField, SmallIntegerField, BigIntegerField, BooleanField
 from playhouse.postgres_ext import JSONField
-import time
 from src.entity.dto.enums import TableNamesEnum
 from src.entity.BaseEntity import BaseEntity as Base
 from src.entity.UserEntity import UserEntity as User
@@ -16,7 +16,6 @@ class AttemptEntity(Base):
     content: dict = JSONField(default=dict())
     created_at: float = BigIntegerField(default=time.time())
     is_expired: bool = BooleanField(default=False)
-    
+
     class Meta:
         table_name = TableNamesEnum.ATTEMPT_ENTITY.value
-    

@@ -1,7 +1,7 @@
+import time
 from uuid import UUID, uuid4
 from peewee import UUIDField, CharField, BooleanField, BigIntegerField
 from pydantic import EmailStr
-import time
 from argon2 import PasswordHasher
 from src.entity.dto.enums import TableNamesEnum
 from src.entity.BaseEntity import BaseEntity as Base
@@ -21,13 +21,13 @@ class UserEntity(Base):
     is_active: bool = BooleanField(default=False)
     is_superuser: bool = BooleanField(default=False)
     is_verified: bool = BooleanField(default=False)
-    
+
     class Meta:
         table_name = TableNamesEnum.USER_ENTITY.value
-    
+
     @staticmethod
     def hash_password(password):
         return HASHER.hash(password)
-    
+
     def verify_password(self, password):
         return HASHER.verify(self.hashed_password, password)

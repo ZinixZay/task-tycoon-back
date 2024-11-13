@@ -6,3 +6,4 @@ from .refresh_token import refresh_token
 from .logout_user import logout_user
 from .delete_user import delete_user
 from .get_another_user_info import get_another_user_info
+from .verify_user_by_code import verify_user_by_code

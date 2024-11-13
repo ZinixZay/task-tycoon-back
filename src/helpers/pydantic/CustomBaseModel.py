@@ -1,3 +1,4 @@
+# type: ignore
 from pydantic import BaseModel
 
 

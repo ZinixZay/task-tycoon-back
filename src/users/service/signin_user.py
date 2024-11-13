@@ -1,6 +1,6 @@
 from src.helpers.errors import NotFoundException
-from src.jwt.dto import TokenDto
-from src.jwt.jwt_core import sign_jwt
+from src.jwt_strategy.dto import TokenDto
+from src.jwt_strategy.jwt_core import sign_jwt
 from src.entity.UserEntity import UserEntity as User
 from src.users.dto import RegisterUserDto
 from src.helpers.errors import BadRequestException

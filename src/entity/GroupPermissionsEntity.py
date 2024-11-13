@@ -10,7 +10,6 @@ class GroupPermissionEntity(Base):
     user_id: UUID = ForeignKeyField(User, backref='permissions')
     group_id: UUID = ForeignKeyField(Group, backref='permissions')
     permissions: str = CharField(max_length=128, default='0' * 128)
-    
+
     class Meta:
         table_name = TableNamesEnum.GROUP_PERMISSIONS_ENTITY.value
-    

@@ -1,7 +1,7 @@
 from uuid import UUID
 from src.helpers.errors import ForbiddenException
 from src.helpers.errors import NotFoundException
-from src.jwt.dto import TokenDto
+from src.jwt_strategy.dto import TokenDto
 from src.entity.GroupEntity import GroupEntity as Group
 from src.entity.UserEntity import UserEntity as User
 

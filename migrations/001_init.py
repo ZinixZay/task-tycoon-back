@@ -50,7 +50,8 @@ class TableNamesEnum(Enum):
 
 
 def migrate(migrator: Migrator, database: pw.Database, *, fake=False):
-    """Write your migrations here."""
+    permissions_str: str = '0' * 128
+
     migrator.sql(f'''
     CREATE TABLE {TableNamesEnum.USER_ENTITY.value} (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -101,7 +102,7 @@ def migrate(migrator: Migrator, database: pw.Database, *, fake=False):
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         user_id UUID REFERENCES {TableNamesEnum.USER_ENTITY.value}(id) ON DELETE CASCADE,
         group_id UUID REFERENCES {TableNamesEnum.GROUP_ENTITY.value}(id) ON DELETE CASCADE,
-        permissions VARCHAR(128) DEFAULT '00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000' NOT NULL
+        permissions VARCHAR(128) DEFAULT '{permissions_str}' NOT NULL
 );
 ''')
     migrator.sql(f'''
@@ -161,7 +162,7 @@ CREATE TABLE {TableNamesEnum.GROUP_TASKS_ENTITY.value} (
     "order" SMALLINT
 );
 ''')
-      
+
 
 
 def rollback(migrator: Migrator, database: pw.Database, *, fake=False):
@@ -179,4 +180,3 @@ def rollback(migrator: Migrator, database: pw.Database, *, fake=False):
     migrator.sql(f'''DROP TABLE {TableNamesEnum.TASK_ENTITY.value}''')
     migrator.sql(f'''DROP TABLE {TableNamesEnum.GROUP_ENTITY.value}''')
     migrator.sql(f'''DROP TABLE {TableNamesEnum.USER_ENTITY.value}''')
-    
