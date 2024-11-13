@@ -3,7 +3,6 @@
 # NO CHECKED-IN PROTOBUF GENCODE
 # source: email_message.proto
 # Protobuf Python Version: 5.28.3
-# type: ignore
 """Generated protocol buffer code."""
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import descriptor_pool as _descriptor_pool

@@ -1,4 +1,3 @@
-# type: ignore
 from coredis import Redis
 from src.env import EnvVariablesEnum
 

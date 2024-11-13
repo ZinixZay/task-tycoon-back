@@ -1,12 +1,11 @@
-# type:ignore
+import asyncio
 import signal
 import pika
+from google.protobuf.json_format import MessageToDict
+from src.email.dto import EmailMessageDto
 from src.rmq.dto import BlockingChannelDto, RmqQueueDataEnum
 from src.rmq import grpc_blocking
-from google.protobuf.json_format import MessageToDict
 from .service.send_verification_email import send_verification_email
-from src.email.dto import EmailMessageDto
-import asyncio
 
 class EmailWorker():
     __channel = None
@@ -26,7 +25,9 @@ class EmailWorker():
         self.__channel.start_consuming()
 
     def __callback_wrapper__(self, ch, method, properties, body):
-        asyncio.get_event_loop().run_until_complete(self.__process_new_message__(ch, method, properties, body))
+        asyncio.get_event_loop().run_until_complete(
+            self.__process_new_message__(ch, method, properties, body)
+            )
 
     async def __process_new_message__(self,
         ch: pika.adapters.blocking_connection.BlockingChannel,
@@ -37,7 +38,7 @@ class EmailWorker():
         message: RmqQueueDataEnum.EMAIL_QUEUE.value.MESSAGE_PB = \
             RmqQueueDataEnum.EMAIL_QUEUE.value.MESSAGE_PB()
         message.ParseFromString(body)
-        
+
         validated_message: EmailMessageDto = EmailMessageDto.model_validate(MessageToDict(message))
 
         await send_verification_email(validated_message)

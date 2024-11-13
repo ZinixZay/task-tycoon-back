@@ -1,4 +1,3 @@
-# type: ignore
 import os
 from enum import Enum
 from dotenv import load_dotenv

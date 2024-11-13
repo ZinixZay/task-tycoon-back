@@ -6,17 +6,26 @@ from src.users.dto.enums import UserRolesEnum
 from src.entity.UserEntity import UserEntity as User
 from src.entity.GroupEntity import GroupEntity as Group
 from src.entity.GroupPermissionsEntity import GroupPermissionEntity
+from src.database import db
 
 
+@db.atomic()
 def create_group(user: TokenDto, create_group_dto: CreateGroupDto) -> CreateGroupResponseDto:
     user_entity: User | None = User.get_or_none(User.id == user.user_id)
     if not user_entity:
         raise NotFoundException("Пользователь не найден")
     if user_entity.role != UserRolesEnum.TEACHER and not user_entity.is_superuser:
         raise ForbiddenException("Нет прав на создание групп")
-    group_entity: Group = Group.create(**create_group_dto.model_dump(exclude_unset=True), user_id=user_entity.id) # TODO: Transaction???
+    group_entity: Group = Group.create(
+        **create_group_dto.model_dump(exclude_unset=True), 
+        user_id=user_entity.id
+        )
     # TODO: hints
     group_permissions: Permissions = Permissions()
     group_permissions.grant_all()
-    GroupPermissionEntity.create(user_id=user_entity.id, group_id=group_entity.id, permissions=group_permissions.to_varchar())
+    GroupPermissionEntity.create(
+        user_id=user_entity.id,
+        group_id=group_entity.id,
+        permissions=group_permissions.to_varchar()
+        )
     return CreateGroupResponseDto(group_id=group_entity.id)
