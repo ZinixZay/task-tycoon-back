@@ -7,7 +7,7 @@ from src.entity.UserEntity import UserEntity as User
 
 
 class TaskEntity(Base):
-    id: UUID = UUIDField(unique=True, primary_key=True, default=uuid4())
+    id: UUID = UUIDField(unique=True, primary_key=True, default=uuid4)
     user_id: UUID = ForeignKeyField(User, backref='tasks')
     title: str = CharField(max_length=256)
     description_full: str = TextField(null=True)

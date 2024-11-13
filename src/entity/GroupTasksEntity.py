@@ -7,7 +7,7 @@ from src.entity.GroupEntity import GroupEntity as Group
 from src.entity.TaskEntity import TaskEntity as Task
 
 class GroupTasksEntity(Base):
-    id: UUID = UUIDField(unique=True, primary_key=True, default=uuid4())
+    id: UUID = UUIDField(unique=True, primary_key=True, default=uuid4)
     group_id: UUID = ForeignKeyField(Group, backref='group_tasks')
     task_id: UUID = ForeignKeyField(Task, backref='group_tasks')
     attempts_count: int = SmallIntegerField(default=3)

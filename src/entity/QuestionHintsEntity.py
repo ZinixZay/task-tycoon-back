@@ -6,7 +6,7 @@ from src.entity.QuestionEntity import QuestionEntity as Question
 
 
 class QuestionHintsEntity(Base):
-    id: UUID = UUIDField(unique=True, primary_key=True, default=uuid4())
+    id: UUID = UUIDField(unique=True, primary_key=True, default=uuid4)
     question_id: UUID = ForeignKeyField(Question, backref='hints')
     message: str = CharField(max_length=512)
     order: int = SmallIntegerField()

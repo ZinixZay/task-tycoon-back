@@ -7,7 +7,7 @@ from src.entity.TaskEntity import TaskEntity as Task
 from src.entity.QuestionEntity import QuestionEntity as Question
 
 class TaskQuestionsEntity(Base):
-    id: UUID = UUIDField(unique=True, primary_key=True, default=uuid4())
+    id: UUID = UUIDField(unique=True, primary_key=True, default=uuid4)
     task_id: UUID = ForeignKeyField(Task, backref='questions')
     question_id: UUID = ForeignKeyField(Question)
     order: int = SmallIntegerField()

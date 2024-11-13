@@ -11,9 +11,11 @@ from src.env import EnvVariablesEnum
 async def send_verification_email(params: EmailMessageDto):
     confirmation_code = gen_random_string()
 
-    subject = 'Тестовый заголовок'
+    subject = 'Подтверждение аккаунта'
     # TODO: send to frontend page. not backend api
-    body = f'http://localhost:8000/api/v1/users/verify_user/{confirmation_code}'
+    # TODO: design mail
+    body = f'''Чтобы подтвердить аккаунт перейдите по ссылке ниже\n
+    http://localhost:8000/api/v1/users/verify_user/{confirmation_code}'''
     to_email = params.to
     from_email = EnvVariablesEnum.SMTP_EMAIL.value
     password = EnvVariablesEnum.SMTP_APP_PASSWORD.value

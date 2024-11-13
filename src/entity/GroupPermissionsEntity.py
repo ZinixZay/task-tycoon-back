@@ -6,7 +6,7 @@ from src.entity.UserEntity import UserEntity as User
 from src.entity.GroupEntity import GroupEntity as Group
 
 class GroupPermissionEntity(Base):
-    id: UUID = UUIDField(unique=True, primary_key=True, default=uuid4())
+    id: UUID = UUIDField(unique=True, primary_key=True, default=uuid4)
     user_id: UUID = ForeignKeyField(User, backref='permissions')
     group_id: UUID = ForeignKeyField(Group, backref='permissions')
     permissions: str = CharField(max_length=128, default='0' * 128)

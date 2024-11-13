@@ -8,7 +8,7 @@ from src.entity.AttemptEntity import AttemptEntity as Attempt
 from src.entity.QuestionEntity import QuestionEntity as Question
 
 class AnswerEntity(Base):
-    id: UUID = UUIDField(unique=True, primary_key=True, default=uuid4())
+    id: UUID = UUIDField(unique=True, primary_key=True, default=uuid4)
     attempt_id: UUID = ForeignKeyField(Attempt, backref='answers')
     question_id: UUID = ForeignKeyField(Question, backref='answers')
     status: AnswerStatusEnum = CharField(choices=ANSWER_STATUSES)

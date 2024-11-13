@@ -7,7 +7,7 @@ from src.entity.BaseEntity import BaseEntity as Base
 from src.entity.UserEntity import UserEntity as User
 
 class GroupEntity(Base):
-    id: UUID = UUIDField(unique=True, primary_key=True, default=uuid4())
+    id: UUID = UUIDField(unique=True, primary_key=True, default=uuid4)
     user_id: UUID = ForeignKeyField(User, backref='groups')
     title: str = CharField(max_length=256)
     type: GroupTypeEnum = CharField(choices=GROUP_TYPES)

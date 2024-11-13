@@ -3,3 +3,4 @@ from .ForbiddenException import ForbiddenException
 from .NotFoundException import NotFoundException
 from .TeapotException import TeapotException
 from .UnauthorizedException import UnauthorizedException
+from .PermissionException import PermissionException

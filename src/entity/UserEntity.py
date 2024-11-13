@@ -10,7 +10,7 @@ from src.users.dto.enums import USER_ROLES, UserRolesEnum
 HASHER = PasswordHasher()
 
 class UserEntity(Base):
-    id: UUID = UUIDField(unique=True, primary_key=True, default=uuid4())
+    id: UUID = UUIDField(unique=True, primary_key=True, default=uuid4)
     email: EmailStr = CharField(unique=True, index=True, max_length=62)
     hashed_password: str = CharField(max_length=1024)
     nickname: str = CharField(max_length=62, null=True)

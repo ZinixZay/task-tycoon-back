@@ -1,52 +1,35 @@
+from typing import Self
 from typing import List, Dict
-from src.entity.UserEntity import UserEntity as User
-from src.entity.GroupPermissionsEntity import GroupPermissionEntity as GroupPermission
-from src.group_permissions.dto.enums.GroupPermissionsEnum import GroupPermissionsEnum, GROUP_PERMISSIONS_ENUM_KEYS
+from src.group_permissions.dto.enums.GroupPermissionsEnum import GroupPermissionsEnum, \
+    GROUP_PERMISSIONS_ENUM_KEYS
 from src.group_permissions.dto.PermissionFieldDto import PermissionFieldDto
-from uuid import UUID
-from src.helpers.errors import NotFoundException
 
 
-class Permissions:
+class PermissionsService:
 
     permissions: Dict[GroupPermissionsEnum, bool]
 
     @classmethod
-    def from_varchar(cls, varchar: str):
+    def from_varchar(cls, varchar: str) -> Self:
         '''
-        Create instance of Permissions from VARCHAR representation
+        Create instance of PermissionsService from VARCHAR representation
         :param number: VARCHAR
-        :return: instance of Permissions
+        :return: instance of PermissionsService
         '''
-        perm: Permissions = Permissions()
+        perm: cls = cls()
         perm._parse_string(varchar)
         return perm
 
     @classmethod
-    def from_data(cls, data: List[PermissionFieldDto]):
+    def from_data(cls, data: List[PermissionFieldDto]) -> Self:
         '''
-        Creates instance of Permissions from list of PermissionsField
+        Creates instance of PermissionsService from list of PermissionsField
         :param data: list of PermissionField
-        :return: instance of Permissions
+        :return: instance of PermissionsService
         '''
-        perm: Permissions = Permissions()
+        perm: cls = cls()
         perm.update(data)
         return perm
-
-    @classmethod
-    def from_user_model(cls, user_model: User, group_id: UUID):
-        '''
-        Creates instance of Permissions from UserEntity
-        :param user_model: UserEntity instance
-        :return: instance of Permissions
-        '''
-        user_permission: GroupPermission = GroupPermission.get_or_none(
-            GroupPermission.user_id == user_model.id 
-            and GroupPermission.group_id == group_id)
-        if not user_permission:
-            raise NotFoundException(f"user {user_model.id} with group {group_id} not found")
-        return user_permission
-
 
     def adjust_to_binary(self, str_permissions: str, permission_names: List[str]) -> List[str]:
         binary_permissions = str_permissions.rjust(len(permission_names), "0")
@@ -56,8 +39,7 @@ class Permissions:
         return binary_permissions
 
     def __init__(self) -> None:
-        self.permissions: Dict[GroupPermissionsEnum, bool] = \
-            {name: False for name in GROUP_PERMISSIONS_ENUM_KEYS}
+        self.permissions = {name: False for name in GROUP_PERMISSIONS_ENUM_KEYS}
 
     def __str__(self) -> str:
         return " ".join([f"<{name}: {value}>" for name, value in self.permissions.items() if not name.startswith("_")])
@@ -84,7 +66,7 @@ class Permissions:
 
     def has(self, field: GroupPermissionsEnum) -> bool:
         '''
-        Is Permissions class has specific permission
+        Is PermissionsService class has specific permission
         :param field: permission to check
         :return: is true
         '''
@@ -92,7 +74,7 @@ class Permissions:
 
     def delete(self, field: GroupPermissionsEnum) -> None:
         '''
-        Make permission False of Permissions instance
+        Make permission False of PermissionsService instance
         :param field: which permission to prohibit
         :return: None
         '''

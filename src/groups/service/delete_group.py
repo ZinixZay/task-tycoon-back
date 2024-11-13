@@ -4,6 +4,7 @@ from src.helpers.errors import NotFoundException
 from src.jwt_strategy.dto import TokenDto
 from src.entity.GroupEntity import GroupEntity as Group
 from src.entity.UserEntity import UserEntity as User
+from src.group_permissions.PermissionsService import PermissionsService
 
 
 def delete_group(target_id: UUID, user: TokenDto) -> UUID:
