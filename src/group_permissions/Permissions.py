@@ -9,6 +9,8 @@ from src.helpers.errors import NotFoundException
 
 class Permissions:
 
+    permissions: Dict[GroupPermissionsEnum.name, bool]
+
     @classmethod
     def from_varchar(cls, varchar: str):
         '''
@@ -38,9 +40,10 @@ class Permissions:
         :param user_model: UserEntity instance
         :return: instance of Permissions
         '''
-        user_permission: GroupPermission
-        user_permission = GroupPermission.get_or_none(GroupPermission.user == user_model.id and GroupPermission.id == group_id)
-        if user_permission is None:
+        user_permission: GroupPermission = GroupPermission.get_or_none(
+            GroupPermission.user_id == user_model.id 
+            and GroupPermission.group_id == group_id)
+        if not user_permission:
             raise NotFoundException(f"user {user_model.id} with group {group_id} not found")
         return user_permission
 
