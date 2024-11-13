@@ -38,7 +38,7 @@ def create_group(user: TokenDto, create_group_dto: CreateGroupDto) -> CreateGrou
         user_id=user_entity.id
         )
     group_permissions: PermissionsService = PermissionsService()
-    group_permissions.grant_all() # maybe copy permissions. not grant all
+    group_permissions.grant_all() # TODO: maybe copy permissions. not grant all
 
     GroupPermissionEntity.create(
         user_id=user_entity.id,

@@ -1,6 +1,7 @@
 from uuid import UUID
-from src.helpers.errors import ForbiddenException
-from src.helpers.errors import NotFoundException
+from src.group_permissions.dto.enums.GroupPermissionsEnum import GroupPermissionsEnum
+from src.entity.GroupPermissionsEntity import GroupPermissionEntity
+from src.helpers.errors import ForbiddenException, NotFoundException, PermissionException
 from src.jwt_strategy.dto import TokenDto
 from src.entity.GroupEntity import GroupEntity as Group
 from src.entity.UserEntity import UserEntity as User
@@ -12,8 +13,17 @@ def delete_group(target_id: UUID, user: TokenDto) -> UUID:
     group: Group = Group.get_or_none(Group.id == target_id)
     if not group:
         raise NotFoundException(f'Группа с id {target_id} не найдена')
-    # TODO: permissions
-    if group.user_id != user_entity.id and not user_entity.is_superuser:
-        raise ForbiddenException("Нет прав на удаление группы")
-    group.delete_instance()
+    if user_entity.is_superuser:
+        pass
+    else:
+        permissions_entity: GroupPermissionEntity = GroupPermissionEntity.get_or_none(
+        GroupPermissionEntity.user_id == user.user_id,
+        GroupPermissionEntity.group_id == target_id
+        )
+        if not permissions_entity:
+            raise NotFoundException('Не найдены права на группу')
+        permissions_service = PermissionsService.from_varchar(permissions_entity.permissions)
+        if not permissions_service.has(GroupPermissionsEnum.DeleteGroup):
+            raise PermissionException(GroupPermissionsEnum.DeleteGroup)
+    group.delete_instance() # TODO: recursive deletion
     return group.id
