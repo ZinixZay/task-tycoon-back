@@ -19,11 +19,7 @@ pika-stubs = "*"
 types-pyjwt = "*"
 pyjwt = "*"
 protobuf = "*"
-opentelemetry-instrumentation-fastapi = "*"
-opentelemetry-api = "*"
-opentelemetry-sdk = "*"
 loguru = "*"
-python-logging-loki = "*"
 
 [dev-packages]
 
