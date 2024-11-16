@@ -1,5 +1,6 @@
 from typing import List
 from fastapi import APIRouter, Body, Depends
+from src.questions.dto import CreateQuestionWithoutTaskResponseDto
 from src.questions.dto import CreateQuestionWithoutTaskDto
 from src.jwt_strategy.jwt_core import AccessJWTBearer
 from src.jwt_strategy.dto import TokenDto
@@ -16,5 +17,5 @@ question_router: APIRouter = APIRouter(
 async def create_questions_without_task(
     user: TokenDto = Depends(AccessJWTBearer()),
     create_questions_without_task_dto: List[CreateQuestionWithoutTaskDto] = Body(...)
-    ):
-    service.create_questions_without_task(user, create_questions_without_task_dto)
+    ) -> List[CreateQuestionWithoutTaskResponseDto]:
+    return service.create_questions_without_task(user, create_questions_without_task_dto)
