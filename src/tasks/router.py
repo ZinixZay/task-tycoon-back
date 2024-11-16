@@ -1,2 +1,2 @@
-print('zxc')
-print('qwe')
+def dlsasdsa(a, b):
+    return a / b
