@@ -1,6 +1,7 @@
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import smtplib
+from src.logger.Logger import Log
 from src.helpers.templates import TemplateEngine, TemplatesEnum
 from src.helpers.funcs import gen_random_string
 from src.cache import CacheService
@@ -35,13 +36,13 @@ async def send_verification_email(params: EmailMessageDto):
         server.login(from_email, password)
 
         server.sendmail(from_email, to_email, msg.as_string())
-        print(f'Сообщение отправлено на почту {params.to}')
+        Log.info(f'Сообщение отправлено на почту {params.to}')
         server.quit()
         confirmation_key: str = TemplateEngine.build_string(
             TemplatesEnum.CACHE.value.CONFIRMATION_RECORD.value,
             confirmation_code
             )
         await CacheService.set(confirmation_key, params.to, expires_in=60 * 60 * 3)
-        print(f'Верификация записана в кеш {params.to}')
+        Log.info(f'Верификация записана в кеш {params.to}')
     except Exception as e:
-        print(e)
+        Log.error(e)

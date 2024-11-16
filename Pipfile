@@ -19,6 +19,11 @@ pika-stubs = "*"
 types-pyjwt = "*"
 pyjwt = "*"
 protobuf = "*"
+opentelemetry-instrumentation-fastapi = "*"
+opentelemetry-api = "*"
+opentelemetry-sdk = "*"
+loguru = "*"
+python-logging-loki = "*"
 
 [dev-packages]
 
@@ -26,10 +31,9 @@ protobuf = "*"
 python_version = "3.12"
 
 [scripts]
-dev = "uvicorn main:app --reload"
+dev = "uvicorn main:app --reload --workers 1"
 dev-no-rel = "uvicorn main:app"
 mgc = "pw_migrate create"
 mgm = "pw_migrate migrate"
 mgr = "pw_migrate rollback"
 docker-dev = "docker compose -p task-tycoon-dev up -d"
-

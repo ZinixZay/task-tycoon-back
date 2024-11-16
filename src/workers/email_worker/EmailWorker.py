@@ -2,6 +2,7 @@ import asyncio
 import signal
 import pika
 from google.protobuf.json_format import MessageToDict
+from src.logger.Logger import Log
 from src.email.dto import EmailMessageDto
 from src.rmq.dto import BlockingChannelDto, RmqQueueDataEnum
 from src.rmq import grpc_blocking
@@ -21,7 +22,7 @@ class EmailWorker():
         signal.signal(signal.SIGINT, self.signal_handler)
         signal.signal(signal.SIGTERM, self.signal_handler)
 
-        print("Starting to consume...")
+        Log.info("Starting to consume...")
         self.__channel.start_consuming()
 
     def __callback_wrapper__(self, ch, method, properties, body):
@@ -46,5 +47,5 @@ class EmailWorker():
         ch.basic_ack(delivery_tag=method.delivery_tag)
 
     def signal_handler(self, signum, frame):
-        print("Terminating consumer...")
+        Log.info("Terminating consumer...")
         self.__channel.stop_consuming()

@@ -1,3 +1,4 @@
+from src.logger.Logger import Log
 from src.helpers.errors import NotFoundException
 from src.jwt_strategy.dto import TokenDto
 from src.jwt_strategy.jwt_core import sign_jwt
@@ -13,6 +14,6 @@ async def signin_user(user_register_dto: RegisterUserDto) -> TokenDto:
             raise NotFoundException(f'Пользователь с логином {user_register_dto.email} не найден')
         user.verify_password(user_register_dto.password)
     except Exception as e:
-        print(e)
+        Log.error(e)
         raise BadRequestException(f'Неверный пароль для пользователя {user_register_dto.email}')
     return await sign_jwt(str(user.id))
