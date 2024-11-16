@@ -38,3 +38,4 @@ class EnvVariablesEnum(Enum):
     SMTP_APP_PASSWORD = os.getenv('SMTP_APP_PASSWORD')
     SMTP_SERVER = os.getenv('SMTP_SERVER')
     SMTP_PORT = os.getenv('SMTP_PORT')
+    BETTER_STACK_TOKEN = os.getenv('BETTER_STACK_TOKEN')
