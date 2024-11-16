@@ -19,6 +19,7 @@ types-pyjwt = "*"
 pyjwt = "*"
 protobuf = "*"
 pydantic = {extras = ["email"], version = "*"}
+coredis = "*"
 
 [dev-packages]
 
