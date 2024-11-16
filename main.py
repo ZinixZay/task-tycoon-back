@@ -5,7 +5,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from src.users import user_router
 from src.groups import group_router
 from src.workers.email_worker import EmailWorker
-from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 
 
 @asynccontextmanager
