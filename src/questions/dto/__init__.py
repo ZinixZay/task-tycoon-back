@@ -1,1 +1,3 @@
 from .enums.QuestionTypeEnum import QuestionTypeEnum
+from .QuestionVariantDto import QuestionVariantDto
+from .CreateQuestionWithoutTaskDto import CreateQuestionWithoutTaskDto

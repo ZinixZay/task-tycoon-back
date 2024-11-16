@@ -11,9 +11,12 @@ async def signin_user(user_register_dto: RegisterUserDto) -> TokenDto:
     try:
         user: User = User.get_or_none(User.email == user_register_dto.email)
         if not user:
-            raise NotFoundException(f'Пользователь с логином {user_register_dto.email} не найден')
+            raise NotFoundException()
         user.verify_password(user_register_dto.password)
-    except Exception as e:
+    except BadRequestException as e:
         logger.error(e)
         raise BadRequestException(f'Неверный пароль для пользователя {user_register_dto.email}')
+    except NotFoundException as e:
+        logger.error(e)
+        raise NotFoundException(f'Пользователь с логином {user_register_dto.email} не найден')
     return await sign_jwt(str(user.id))

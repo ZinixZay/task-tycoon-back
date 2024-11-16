@@ -129,9 +129,10 @@ CREATE TABLE {TableNamesEnum.GROUP_TASKS_ENTITY.value} (
 """)
     migrator.sql(f'''CREATE TABLE {TableNamesEnum.QUESTION_ENTITY.value} (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES {TableNamesEnum.USER_ENTITY.value}(id) ON DELETE CASCADE,
     question_body VARCHAR(1024) NOT NULL,
     type VARCHAR NOT NULL,
-    content JSONB,
+    content JSONB DEFAULT '[]',
     created_at BIGINT DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000) NOT NULL
 );
 ''')

@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from src.users import user_router
 from src.groups import group_router
+from src.questions import question_router
 from src.workers.email_worker import EmailWorker
 
 @asynccontextmanager
@@ -28,3 +29,4 @@ app.add_middleware(
 
 app.include_router(user_router, prefix='/api/v1')
 app.include_router(group_router, prefix='/api/v1')
+app.include_router(question_router, prefix='/api/v1')

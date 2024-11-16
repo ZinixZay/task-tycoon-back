@@ -1,4 +1,3 @@
-import uuid
 from src.group_permissions.PermissionsService import PermissionsService
 from src.group_permissions.dto.enums.GroupPermissionsEnum import GroupPermissionsEnum
 from src.groups.dto import CreateGroupResponseDto, CreateGroupDto

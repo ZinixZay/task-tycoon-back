@@ -38,9 +38,9 @@ async def logout_user(user: TokenDto = Depends(AccessJWTBearer())) -> None:
 
 @user_router.patch('/me')
 async def update_user(user: TokenDto = Depends(AccessJWTBearer()), 
-                      updateDto: UpdateUserDto = Body(...)
+                      update_dto: UpdateUserDto = Body(...)
                       ) -> None:
-    service.update_user(user, updateDto)
+    service.update_user(user, update_dto)
 
 
 @user_router.get('/me')
