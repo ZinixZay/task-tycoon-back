@@ -1,3 +1,4 @@
+# type: ignore
 import asyncio
 import signal
 import pika
@@ -9,7 +10,7 @@ from src.rmq import grpc_blocking
 from .service.send_verification_email import send_verification_email
 
 class EmailWorker():
-    __channel = None
+    __channel: pika.adapters.blocking_connection.BlockingChannel
 
     @grpc_blocking(RmqQueueDataEnum.EMAIL_QUEUE)
     def start_consuming(self, params: BlockingChannelDto = BlockingChannelDto):
