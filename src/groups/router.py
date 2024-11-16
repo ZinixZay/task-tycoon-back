@@ -1,10 +1,10 @@
 from uuid import UUID
 from fastapi import APIRouter, Body, Depends
-from pydantic import EmailStr
 from src.groups.dto import CreateGroupResponseDto, CreateGroupDto
 from src.groups import service
 from src.jwt_strategy.dto import TokenDto
 from src.jwt_strategy.jwt_core import AccessJWTBearer
+from loguru import logger
 
 group_router: APIRouter = APIRouter(
     prefix='/groups',
@@ -23,6 +23,6 @@ async def delete_group(target_id: UUID, user: TokenDto = Depends(AccessJWTBearer
     return service.delete_group(target_id, user)
 
 
-# @group_router.get('/PING/{to}') # for testing
-# async def ping(to: EmailStr):
-#     grpc_send_email(to=to)
+@group_router.get('/PING') # for testing
+async def ping():
+    logger.info('dsq')

@@ -1,5 +1,5 @@
 from functools import wraps
-from src.logger.Logger import Log
+from src.logger.logger import logger
 from src.rmq.dto import BlockingChannelDto
 from src.rmq.service.get_blocking_connection import get_blocking_connection
 from src.rmq.dto import RmqQueueDataEnum
@@ -9,9 +9,9 @@ def grpc_blocking(queue: RmqQueueDataEnum):
         @wraps(func)
         def wrapper(*args, **kwargs):
             with get_blocking_connection() as blocking_connection:
-                Log.info(f'Opened rmq connection for {func.__name__}')
+                logger.info('Opened rmq connection for %s', func.__name__)
                 with blocking_connection.channel() as blocking_channel:
-                    Log.info(f'Opened rmq channel for {func.__name__}')
+                    logger.info('Opened rmq channel for %s', func.__name__)
                     blocking_channel.queue_declare(queue=queue.value.QUEUE_NAME)
                     if 'params' in kwargs:
                         kwargs['params'].blocking_channel = blocking_channel
@@ -22,7 +22,7 @@ def grpc_blocking(queue: RmqQueueDataEnum):
                             blocking_connection = blocking_connection
                             )
                     func(*args, **kwargs)
-                Log.info(f'Closed rmq channel for {func.__name__}')
-            Log.info(f'Closed rmq connection for {func.__name__}')
+                logger.info('Closed rmq channel for %s', func.__name__)
+            logger.info('Closed rmq connection for %s', func.__name__)
         return wrapper
     return with_blocking_channel

@@ -1,6 +1,6 @@
-from src.logger.Logger import Log
 from src.rmq.dto import RmqQueueDataEnum, BlockingChannelDto, RmqQueuesDtosType
 from src.rmq import grpc_blocking
+from src.logger.logger import logger
 
 
 class Publisher:
@@ -35,5 +35,5 @@ class Publisher:
                 routing_key=queue.value.ROUTING_KEY,
                 body=message.SerializeToString()
             )
-            Log.info(f'Published message to queue "{queue.value.QUEUE_NAME}" succesfully!')
+            logger.info('Published message to queue %s succesfully!', queue.value.QUEUE_NAME)
         publish(message=message)

@@ -6,7 +6,6 @@ from src.users import user_router
 from src.groups import group_router
 from src.workers.email_worker import EmailWorker
 
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     email_worker: EmailWorker = EmailWorker()
@@ -16,7 +15,6 @@ async def lifespan(app: FastAPI):
     yield
 
     email_worker_process.join()
-
 
 app = FastAPI(lifespan=lifespan)
 

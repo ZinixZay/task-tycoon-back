@@ -21,6 +21,8 @@ protobuf = "*"
 loguru = "*"
 pydantic = {extras = ["email"], version = "*"}
 coredis = "*"
+pyyaml = "*"
+logtail-python = "*"
 
 [dev-packages]
 
