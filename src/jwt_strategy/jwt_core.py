@@ -58,11 +58,10 @@ class AccessJWTBearer(HTTPBearer):
             await self.decode_jwt(refresh_token, TokenTypeEnum.REFRESH_TOKEN)
         if not decoded_refresh_token:
             raise UnauthorizedException('Tokens not provided or expired')
-
         new_pair: JWTDto = await sign_jwt(decoded_refresh_token.user_id)
         response.set_cookie(key='ACCESS_TOKEN', value=new_pair.ACCESS_TOKEN)
         response.set_cookie(key='REFRESH_TOKEN', value=new_pair.REFRESH_TOKEN)
-        return new_pair
+        return decoded_refresh_token
 
     async def decode_jwt(self, token: str, token_type: TokenTypeEnum) -> TokenDto | None:
         try:
