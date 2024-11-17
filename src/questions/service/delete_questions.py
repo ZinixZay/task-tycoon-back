@@ -11,5 +11,8 @@ def delete_questions(user: TokenDto, question_ids: List[UUID]):
     if not user_entity:
         raise NotFoundException("Пользователь не найден")
 
-    question_entities: List[Question] = list(Question.select().where(Question.id.in_(question_ids)).execute())
-    
+    question_entities: List[Question] = list(
+        Question.select()
+        .where(Question.id.in_(question_ids))
+        .execute()
+    )
