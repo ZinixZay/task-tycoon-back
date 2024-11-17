@@ -1,4 +1,5 @@
 from typing import List
+from uuid import UUID
 from fastapi import APIRouter, Body, Depends
 from src.questions.dto import CreateQuestionWithoutTaskResponseDto
 from src.questions.dto import CreateQuestionWithoutTaskDto
@@ -19,3 +20,10 @@ async def create_questions_without_task(
     create_questions_without_task_dto: List[CreateQuestionWithoutTaskDto] = Body(...)
     ) -> List[CreateQuestionWithoutTaskResponseDto]:
     return service.create_questions_without_task(user, create_questions_without_task_dto)
+
+@question_router.delete('')
+async def delete_questions(
+    user: TokenDto = Depends(AccessJWTBearer()),
+    question_ids: List[UUID] = Body(...)
+    ) -> List[UUID]:
+    return service.delete_questions(user, question_ids)

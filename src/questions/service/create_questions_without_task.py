@@ -48,4 +48,3 @@ def validate_question_model_to_dto(
     validated = model_to_dict(question_model)
     validated['id'] = str(validated['id'])
     return validated
-
