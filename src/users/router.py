@@ -24,8 +24,8 @@ async def signup_user(user_dto: RegisterUserDto = Body(...)) -> EmailStr:
 @user_router.post('/signin')
 async def signin_user(response: Response, user_dto: RegisterUserDto = Body(...)) -> None:
     tokens: JWTDto = await service.signin_user(user_dto)
-    response.set_cookie(key='ACCESS_TOKEN', value=tokens.ACCESS_TOKEN)
-    response.set_cookie(key='REFRESH_TOKEN', value=tokens.REFRESH_TOKEN)
+    response.set_cookie(key='ACCESS_TOKEN', value=tokens.ACCESS_TOKEN, samesite=False, secure=False)
+    response.set_cookie(key='REFRESH_TOKEN', value=tokens.REFRESH_TOKEN, samesite=False, secure=False)
 
 
 @user_router.get('/logout')
