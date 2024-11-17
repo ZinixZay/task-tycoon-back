@@ -23,6 +23,7 @@ async def delete_group(target_id: UUID, user: TokenDto = Depends(AccessJWTBearer
     return service.delete_group(target_id, user)
 
 
-@group_router.get('/PING') # for testing
-async def ping():
-    logger.info('dsq')
+# @group_router.get('/PING') # for testing
+# async def ping(user: TokenDto = Depends(AccessJWTBearer())):
+#     logger.info('dsq')
+#     print(user)
